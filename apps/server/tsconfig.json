@@ -11,11 +11,9 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "resolveJsonModule": true
+  },
+  "extends": "my-tsconfig/base.json",
+  "exclude": ["node_modules", "dist", "data", "uploads"],
+  "include": ["src", "test"]
 }
