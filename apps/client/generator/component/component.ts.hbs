@@ -1,0 +1,42 @@
+import React from 'react';
+
+// talons
+{{#if wantCustomHook}}
+import {use{{ properCase name }} } from './use{{ properCase name }}';
+{{/if}}
+
+{{#if wantMergeClasses}}
+// utils
+import mergeClasses from "@utils/mergeClasses";
+{{/if}}
+
+// styles
+import defaultClasses from './{{camelCase name}}.module.css';
+{{#if wantStyledComponent}}
+import {} from './{{ properCase name }}Styled.ts';
+{{/if}}
+
+interface Props {
+{{#if wantMergeClasses}}
+classes?:object
+{{/if}}
+}
+
+const {{ properCase name }} = (
+{{#if wantMergeClasses}}
+    {classes: propsClasses}: Props
+{{/if}}
+) => {
+
+{{#if wantMergeClasses}}
+const classes = mergeClasses(defaultClasses, propsClasses);
+{{/if}}
+
+return (
+<div>
+    
+</div>
+);
+}
+
+export default {{ properCase name }};

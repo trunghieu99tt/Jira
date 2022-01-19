@@ -1,0 +1,9 @@
+.turbo
+build/**
+dist/**
+.next/**
+node_modules
+build
+apps/**/build/**
+apps/**/dist/**
+apps/**/node_modules
