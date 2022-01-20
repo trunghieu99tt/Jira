@@ -11,7 +11,8 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "strictPropertyInitialization": false
   },
   "extends": "my-tsconfig/base.json",
   "exclude": ["node_modules", "dist", "data", "uploads"],
