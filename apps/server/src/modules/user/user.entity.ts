@@ -1,32 +1,74 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { BoardUser } from '../board-user/board-user.entity';
+import { Board } from '../board/board.entity';
+import { Comment } from '../comment/comment.entity';
 
 @ObjectType()
-@Schema({
-  collection: 'users',
+@Entity({
+  name: 'users',
 })
 export class User {
+  @Field(() => Number)
+  @PrimaryGeneratedColumn('increment', {
+    type: 'bigint',
+  })
+  id: number;
+
   @Field(() => String)
-  @Prop(String)
+  @Column({
+    name: 'username',
+  })
   username: string;
 
   @Field(() => String)
-  @Prop(String)
+  @Column({
+    name: 'password',
+  })
   password: string;
 
   @Field(() => String)
-  @Prop(String)
+  @Column({
+    name: 'email',
+  })
   email: string;
 
   @Field(() => String)
-  @Prop(String)
+  @Column()
   name: string;
 
   @Field(() => String)
-  @Prop(String)
+  @Column()
   avatar: string;
-}
 
-export const UserSchema = SchemaFactory.createForClass(User);
-export interface UserDocument extends User, Document {}
+  @OneToMany(() => Board, (board) => board.owner)
+  @Field(() => [Board])
+  boards: Board[];
+
+  @OneToMany(() => BoardUser, (boardUser) => boardUser.user)
+  @Field(() => [BoardUser])
+  boardUsers: BoardUser[];
+
+  @OneToMany(() => Comment, (comment) => comment.author)
+  @Field(() => [Comment])
+  comments: Comment[];
+
+  @Field(() => Date)
+  @CreateDateColumn({
+    name: 'created_at',
+  })
+  createdAt: Date;
+
+  @Field(() => Date)
+  @UpdateDateColumn({
+    name: 'updated_at',
+  })
+  updatedAt: Date;
+}

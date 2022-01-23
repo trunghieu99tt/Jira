@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  mysqldb:
+    image: mysql:8
+    platform: linux/amd64
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 3306:3306
+    volumes:
+      - mysqldata:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+      MYSQL_DATABASE: jira
+
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysqldb
+  
+  redis: 
+    image: "redis:alpine"
+    ports:
+      - 6379:6379
+      
+volumes:
+  node_modules:
+  mysqldata:

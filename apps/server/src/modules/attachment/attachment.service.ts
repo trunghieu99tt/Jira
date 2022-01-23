@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class UserService {
+export class AttachmentService {
   constructor() {
     console.log('This is constructor');
   }
