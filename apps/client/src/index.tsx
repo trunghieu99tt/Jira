@@ -3,6 +3,7 @@ import React, { Suspense } from 'react';
 import { RecoilRoot } from 'recoil';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import { ApolloProvider } from '@apollo/client/react';
 
 import AppProvider from '@context/app.context';
 
@@ -12,6 +13,7 @@ import './index.css';
 
 import './i18.config';
 import reportWebVitals from './reportWebVitals';
+import apolloClient from 'api/graphql-client';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -20,7 +22,9 @@ ReactDOM.render(
         <AppProvider>
           <RecoilRoot>
             <HelmetProvider>
-              <App />
+              <ApolloProvider client={apolloClient}>
+                <App />
+              </ApolloProvider>
             </HelmetProvider>
           </RecoilRoot>
         </AppProvider>

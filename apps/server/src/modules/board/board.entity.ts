@@ -1,4 +1,4 @@
-import { Field, ObjectType, Int } from '@nestjs/graphql';
+import { Field, ObjectType, Int, registerEnumType } from '@nestjs/graphql';
 import { BoardList } from '../board-list/board-list.entity';
 import {
   Column,
@@ -12,6 +12,11 @@ import {
 import { BoardUser } from '../board-user/board-user.entity';
 import { Comment } from '../comment/comment.entity';
 import { User } from '../user/user.entity';
+import { BoardPrivacy } from './constants/board.constant';
+
+registerEnumType(BoardPrivacy, {
+  name: 'BoardPrivacy',
+});
 
 @Entity({
   name: 'boards',
@@ -31,6 +36,18 @@ export class Board {
     name: 'cover_photo',
   })
   coverPhoto: string;
+
+  @Field(() => BoardPrivacy)
+  @Column({
+    name: 'privacy',
+    type: 'enum',
+    enum: BoardPrivacy,
+  })
+  privacy: BoardPrivacy;
+
+  @Field(() => String)
+  @Column()
+  description: string;
 
   @OneToMany(() => BoardList, (boardList) => boardList.board)
   @Field(() => [BoardList])

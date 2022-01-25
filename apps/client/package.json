@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.5.7",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -13,6 +14,7 @@
     "axios": "^0.24.0",
     "babel-plugin-styled-components": "^2.0.2",
     "craco": "^0.0.3",
+    "graphql": "^16.2.0",
     "i18next": "^21.6.0",
     "i18next-browser-languagedetector": "^6.1.2",
     "i18next-xhr-backend": "^3.2.2",
@@ -29,15 +31,13 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "craco start",
+    "dev": "craco start",
     "build": "craco build",
     "test": "craco test",
     "eject": "craco eject",
-    "pre-commit": "lint-staged",
     "lint": "eslint \"{src,test}/**/*.ts\" --fix",
     "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "format": "prettier --write \"src/**/*.ts\"",
-    "prepare": "husky install",
     "generate": "plop --plopfile generator/index.js"
   },
   "eslintConfig": {

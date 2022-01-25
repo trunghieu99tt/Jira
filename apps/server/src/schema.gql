@@ -51,12 +51,19 @@ type Board {
   id: Int!
   name: String!
   coverPhoto: String!
+  privacy: BoardPrivacy!
+  description: String!
   boardLists: [BoardList!]!
   owner: User!
   boardUsers: [BoardUser!]!
   comments: [Comment!]!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+enum BoardPrivacy {
+  PUBLIC
+  PRIVATE
 }
 
 type BoardList {
@@ -87,5 +94,6 @@ type Attachment {
 }
 
 type Query {
-  tasks: String!
+  task(id: Int!): Task!
+  board(id: Int!): Board!
 }
