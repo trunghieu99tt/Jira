@@ -12,9 +12,10 @@
     "baseUrl": "./",
     "incremental": true,
     "resolveJsonModule": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "skipLibCheck": true
   },
   "extends": "my-tsconfig/base.json",
   "exclude": ["node_modules", "dist", "data", "uploads"],
-  "include": ["src", "test"]
+  "include": ["src/**/*", "src/**/**/*", "test"]
 }

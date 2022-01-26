@@ -8,7 +8,7 @@ export const getEnv = (key: string): string => {
 
 // server
 export const NODE_ENV = getEnv('NODE_ENV');
-export const PORT = Number(getEnv('PORT'));
+export const PORT = Number(getEnv('SERVER_PORT'));
 
 // project
 export const PROJECT_NAME = getEnv('PROJECT_NAME');
@@ -19,15 +19,21 @@ export const CLOUDINARY_URL = getEnv('CLOUDINARY_URL');
 export const CLOUDINARY_PATH = getEnv('CLOUDINARY_PATH');
 
 // MongoDB
-export const MONGO_URL = getEnv('MONGO_URL');
-export const MONGO_DB_NAME = getEnv('MONGO_DB_NAME');
-export const MONGO_USERNAME = getEnv('MONGO_USERNAME');
-export const MONGO_PASSWORD = getEnv('MONGO_PASSWORD');
-export const DATABASE_URL = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@cluster0.xblod.mongodb.net/${MONGO_DB_NAME}?retryWrites=true&w=majority`;
+export const DB_PORT = Number(getEnv('DB_PORT'));
+export const DB_HOST = getEnv('DB_HOST');
+export const DB_NAME = getEnv('DB_NAME');
+export const DB_USER = getEnv('DB_USER');
+export const DB_PASSWORD = getEnv('DB_PASSWORD');
 
 // Auth
 export const JWT_SECRET = getEnv('JWT_SECRET');
-export const JWT_EXP = Number(getEnv('JWT_EXP'));
+export const JWT_ACCESS_TOKEN_EXPIRES_IN_SECONDS = Number(
+  getEnv('JWT_ACCESS_TOKEN_EXPIRES_IN_SECONDS'),
+);
+export const JWT_REFRESH_TOKEN_EXPIRES_IN_SECONDS = Number(
+  getEnv('JWT_REFRESH_TOKEN_EXPIRES_IN_SECONDS'),
+);
+export const DEFAULT_API_KEY = getEnv('DEFAULT_API_KEY');
 
 // Mailer
 export const MAILER_EMAIL_ID = getEnv('MAILER_EMAIL_ID');

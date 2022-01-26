@@ -12,3 +12,5 @@ export const getEnv = (key: string, ignore = false): string => {
 
 export const API_URL = getEnv('REACT_APP_API_URL');
 export const SOCKET_URL = getEnv('REACT_APP_SOCKET_URL');
+
+export const GRAPHQL_SERVER_URL = getEnv('REACT_APP_GRAPHQL_SERVER_URL');

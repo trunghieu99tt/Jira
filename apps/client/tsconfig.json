@@ -22,7 +22,9 @@
     "baseUrl": "./src"
   },
   "include": [
-    "src"
+    "src/**/*",
+    "src/**/**/*.ts",
+    "src/**/**/*.tsx"
   ],
   "extends": "./tsconfig.path.json"
 }
