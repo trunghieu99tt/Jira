@@ -57,6 +57,7 @@ type Board {
   owner: User!
   boardUsers: [BoardUser!]!
   comments: [Comment!]!
+  userCount: Float!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -95,5 +96,7 @@ type Attachment {
 
 type Query {
   task(id: Int!): Task!
+  boards(offset: Int = 0, limit: Int = 20): [Board!]!
   board(id: Int!): Board!
+  getBoardUsers(offset: Int = 0, limit: Int = 20, boardId: Int!): [BoardUser!]!
 }

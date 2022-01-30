@@ -65,6 +65,9 @@ export class Board {
   @Field(() => [Comment])
   comments: Comment[];
 
+  @Field(() => Number)
+  userCount: number;
+
   @Field(() => Date)
   @CreateDateColumn({
     name: 'created_at',

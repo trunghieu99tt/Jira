@@ -1,11 +1,11 @@
-import Board from '@components/Board';
+import BoardListPage from '@pages/BoardList/BoardListPage';
 import React from 'react';
 import './App.css';
 
 const App: React.FC = () => {
   return (
     <div>
-      <Board />
+      <BoardListPage />
     </div>
   );
 };

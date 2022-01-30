@@ -4,16 +4,14 @@ import { RecoilRoot } from 'recoil';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { ApolloProvider } from '@apollo/client/react';
+import apolloClient from 'api/graphql-client';
+import reportWebVitals from './reportWebVitals';
 
 import AppProvider from '@context/app.context';
 
-import App from './App';
-
 import './index.css';
-
 import './i18.config';
-import reportWebVitals from './reportWebVitals';
-import apolloClient from 'api/graphql-client';
+import App from './App';
 
 ReactDOM.render(
   <React.StrictMode>
