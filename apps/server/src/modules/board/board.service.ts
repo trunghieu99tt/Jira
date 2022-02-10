@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { plainToClass } from 'class-transformer';
 import {
   DEFAULT_LIMIT,
   DEFAULT_OFFSET,
@@ -6,6 +7,7 @@ import {
 import { BoardListService } from '../board-list/board-list.service';
 import { Board } from './board.entity';
 import { BoardRepository } from './board.repository';
+import { CreateBoardInput } from './dtos/create-board-input.dto';
 
 @Injectable()
 export class BoardService {
@@ -31,5 +33,10 @@ export class BoardService {
     const board = await this.repository.findOne(id);
     if (!board) throw new Error('Board not found');
     return board;
+  }
+
+  async createBoard(createBoardInput: CreateBoardInput): Promise<Board> {
+    const newBoard = plainToClass(Board, createBoardInput);
+    return this.repository.create(newBoard);
   }
 }

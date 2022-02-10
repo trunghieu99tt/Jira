@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { CreateBoardInput } from '../board/dtos/create-board-input.dto';
 import { BoardUser } from './board-user.entity';
 import { BoardUserRepository } from './board-user.repository';
 

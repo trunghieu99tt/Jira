@@ -1,5 +1,5 @@
 export class StringTool {
-  static makeId(length: number): string {
+  static makeId(prefix = '', length = 10): string {
     let res = '';
     const characters =
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -7,6 +7,6 @@ export class StringTool {
     for (let i = 0; i < length; i++) {
       res += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    return res;
+    return `${prefix}-${res}`;
   }
 }

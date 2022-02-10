@@ -7,6 +7,7 @@ export const useBoardList = () => {
   const boards = data?.boards;
 
   console.log('boards', boards);
+  console.log('loading', loading);
 
   return {
     loading,

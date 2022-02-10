@@ -1,6 +1,7 @@
 import {
   Args,
   Int,
+  Mutation,
   Parent,
   Query,
   ResolveField,
@@ -13,6 +14,7 @@ import { BoardUser } from '../board-user/board-user.entity';
 import { BoardUserService } from '../board-user/board-user.service';
 import { Board } from './board.entity';
 import { BoardService } from './board.service';
+import { CreateBoardInput } from './dtos/create-board-input.dto';
 
 @Resolver((of: any) => Board)
 export class BoardResolver {
@@ -33,6 +35,13 @@ export class BoardResolver {
   @Query((returns: any) => Board)
   async board(@Args('id', { type: () => Int }) id: number): Promise<Board> {
     return this.boardService.findBoardById(id);
+  }
+
+  @Mutation((returns) => Board)
+  async createBoard(
+    @Args('createBoardInput') createBoardInput: CreateBoardInput,
+  ): Promise<Board> {
+    return this.boardService.createBoard(createBoardInput);
   }
 
   @ResolveField()

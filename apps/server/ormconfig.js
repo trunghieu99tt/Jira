@@ -14,4 +14,5 @@ module.exports = {
   },
   timezone: 'Z',
   synchronize: false,
+  logging: true
 };

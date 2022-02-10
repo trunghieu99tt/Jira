@@ -19,6 +19,7 @@ const BoardList = ({ data }: Props) => {
               src={board.coverPhoto}
               alt={`${board.name}`}
               height="200px"
+              classes={{ root: classes.itemImage }}
             />
             <div className={classes.info}>
               <h3 className={classes.name}>{board.name}</h3>
@@ -26,7 +27,15 @@ const BoardList = ({ data }: Props) => {
               <div className={classes.boardUsers}>
                 {boardUsers?.map((boardUser: IBoardUser) => {
                   const { user } = boardUser;
-                  return <Avatar src={user?.avatar} alt={user?.name}></Avatar>;
+                  return (
+                    <Avatar
+                      src={user?.avatar}
+                      alt={user?.name}
+                      tooltip={user?.name}
+                      size="MEDIUM"
+                      key={`board-list-item-user-avatar-${user?.id}`}
+                    ></Avatar>
+                  );
                 })}
               </div>
             </div>

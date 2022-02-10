@@ -100,3 +100,14 @@ type Query {
   board(id: Int!): Board!
   getBoardUsers(offset: Int = 0, limit: Int = 20, boardId: Int!): [BoardUser!]!
 }
+
+type Mutation {
+  createBoard(createBoardInput: CreateBoardInput!): Board!
+}
+
+input CreateBoardInput {
+  name: String!
+  coverPhoto: String = ""
+  privacy: String!
+  description: String = ""
+}
