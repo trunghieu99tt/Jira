@@ -1,4 +1,4 @@
-import { KeyCodes } from 'constants/constant';
+import { KeyCodes } from '@constants/common';
 import { useEffect } from 'react';
 
 const useOnEscapeKeyDown = (

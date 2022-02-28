@@ -7,7 +7,7 @@ import mergeClasses from '@utils/mergeClasses';
 
 // constants
 import { TSize, TTooltipPlacement } from '@type/app.type';
-import { AVATAR_COLORS_BY_LETTER } from 'constants/constant';
+import { AVATAR_COLORS_BY_LETTER } from '@constants/common';
 
 // styles
 import defaultClasses from './avatar.module.css';

@@ -25,11 +25,16 @@ const generateField = (FormComponent: any) => {
         className={classes.fieldWrapper}
         data-testid={name ? `form-field:${name}` : 'form-field'}
       >
-        {label && <label htmlFor={fieldId}>{label}</label>}
+        {label && (
+          <label htmlFor={fieldId} className={classes.label}>
+            {label}
+          </label>
+        )}
         <FormComponent
           id={fieldId}
           invalid={!!error}
           name={name}
+          className={classes.field}
           {...otherProps}
         />
         {tip && <div className={classes.tip}>{tip}</div>}

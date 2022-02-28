@@ -38,3 +38,7 @@ export const KeyCodes = {
   ARROW_DOWN: 40,
   M: 77,
 };
+
+export const ACCEPT_FILE_FORMATS = ['image/jpeg', 'image/jpg', 'image/png'];
+export const MAX_NUMBER_OF_FILES = 5;
+export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB

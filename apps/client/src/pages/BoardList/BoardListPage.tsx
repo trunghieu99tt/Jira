@@ -10,6 +10,7 @@ import Modal from '@components/shared/Modal';
 
 // styles
 import classes from './boardListPage.module.css';
+import BoardCreate from '@components/BoardCreate';
 
 const BoardListPage = () => {
   const { data, error, loading } = useBoardList();
@@ -41,7 +42,7 @@ const BoardListPage = () => {
       {isCreateBoardModalOpen() && (
         <Modal
           renderContent={(modal) => {
-            return <div>Test</div>;
+            return <BoardCreate />;
           }}
           testid="modal:board-create"
           isOpen

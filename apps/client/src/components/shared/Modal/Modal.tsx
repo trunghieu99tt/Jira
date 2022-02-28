@@ -49,8 +49,8 @@ const Modal = ({
   const isControlled = typeof propsIsOpen === 'boolean';
   const isOpen = isControlled ? propsIsOpen : stateIsOpen;
 
-  const $modalRef = useRef<HTMLDivElement>();
-  const $clickableOverlayRef = useRef();
+  let $modalRef = useRef<HTMLDivElement | null>(null);
+  let $clickableOverlayRef = useRef<HTMLDivElement | null>(null);
 
   const closeModal = useCallback(() => {
     if (!isControlled) {
@@ -81,8 +81,12 @@ const Modal = ({
             <div
               className={cn(classes.clickableOverlay, classes[variant])}
               data-testid={testid}
+              ref={$clickableOverlayRef}
             >
-              <div className={cn(classes.modal, classes[variant])}>
+              <div
+                className={cn(classes.modal, classes[variant])}
+                ref={$modalRef}
+              >
                 {withCloseIcon && <button className={classes.close}>X</button>}
                 {renderContent({ close: closeModal })}
               </div>
