@@ -1,0 +1,38 @@
+.root {
+  position: relative;
+}
+
+.audience {
+  color: var(--blue-1);
+  font-size: 1.2rem;
+  font-weight: 500;
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  cursor: pointer;
+}
+
+.audience svg {
+  --size: 1.6rem;
+  width: var(--size);
+  height: var(--size);
+}
+
+.audienceIcon {
+}
+
+.audienceText {
+}
+
+.audienceSelectionItem {
+  font-size: 1.2rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.audienceSelectionItem svg {
+  --size: 1.6rem;
+  width: var(--size);
+  height: var(--size);
+}

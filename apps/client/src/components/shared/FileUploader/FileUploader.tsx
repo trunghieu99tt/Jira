@@ -14,25 +14,30 @@ import { AiOutlineCloudUpload } from 'react-icons/ai';
 import defaultClasses from './fileUploader.module.css';
 
 interface FileUploaderProps {
-  handleFiles: (files: File[]) => void;
-  maxNumberOfFiles?: number;
   classes?: any;
+  maxNumberOfFiles?: number;
+  shouldHavePreview?: boolean;
+  handleFiles: (files: File[]) => void;
 }
 
-const FileUploaderPage = ({
+const FileUploader = ({
   handleFiles,
-  maxNumberOfFiles = MAX_NUMBER_OF_FILES,
   classes: propsClasses,
+  shouldHavePreview = false,
+  maxNumberOfFiles = MAX_NUMBER_OF_FILES,
 }: FileUploaderProps) => {
   const classes = mergeClasses(defaultClasses, propsClasses);
 
   const {
+    ref,
     errors,
+    uploaded,
+    isEditing,
+
     onDragLeave,
     onDragOver,
     onDropFile,
     onInputChange,
-    ref,
     onSubmit,
   } = useFileUploader({
     handleFiles,
@@ -52,6 +57,24 @@ const FileUploaderPage = ({
             </li>
           ))}
         </ul>
+      )}
+      {shouldHavePreview && uploaded?.length > 0 && (
+        <section className={classes.previewSection}>
+          {uploaded?.slice(0, 3).map(({ file, preview }, idx: number) => {
+            return (
+              <figure
+                key={`file-${file.name}-${idx}`}
+                className={classes.previewItem}
+              >
+                <img
+                  src={preview}
+                  alt={`file-${file.name}`}
+                  className={classes.previewImage}
+                />
+              </figure>
+            );
+          })}
+        </section>
       )}
       <div className={classes.uploadZone}>
         <div
@@ -83,9 +106,9 @@ const FileUploaderPage = ({
           />
         </label>
       </div>
-      <button onClick={onSubmit}>OK</button>
+      {isEditing && <button onClick={onSubmit}>OK</button>}
     </section>
   );
 };
 
-export default FileUploaderPage;
+export default FileUploader;

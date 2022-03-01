@@ -12,11 +12,14 @@ export class CreateBoardInput {
   coverPhoto: string;
 
   @Field()
-  privacy: string;
+  privacy: number;
 
   @Field({
     defaultValue: '',
     nullable: true,
   })
   description: string;
+
+  @Field()
+  ownerId: number;
 }

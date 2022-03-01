@@ -1,16 +1,15 @@
-import BoardList from '@components/BoardList';
-
 // talons
 import { useBoardList } from './useBoardListPage';
 import { useQueryParamModal } from '@talons/useQueryParamModal';
 
 // components
-import Button from '@components/shared/Button';
 import Modal from '@components/shared/Modal';
+import Button from '@components/shared/Button';
+import BoardList from '@components/Boards/BoardList';
+import BoardCreate from '@components/Boards/BoardCreate';
 
 // styles
 import classes from './boardListPage.module.css';
-import BoardCreate from '@components/BoardCreate';
 
 const BoardListPage = () => {
   const { data, error, loading } = useBoardList();
@@ -40,7 +39,7 @@ const BoardListPage = () => {
         <BoardList data={data} />
       </section>
       {isCreateBoardModalOpen() && (
-        <Modal
+        <Modal        
           renderContent={(modal) => {
             return <BoardCreate />;
           }}

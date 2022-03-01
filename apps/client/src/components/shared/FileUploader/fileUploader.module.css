@@ -28,3 +28,14 @@
   width: var(--size);
   height: var(--size);
 }
+
+.previewSection {
+}
+
+.previewItem {
+  max-width: 100%;
+}
+
+.previewImage {
+  width: 100%;
+}

@@ -16,6 +16,7 @@
     "classnames": "^2.3.1",
     "craco": "^0.0.3",
     "formik": "^2.2.9",
+    "framer-motion": "4.1.17",
     "graphql": "^16.2.0",
     "i18next": "^21.6.0",
     "i18next-browser-languagedetector": "^6.1.2",

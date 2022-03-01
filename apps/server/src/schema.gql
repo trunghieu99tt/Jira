@@ -108,6 +108,7 @@ type Mutation {
 input CreateBoardInput {
   name: String!
   coverPhoto: String = ""
-  privacy: String!
+  privacy: Float!
   description: String = ""
+  ownerId: Float!
 }

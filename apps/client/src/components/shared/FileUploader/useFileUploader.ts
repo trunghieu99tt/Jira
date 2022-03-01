@@ -12,6 +12,8 @@ export const useFileUploader = ({
   maxNumberOfFiles,
 }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
+
+  const [isEditing, setIsEditing] = useState<boolean>(true);
   const [errors, setErrors] = useState<string[]>([]);
   const [uploaded, setUploaded] = useState<
     {
@@ -98,12 +100,15 @@ export const useFileUploader = ({
   };
 
   const onSubmit = () => {
+    setIsEditing(false);
     handleFilesProp(uploaded.map((file) => file.file));
   };
 
   return {
     ref,
     errors,
+    uploaded,
+    isEditing,
     onSubmit,
     onDropFile,
     onDragOver,

@@ -25,12 +25,12 @@ const Input = forwardRef<HTMLInputElement, Props>(
   ) => {
     const classes = mergeClasses(defaultClasses, propsClasses);
 
-    const handleChange = (event: ChangeEvent) => {
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
       if (
         !filter ||
-        (event?.target?.nodeValue && filter.test(event.target.nodeValue))
+        (event?.target?.value && filter.test(event.target.value))
       ) {
-        onChange(event.target.nodeValue, event);
+        onChange(event.target.value, event);
       }
     };
 

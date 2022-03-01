@@ -10,7 +10,6 @@ import {
 import { PaginationArgs } from 'src/common/dto/pagination-args.dto';
 import { BoardList } from '../board-list/board-list.entity';
 import { BoardListService } from '../board-list/board-list.service';
-import { BoardUser } from '../board-user/board-user.entity';
 import { BoardUserService } from '../board-user/board-user.service';
 import { Board } from './board.entity';
 import { BoardService } from './board.service';
