@@ -1,9 +1,12 @@
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { GET_BOARDS } from 'queries/board.queries';
+import { CREATE_BOARD_MUTATION } from 'graphql/mutations/board.mutation';
+import { GET_PROJECT_LIST } from 'graphql/queries/project.queries';
 
 export const useBoards = () => {
-  const [getBoards, getBoardResponse] = useLazyQuery(GET_BOARDS);
-  const [createBoardFunction, createBoardResponse] = useMutation(GET_BOARDS);
+  const [getBoards, getBoardResponse] = useLazyQuery(GET_PROJECT_LIST);
+  const [createBoardFunction, createBoardResponse] = useMutation(
+    CREATE_BOARD_MUTATION,
+  );
 
   return {
     getBoards,

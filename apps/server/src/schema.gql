@@ -2,40 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Comment {
-  id: Float!
-  content: String!
-  file: String!
-  author: User!
-  board: Board!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type User {
-  id: Float!
-  username: String!
-  password: String!
-  email: String!
-  name: String!
-  avatar: String!
-  boards: [Board!]!
-  boardUsers: [BoardUser!]!
-  comments: [Comment!]!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
 type BoardUser {
   id: Float!
   role: BoardUserRole!
   user: User!
-  board: Board!
+  board: Project!
   reportedTasks: [Task!]!
   assignedTasks: [Task!]!
   createdAt: DateTime!
@@ -47,11 +18,40 @@ enum BoardUserRole {
   MEMBER
 }
 
-type Board {
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Comment {
+  id: Float!
+  content: String!
+  file: String!
+  author: User!
+  board: Project!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type User {
+  id: Float!
+  username: String!
+  password: String!
+  email: String!
+  name: String!
+  avatar: String!
+  boards: [Project!]!
+  boardUsers: [BoardUser!]!
+  comments: [Comment!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Project {
   id: Int!
   name: String!
   coverPhoto: String!
-  privacy: BoardPrivacy!
+  privacy: Privacy!
   description: String!
   boardLists: [BoardList!]!
   owner: User!
@@ -62,7 +62,7 @@ type Board {
   updatedAt: DateTime!
 }
 
-enum BoardPrivacy {
+enum Privacy {
   PUBLIC
   PRIVATE
 }
@@ -70,7 +70,7 @@ enum BoardPrivacy {
 type BoardList {
   id: Float!
   name: String!
-  board: Board!
+  board: Project!
   tasks: [Task!]!
 }
 
@@ -96,19 +96,19 @@ type Attachment {
 
 type Query {
   task(id: Int!): Task!
-  boards(offset: Int = 0, limit: Int = 20): [Board!]!
-  board(id: Int!): Board!
+  boards(offset: Int = 0, limit: Int = 20): [Project!]!
+  board(id: Int!): Project!
   getBoardUsers(offset: Int = 0, limit: Int = 20, boardId: Int!): [BoardUser!]!
 }
 
 type Mutation {
-  createBoard(createBoardInput: CreateBoardInput!): Board!
+  createBoard(createBoardInput: CreateBoardInput!): Project!
 }
 
 input CreateBoardInput {
   name: String!
   coverPhoto: String = ""
-  privacy: Float!
+  privacy: Int!
   description: String = ""
-  ownerId: Float!
+  ownerId: Int!
 }

@@ -7,8 +7,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { BoardUser } from '../board-user/board-user.entity';
-import { Board } from '../board/board.entity';
+import { ProjectUser } from '../project-user/project-user.entity';
+import { Project } from '../project/project.entity';
 import { Comment } from '../comment/comment.entity';
 
 @ObjectType()
@@ -48,13 +48,13 @@ export class User {
   @Column()
   avatar: string;
 
-  @OneToMany(() => Board, (board) => board.owner)
-  @Field(() => [Board])
-  boards: Board[];
+  @OneToMany(() => Project, (board) => board.owner)
+  @Field(() => [Project])
+  boards: Project[];
 
-  @OneToMany(() => BoardUser, (boardUser) => boardUser.user)
-  @Field(() => [BoardUser])
-  boardUsers: BoardUser[];
+  @OneToMany(() => ProjectUser, (boardUser) => boardUser.user)
+  @Field(() => [ProjectUser])
+  boardUsers: ProjectUser[];
 
   @OneToMany(() => Comment, (comment) => comment.author)
   @Field(() => [Comment])

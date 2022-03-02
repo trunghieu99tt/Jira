@@ -5,8 +5,8 @@ import { useQueryParamModal } from '@talons/useQueryParamModal';
 // components
 import Modal from '@components/shared/Modal';
 import Button from '@components/shared/Button';
-import BoardList from '@components/Boards/BoardList';
-import BoardCreate from '@components/Boards/BoardCreate';
+import BoardList from '@components/Project/LIst';
+import BoardCreate from '@components/Project/Create';
 
 // styles
 import classes from './boardListPage.module.css';

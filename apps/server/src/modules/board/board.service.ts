@@ -1,42 +1,22 @@
-import { Injectable } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
-import {
-  DEFAULT_LIMIT,
-  DEFAULT_OFFSET,
-} from 'src/common/constants/common.constant';
-import { BoardListService } from '../board-list/board-list.service';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Board } from './board.entity';
 import { BoardRepository } from './board.repository';
-import { CreateBoardInput } from './dtos/create-board-input.dto';
 
 @Injectable()
 export class BoardService {
-  constructor(
-    private readonly repository: BoardRepository,
-    private readonly boardListService: BoardListService,
-  ) {}
+  constructor(private readonly repository: BoardRepository) {}
 
-  async findAllBoards(
-    offset = DEFAULT_OFFSET,
-    limit = DEFAULT_LIMIT,
-  ): Promise<Board[]> {
+  async findBoardListById(id: number): Promise<Board> {
+    const boardList = await this.repository.findOne(id);
+    if (!boardList) {
+      throw new NotFoundException('BoardList not found');
+    }
+    return boardList;
+  }
+
+  async findBoardListsByBoardId(boardId: number): Promise<Board[]> {
     return this.repository.find({
-      order: {
-        updatedAt: 'DESC',
-      },
-      skip: offset,
-      take: limit,
+      where: { board: { id: boardId } },
     });
-  }
-
-  async findBoardById(id: number): Promise<Board> {
-    const board = await this.repository.findOne(id);
-    if (!board) throw new Error('Board not found');
-    return board;
-  }
-
-  async createBoard(createBoardInput: CreateBoardInput): Promise<Board> {
-    const newBoard = plainToClass(Board, createBoardInput);
-    return this.repository.create(newBoard);
   }
 }

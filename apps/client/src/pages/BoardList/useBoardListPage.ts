@@ -1,8 +1,8 @@
 import { useQuery } from '@apollo/client';
-import { GET_BOARDS } from 'queries/board.queries';
+import { GET_PROJECT_LIST } from 'graphql/queries/project.queries';
 
 export const useBoardList = () => {
-  const { loading, data, error } = useQuery(GET_BOARDS);
+  const { loading, data, error } = useQuery(GET_PROJECT_LIST);
 
   const boards = data?.boards;
 
