@@ -2,20 +2,36 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Comment {
+type ProjectUser {
   id: Float!
-  content: String!
-  file: String!
-  author: User!
-  board: Board!
+  role: Role!
+  user: User!
+  project: Project!
+  reportedTasks: [Task!]!
+  assignedTasks: [Task!]!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+enum Role {
+  ADMIN
+  MEMBER
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type Comment {
+  id: Float!
+  content: String!
+  file: String!
+  author: User!
+  board: Project!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
 
 type User {
   id: Float!
@@ -24,52 +40,38 @@ type User {
   email: String!
   name: String!
   avatar: String!
-  boards: [Board!]!
-  boardUsers: [BoardUser!]!
+  projects: [Project!]!
+  projectUsers: [ProjectUser!]!
   comments: [Comment!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
-type BoardUser {
-  id: Float!
-  role: BoardUserRole!
-  user: User!
-  board: Board!
-  reportedTasks: [Task!]!
-  assignedTasks: [Task!]!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-enum BoardUserRole {
-  ADMIN
-  MEMBER
-}
-
-type Board {
+type Project {
   id: Int!
   name: String!
   coverPhoto: String!
-  privacy: BoardPrivacy!
+  privacy: Privacy!
   description: String!
-  boardLists: [BoardList!]!
+  boards: [Board!]!
   owner: User!
-  boardUsers: [BoardUser!]!
+  projectUsers: [ProjectUser!]!
   comments: [Comment!]!
+  tasks: [Task!]!
+  userCount: Float!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
-enum BoardPrivacy {
+enum Privacy {
   PUBLIC
   PRIVATE
 }
 
-type BoardList {
+type Board {
   id: Float!
   name: String!
-  board: Board!
+  project: Project!
   tasks: [Task!]!
 }
 
@@ -77,10 +79,11 @@ type Task {
   id: Float!
   name: String!
   description: String!
-  reportedBy: BoardUser!
-  assignedTo: BoardUser!
+  reportedBy: ProjectUser!
+  assignedTo: ProjectUser!
   attachments: [Attachment!]!
-  boardList: BoardList!
+  project: Project!
+  board: Board!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -95,5 +98,20 @@ type Attachment {
 
 type Query {
   task(id: Int!): Task!
-  board(id: Int!): Board!
+  projects(offset: Int = 0, limit: Int = 20): [Project!]!
+  project(id: Int!): Project!
+  boardList(id: Int!): Board!
+  getProjectUsers(offset: Int = 0, limit: Int = 20, projectId: Int!): [ProjectUser!]!
+}
+
+type Mutation {
+  createProject(createProjectInput: CreateProjectInput!): Project!
+}
+
+input CreateProjectInput {
+  name: String!
+  coverPhoto: String = ""
+  privacy: Int!
+  description: String = ""
+  ownerId: Int!
 }

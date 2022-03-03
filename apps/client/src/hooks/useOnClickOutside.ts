@@ -1,25 +1,53 @@
-import { useEffect } from 'react';
+import useDeepCompareMemoize from '@utils/deepCompareMemoize';
+import { RefObject, useEffect, useRef } from 'react';
 
-// Hook
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const useOnClickOutside = (ref: any, handler: any): void => {
+const useOnOutsideClick = (
+  $ignoredElementRefs: RefObject<any>,
+  isListening: boolean,
+  onOutsideClick: any,
+  $listeningElementRef: RefObject<any>,
+) => {
+  const $mouseDownTargetRef = useRef<RefObject<any>>();
+  const $ignoredElementRefsMemoized = useDeepCompareMemoize(
+    [$ignoredElementRefs].flat(),
+  );
+
   useEffect(() => {
-    const listener = (event: any) => {
-      if (!ref.current || ref.current.contains(event.target)) {
-        return;
+    const handleMouseDown = (event: any) => {
+      if ($mouseDownTargetRef?.current && event?.target) {
+        $mouseDownTargetRef.current = event.target;
       }
-
-      handler(event);
     };
 
-    document.addEventListener('mousedown', listener);
-    document.addEventListener('touchstart', listener);
+    const handleMouseUp = (event: MouseEvent) => {
+      const isAnyIgnoredElementAncestorOfTarget = (
+        $ignoredElementRefsMemoized as any
+      )?.some(
+        ($elementRef: RefObject<any>) =>
+          $elementRef?.current?.contains($mouseDownTargetRef.current) ||
+          $elementRef?.current?.contains(event.target),
+      );
+      if (event.button === 0 && !isAnyIgnoredElementAncestorOfTarget) {
+        onOutsideClick();
+      }
+    };
 
+    const $listeningElement = ($listeningElementRef || {}).current || document;
+
+    if (isListening) {
+      $listeningElement.addEventListener('mousedown', handleMouseDown);
+      $listeningElement.addEventListener('mouseup', handleMouseUp);
+    }
     return () => {
-      document.removeEventListener('mousedown', listener);
-      document.removeEventListener('touchstart', listener);
+      $listeningElement.removeEventListener('mousedown', handleMouseDown);
+      $listeningElement.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [ref, handler]);
+  }, [
+    $ignoredElementRefsMemoized,
+    $listeningElementRef,
+    isListening,
+    onOutsideClick,
+  ]);
 };
 
-export { useOnClickOutside };
+export default useOnOutsideClick;

@@ -1,0 +1,19 @@
+.fieldWrapper {
+  margin-top: 2rem;
+}
+
+.label {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.field {
+  border: 1px solid #e0e0e0;
+  padding: 1rem 1.5rem;
+  color: var(--gray-4);
+  font-weight: 500;
+  border-radius: 0.8rem;
+  width: 100%;
+}

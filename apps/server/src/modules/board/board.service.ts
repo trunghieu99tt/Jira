@@ -1,18 +1,22 @@
-import { Injectable } from '@nestjs/common';
-import { BoardListService } from '../board-list/board-list.service';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Board } from './board.entity';
 import { BoardRepository } from './board.repository';
 
 @Injectable()
 export class BoardService {
-  constructor(
-    private readonly repository: BoardRepository,
-    private readonly boardListService: BoardListService,
-  ) {}
+  constructor(private readonly repository: BoardRepository) {}
 
-  async findBoardById(id: number): Promise<Board> {
-    const board = await this.repository.findOne(id);
-    if (!board) throw new Error('Board not found');
-    return board;
+  async findBoardListById(id: number): Promise<Board> {
+    const boardList = await this.repository.findOne(id);
+    if (!boardList) {
+      throw new NotFoundException('BoardList not found');
+    }
+    return boardList;
+  }
+
+  async findBoardsByProjectId(projectId: number): Promise<Board[]> {
+    return this.repository.find({
+      where: { project: { id: projectId } },
+    });
   }
 }

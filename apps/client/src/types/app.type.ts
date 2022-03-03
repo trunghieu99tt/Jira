@@ -2,6 +2,8 @@ import { Socket } from 'socket.io-client';
 
 export type TTheme = 'LIGHT' | 'DARK';
 export type TScreenSize = 'DESKTOP' | 'TABLET' | 'MOBILE';
+export type TSize = 'SMALL' | 'MEDIUM' | 'LARGE';
+export type TModalPosition = 'top' | 'bottom' | 'left' | 'right' | 'center';
 
 export type TAppAction = {
   type: 'SET_SOCKET';
@@ -22,3 +24,5 @@ export interface Size {
   width: number | undefined;
   height: number | undefined;
 }
+
+export type TTooltipPlacement = 'top' | 'bottom' | 'left' | 'right';

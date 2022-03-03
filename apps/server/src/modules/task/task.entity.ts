@@ -1,16 +1,18 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { BoardList } from '../board-list/board-list.entity';
+import { Board } from '../board/board.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Attachment } from '../attachment/attachment.entity';
-import { BoardUser } from '../board-user/board-user.entity';
+import { ProjectUser } from '../project-user/project-user.entity';
+import { Project } from '../project/project.entity';
 
 @Entity({
   name: 'tasks',
@@ -28,21 +30,25 @@ export class Task {
   @Field(() => String)
   description: string;
 
-  @Field(() => BoardUser)
-  @ManyToOne(() => BoardUser, (boardUser) => boardUser.reportedTasks)
-  reportedBy: BoardUser;
+  @Field(() => ProjectUser)
+  @ManyToOne(() => ProjectUser, (boardUser) => boardUser.reportedTasks)
+  reportedBy: ProjectUser;
 
-  @Field(() => BoardUser)
-  @ManyToOne(() => BoardUser, (boardUser) => boardUser.assignedTasks)
-  assignedTo: BoardUser;
+  @Field(() => ProjectUser)
+  @ManyToOne(() => ProjectUser, (boardUser) => boardUser.assignedTasks)
+  assignedTo: ProjectUser;
 
   @Field(() => [Attachment])
   @OneToMany(() => Attachment, (attachment) => attachment.task)
   attachments: Attachment[];
 
-  @Field(() => BoardList)
-  @ManyToOne(() => BoardList, (boardList) => boardList.tasks)
-  boardList: BoardList;
+  @ManyToOne(() => Project, (project) => project.tasks)
+  @Field(() => Project)
+  project: Project;
+
+  @Field(() => Board)
+  @ManyToOne(() => Board, (board) => board.tasks)
+  board: Board;
 
   @Field(() => Date)
   @CreateDateColumn({

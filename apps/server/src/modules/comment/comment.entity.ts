@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Board } from '../board/board.entity';
+import { Project } from '../project/project.entity';
 import { User } from '../user/user.entity';
 
 @Entity({
@@ -35,9 +35,9 @@ export class Comment {
   @ManyToOne(() => User, (user) => user.comments)
   author: User;
 
-  @Field(() => Board)
-  @ManyToOne(() => Board, (board) => board.comments)
-  board: Board;
+  @Field(() => Project)
+  @ManyToOne(() => Project, (board) => board.comments)
+  board: Project;
 
   @CreateDateColumn({
     name: 'created_at',

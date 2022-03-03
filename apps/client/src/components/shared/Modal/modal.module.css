@@ -1,0 +1,39 @@
+.scrollOverlay {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.clickableOverlay {
+  min-height: 100%;
+  background: rgba(9, 30, 66, 0.54);
+}
+
+.clickableOverlay.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5rem;
+}
+
+.modal {
+  display: inline-block;
+  position: relative;
+  background: #fff;
+}
+
+.modal.center {
+  vertical-align: middle;
+  border-radius: 0.3rem;
+}
+
+.modal.aside {
+  min-height: 100vh;
+  box-shadow: 0 0 2rem 0 rgba(0, 0, 0, 0.5);
+}

@@ -1,0 +1,41 @@
+.root {
+}
+
+.heading {
+}
+
+.subHeading {
+}
+
+.errorList {
+}
+
+.errorItem {
+}
+
+.uploadZone {
+}
+
+.uploadZoneInner {
+  padding: 2rem;
+  border: 1px solid var(--gray-4);
+  border-radius: 0.8rem;
+  text-align: center;
+}
+
+.uploadZoneInner .uploadIcon {
+  --size: 3rem;
+  width: var(--size);
+  height: var(--size);
+}
+
+.previewSection {
+}
+
+.previewItem {
+  max-width: 100%;
+}
+
+.previewImage {
+  width: 100%;
+}
