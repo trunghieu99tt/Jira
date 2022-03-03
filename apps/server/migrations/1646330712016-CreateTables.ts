@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class CreateTables1646247251468 implements MigrationInterface {
-  name = 'CreateTables1646247251468';
+export class CreateTables1646330712016 implements MigrationInterface {
+  name = 'CreateTables1646330712016';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
@@ -11,7 +11,7 @@ export class CreateTables1646247251468 implements MigrationInterface {
                 \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
                 \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
                 \`userId\` bigint NULL,
-                \`boardId\` int NULL,
+                \`projectId\` int NULL,
                 PRIMARY KEY (\`id\`)
             ) ENGINE = InnoDB
         `);
@@ -57,7 +57,7 @@ export class CreateTables1646247251468 implements MigrationInterface {
             CREATE TABLE \`boards\` (
                 \`id\` int NOT NULL AUTO_INCREMENT,
                 \`name\` varchar(255) NOT NULL,
-                \`boardId\` int NULL,
+                \`projectId\` int NULL,
                 PRIMARY KEY (\`id\`)
             ) ENGINE = InnoDB
         `);
@@ -69,6 +69,7 @@ export class CreateTables1646247251468 implements MigrationInterface {
                 \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
                 \`reportedById\` int NULL,
                 \`assignedToId\` int NULL,
+                \`projectId\` int NULL,
                 \`boardListId\` int NULL,
                 PRIMARY KEY (\`id\`)
             ) ENGINE = InnoDB
@@ -89,7 +90,7 @@ export class CreateTables1646247251468 implements MigrationInterface {
         `);
     await queryRunner.query(`
             ALTER TABLE \`project_users\`
-            ADD CONSTRAINT \`FK_d817bc6ac850c8d3bbae98685dc\` FOREIGN KEY (\`boardId\`) REFERENCES \`projects\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT \`FK_1905d9d76173d09c07ba1f0cd84\` FOREIGN KEY (\`projectId\`) REFERENCES \`projects\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
     await queryRunner.query(`
             ALTER TABLE \`comments\`
@@ -105,7 +106,7 @@ export class CreateTables1646247251468 implements MigrationInterface {
         `);
     await queryRunner.query(`
             ALTER TABLE \`boards\`
-            ADD CONSTRAINT \`FK_0d8a61707c1e37dcc800ae0eaf5\` FOREIGN KEY (\`boardId\`) REFERENCES \`projects\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT \`FK_074efe1a079786d8c076bf00fff\` FOREIGN KEY (\`projectId\`) REFERENCES \`projects\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
     await queryRunner.query(`
             ALTER TABLE \`tasks\`
@@ -114,6 +115,10 @@ export class CreateTables1646247251468 implements MigrationInterface {
     await queryRunner.query(`
             ALTER TABLE \`tasks\`
             ADD CONSTRAINT \`FK_d020677feafe94eba0cb9d846d1\` FOREIGN KEY (\`assignedToId\`) REFERENCES \`project_users\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION
+        `);
+    await queryRunner.query(`
+            ALTER TABLE \`tasks\`
+            ADD CONSTRAINT \`FK_e08fca67ca8966e6b9914bf2956\` FOREIGN KEY (\`projectId\`) REFERENCES \`projects\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
     await queryRunner.query(`
             ALTER TABLE \`tasks\`
@@ -133,13 +138,16 @@ export class CreateTables1646247251468 implements MigrationInterface {
             ALTER TABLE \`tasks\` DROP FOREIGN KEY \`FK_aa58d855a2bc4dbe19797f8523c\`
         `);
     await queryRunner.query(`
+            ALTER TABLE \`tasks\` DROP FOREIGN KEY \`FK_e08fca67ca8966e6b9914bf2956\`
+        `);
+    await queryRunner.query(`
             ALTER TABLE \`tasks\` DROP FOREIGN KEY \`FK_d020677feafe94eba0cb9d846d1\`
         `);
     await queryRunner.query(`
             ALTER TABLE \`tasks\` DROP FOREIGN KEY \`FK_dae518c39d2fa5a61d1ddfc702c\`
         `);
     await queryRunner.query(`
-            ALTER TABLE \`boards\` DROP FOREIGN KEY \`FK_0d8a61707c1e37dcc800ae0eaf5\`
+            ALTER TABLE \`boards\` DROP FOREIGN KEY \`FK_074efe1a079786d8c076bf00fff\`
         `);
     await queryRunner.query(`
             ALTER TABLE \`projects\` DROP FOREIGN KEY \`FK_a8e7e6c3f9d9528ed35fe5bae33\`
@@ -151,7 +159,7 @@ export class CreateTables1646247251468 implements MigrationInterface {
             ALTER TABLE \`comments\` DROP FOREIGN KEY \`FK_4548cc4a409b8651ec75f70e280\`
         `);
     await queryRunner.query(`
-            ALTER TABLE \`project_users\` DROP FOREIGN KEY \`FK_d817bc6ac850c8d3bbae98685dc\`
+            ALTER TABLE \`project_users\` DROP FOREIGN KEY \`FK_1905d9d76173d09c07ba1f0cd84\`
         `);
     await queryRunner.query(`
             ALTER TABLE \`project_users\` DROP FOREIGN KEY \`FK_6ebc83af455ff1ed9573c823e23\`

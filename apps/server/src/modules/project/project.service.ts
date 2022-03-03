@@ -16,7 +16,9 @@ import {
   DEFAULT_LIMIT,
   DEFAULT_OFFSET,
 } from 'src/common/constants/common.constant';
-import { CreateBoardInput } from './dtos/create-project-input.dto';
+import { CreateProjectInput } from './dtos/create-project-input.dto';
+import { DEFAULT_BOARD_NAMES } from './constants/project.constant';
+import { Board } from '../board/board.entity';
 
 @Injectable()
 export class ProjectService extends Service<Project, ProjectRepository> {
@@ -45,21 +47,32 @@ export class ProjectService extends Service<Project, ProjectRepository> {
       where: {
         id,
       },
+      relations: ['boards'],
     });
   }
 
-  async createNewProject(createBoardInput: CreateBoardInput): Promise<Project> {
+  async createNewProject(
+    createBoardInput: CreateProjectInput,
+  ): Promise<Project> {
     const response = await this.connection.transaction(
       async (manager: EntityManager) => {
-        const newBoard = plainToClass(Project, createBoardInput);
+        const newProject = plainToClass(Project, createBoardInput);
         const user = await manager.findOne(User, createBoardInput.ownerId);
         if (!user) throw new Error('User not found');
-        newBoard.owner = user;
-        const board = await manager.save(newBoard);
+        newProject.owner = user;
+        const board = await manager.save(newProject);
+
+        // create some default boards
+        for (let i = 0; i < DEFAULT_BOARD_NAMES.length; i += 1) {
+          const newBoard = plainToClass(Board, {
+            name: DEFAULT_BOARD_NAMES[i],
+            project: board,
+          });
+          await manager.save(newBoard);
+        }
         return board;
       },
     );
-
     return response;
   }
 }

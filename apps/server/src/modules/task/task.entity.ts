@@ -6,11 +6,13 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Attachment } from '../attachment/attachment.entity';
 import { ProjectUser } from '../project-user/project-user.entity';
+import { Project } from '../project/project.entity';
 
 @Entity({
   name: 'tasks',
@@ -40,9 +42,13 @@ export class Task {
   @OneToMany(() => Attachment, (attachment) => attachment.task)
   attachments: Attachment[];
 
+  @ManyToOne(() => Project, (project) => project.tasks)
+  @Field(() => Project)
+  project: Project;
+
   @Field(() => Board)
-  @ManyToOne(() => Board, (boardList) => boardList.tasks)
-  boardList: Board;
+  @ManyToOne(() => Board, (board) => board.tasks)
+  board: Board;
 
   @Field(() => Date)
   @CreateDateColumn({

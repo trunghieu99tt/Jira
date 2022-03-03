@@ -1,13 +1,13 @@
 import React from 'react';
 
 // talons
-import { useBoard } from './useBoard';
+import { useProjectItem } from './useProjectItem';
 
 // utils
 import mergeClasses from '@utils/mergeClasses';
 
 // styles
-import defaultClasses from './board.module.css';
+import defaultClasses from './projectItem.module.css';
 import { useQuery } from '@apollo/client';
 import { GET_PROJECT_BY_ID } from 'graphql/queries/project.queries';
 

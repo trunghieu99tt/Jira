@@ -1,18 +1,18 @@
 // talons
-import { useBoardList } from './useBoardListPage';
+import { useProjectListPage } from './useProjectListPage';
 import { useQueryParamModal } from '@talons/useQueryParamModal';
 
 // components
 import Modal from '@components/shared/Modal';
 import Button from '@components/shared/Button';
-import BoardList from '@components/Project/LIst';
 import BoardCreate from '@components/Project/Create';
+import ProjectList from '@components/Project/List';
 
 // styles
-import classes from './boardListPage.module.css';
+import classes from './projectListPage.module.css';
 
-const BoardListPage = () => {
-  const { data, error, loading } = useBoardList();
+const ProjectListPage = () => {
+  const { data, error, loading } = useProjectListPage();
   const {
     open: openCreateBoardModal,
     close: closeCreateBoardModal,
@@ -30,16 +30,16 @@ const BoardListPage = () => {
   return (
     <section className={classes.root}>
       <header className={classes.header}>
-        <h2 className={classes.heading}>All Boards</h2>
+        <h2 className={classes.heading}>All Projects</h2>
         <Button variant="primary" onClick={openCreateBoardModal}>
           Add
         </Button>
       </header>
       <section className={classes.list}>
-        <BoardList data={data} />
+        <ProjectList data={data} />
       </section>
       {isCreateBoardModalOpen() && (
-        <Modal        
+        <Modal
           renderContent={(modal) => {
             return <BoardCreate />;
           }}
@@ -54,4 +54,4 @@ const BoardListPage = () => {
   );
 };
 
-export default BoardListPage;
+export default ProjectListPage;

@@ -17,6 +17,7 @@ import { ProjectUser } from '../project-user/project-user.entity';
 
 // enums
 import { EPrivacy } from '../../common/enums';
+import { Task } from '../task/task.entity';
 
 registerEnumType(EPrivacy, {
   name: 'Privacy',
@@ -53,21 +54,25 @@ export class Project {
   @Column()
   description: string;
 
-  @OneToMany(() => Board, (boardList) => boardList.board)
+  @OneToMany(() => Board, (board) => board.project)
   @Field(() => [Board])
   boards: Board[];
 
-  @ManyToOne(() => User, (user) => user.boards)
+  @ManyToOne(() => User, (user) => user.projects)
   @Field(() => User)
   owner: User;
 
-  @OneToMany(() => ProjectUser, (boardUser) => boardUser.board)
+  @OneToMany(() => ProjectUser, (projectUser) => projectUser.project)
   @Field(() => [ProjectUser])
   projectUsers: ProjectUser[];
 
   @OneToMany(() => Comment, (comment) => comment.board)
   @Field(() => [Comment])
   comments: Comment[];
+
+  @OneToMany(() => Task, (task) => task.project)
+  @Field(() => [Task])
+  tasks: Task[];
 
   @Field(() => Number)
   userCount: number;

@@ -1,5 +1,5 @@
 // talons
-import { useBoardCreate } from './useBoardCreate';
+import { useCreateProject } from './useCreateProject';
 
 // utils
 import mergeClasses from '@utils/mergeClasses';
@@ -11,17 +11,17 @@ import AudienceSelector from '../AudienceSelector';
 import FileUploader from '@components/shared/FileUploader';
 
 // styles
-import defaultClasses from './boardCreate.module.css';
+import defaultClasses from './createProject.module.css';
 
 type Props = {
   classes?: any;
 };
 
-const BoardCreate = ({ classes: propsClasses }: Props) => {
+const CreateProject = ({ classes: propsClasses }: Props) => {
   const classes = mergeClasses(defaultClasses, propsClasses);
 
   const { audience, handleFiles, onChangeAudience, onSubmit } =
-    useBoardCreate();
+    useCreateProject();
 
   return (
     <Form
@@ -36,7 +36,7 @@ const BoardCreate = ({ classes: propsClasses }: Props) => {
       onSubmit={onSubmit}
     >
       <Form.Element className={classes.formWrapper}>
-        <h3>Create a new board</h3>
+        <h3>Create a new project</h3>
         <FileUploader
           handleFiles={handleFiles}
           shouldHavePreview={true}
@@ -64,4 +64,4 @@ const BoardCreate = ({ classes: propsClasses }: Props) => {
   );
 };
 
-export default BoardCreate;
+export default CreateProject;

@@ -41,27 +41,27 @@ export class ProjectResolver {
   }
 
   @Mutation((returns) => Project)
-  async CreateProject(
+  async createProject(
     @Args('createProjectInput') createProjectInput: CreateProjectInput,
   ): Promise<Project> {
     return this.projectService.createNewProject(createProjectInput);
   }
 
   @ResolveField()
-  async boards(@Parent() board: Project): Promise<Board[]> {
-    const { id } = board;
-    return this.boardService.findBoardListsByBoardId(id);
+  async boards(@Parent() project: Project): Promise<Board[]> {
+    const { id } = project;
+    return this.boardService.findBoardsByProjectId(id);
   }
 
   @ResolveField()
-  async projectUsers(@Parent() board: Project): Promise<any> {
-    const { id } = board;
+  async projectUsers(@Parent() project: Project): Promise<any> {
+    const { id } = project;
     return this.projectUserService.findProjectUsersByProjectId(id);
   }
 
   @ResolveField()
-  async userCount(@Parent() board: Project): Promise<number> {
-    const { id } = board;
+  async userCount(@Parent() project: Project): Promise<number> {
+    const { id } = project;
     return this.projectUserService.countNumberOfProjectUsers(id);
   }
 }

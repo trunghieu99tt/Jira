@@ -26,9 +26,9 @@ export class Board {
 
   @ManyToOne(() => Project, (project) => project.boards)
   @Field(() => Project)
-  board: Project;
+  project: Project;
 
-  @OneToMany(() => Task, (task) => task.boardList)
+  @OneToMany(() => Task, (task) => task.board)
   @Field(() => [Task])
   tasks: Task[];
 }

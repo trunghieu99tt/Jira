@@ -14,9 +14,9 @@ export class BoardService {
     return boardList;
   }
 
-  async findBoardListsByBoardId(boardId: number): Promise<Board[]> {
+  async findBoardsByProjectId(projectId: number): Promise<Board[]> {
     return this.repository.find({
-      where: { board: { id: boardId } },
+      where: { project: { id: projectId } },
     });
   }
 }

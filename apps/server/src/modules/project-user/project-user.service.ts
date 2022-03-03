@@ -18,7 +18,11 @@ export class ProjectUserService extends Service<
     limit = 5,
   ): Promise<Partial<ProjectUser>[]> {
     return this.findList({
-      where: { project: projectId },
+      where: {
+        project: {
+          id: projectId,
+        },
+      },
       skip: offset,
       take: limit,
       order: {
@@ -27,10 +31,12 @@ export class ProjectUserService extends Service<
     });
   }
 
-  async countNumberOfProjectUsers(boardId: number): Promise<number> {
+  async countNumberOfProjectUsers(projectId: number): Promise<number> {
+    console.log('projectId', projectId);
+
     return this.count({
       where: {
-        board: { id: boardId },
+        project: { id: projectId },
       },
     });
   }

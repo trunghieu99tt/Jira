@@ -33,7 +33,7 @@ export class ProjectUser {
   @Field(() => ERole)
   role: ERole;
 
-  @ManyToOne(() => User, (user) => user.boardUsers)
+  @ManyToOne(() => User, (user) => user.projectUsers)
   @Field(() => User)
   user: User;
 

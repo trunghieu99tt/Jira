@@ -1,15 +1,15 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_BOARD_MUTATION = gql`
-  mutation createBoard(
+  mutation createProject(
     $name: String!
-    $privacy: Int!
-    $ownerId: Int!
     $coverPhoto: String
+    $privacy: Int!
     $description: String
+    $ownerId: Int!
   ) {
-    createBoard(
-      createBoardInput: {
+    createProject(
+      createProjectInput: {
         name: $name
         privacy: $privacy
         ownerId: $ownerId
@@ -18,6 +18,10 @@ export const CREATE_BOARD_MUTATION = gql`
       }
     ) {
       id
+      owner {
+        id
+        name
+      }
     }
   }
 `;

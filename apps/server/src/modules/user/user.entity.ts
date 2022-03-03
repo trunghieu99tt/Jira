@@ -50,11 +50,11 @@ export class User {
 
   @OneToMany(() => Project, (board) => board.owner)
   @Field(() => [Project])
-  boards: Project[];
+  projects: Project[];
 
   @OneToMany(() => ProjectUser, (boardUser) => boardUser.user)
   @Field(() => [ProjectUser])
-  boardUsers: ProjectUser[];
+  projectUsers: ProjectUser[];
 
   @OneToMany(() => Comment, (comment) => comment.author)
   @Field(() => [Comment])

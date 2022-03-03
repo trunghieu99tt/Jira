@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user.recoil';
 
-export const useBoardCreate = () => {
+export const useCreateProject = () => {
   const [audience, setAudience] = useState<number>(0);
   const [coverPhoto, setCoverPhoto] = useState<File | null>(null);
 
@@ -31,7 +31,7 @@ export const useBoardCreate = () => {
         description,
         coverPhoto: coverPhotoUrl,
         privacy: audience,
-        ownerId: currentUser?.id || ``,
+        ownerId: currentUser?.id || 1,
       },
     });
   };

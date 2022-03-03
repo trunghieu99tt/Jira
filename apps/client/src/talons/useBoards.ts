@@ -1,5 +1,5 @@
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { CREATE_BOARD_MUTATION } from 'graphql/mutations/board.mutation';
+import { CREATE_BOARD_MUTATION } from 'graphql/mutations/project.mutation';
 import { GET_PROJECT_LIST } from 'graphql/queries/project.queries';
 
 export const useBoards = () => {
