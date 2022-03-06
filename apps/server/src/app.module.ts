@@ -8,11 +8,12 @@ import { AppService } from './app.service';
 import { configModuleOptions } from './configuration/config-module';
 import { AttachmentModule } from './modules/attachment/attachment.module';
 import { BoardModule } from './modules/board/board.module';
-import { BoardUserModule } from './modules/project-user/project-user.module';
 import { ProjectModule } from './modules/project/project.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { TaskModule } from './modules/task/task.module';
 import { UserModule } from './modules/user/user.module';
+import { FileModule } from './modules/file/file.module';
+import { UploadModule } from './modules/upload/upload.module';
 
 @Module({
   imports: [
@@ -48,10 +49,11 @@ import { UserModule } from './modules/user/user.module';
     AttachmentModule,
     ProjectModule,
     BoardModule,
-    BoardUserModule,
     CommentModule,
     TaskModule,
     UserModule,
+    FileModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -9,7 +9,7 @@ const BoardItem = ({ data }: Props) => {
   return (
     <Droppable droppableId={`board-${data.id}`}>
       {(provided, snapshot) => (
-        <article>
+        <article ref={provided.innerRef}>
           <p>{data.name}</p>
         </article>
       )}

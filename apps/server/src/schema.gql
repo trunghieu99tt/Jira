@@ -2,20 +2,19 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type ProjectUser {
+type Task {
   id: Float!
-  role: Role!
-  user: User!
-  project: Project!
-  reportedTasks: [Task!]!
-  assignedTasks: [Task!]!
+  name: String!
+  description: String!
+  summary: String!
+  priority: Float!
+  type: String!
+  reporterUserId: Int!
+  assigneeUserId: Int!
+  projectId: Int!
+  boardId: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
-}
-
-enum Role {
-  ADMIN
-  MEMBER
 }
 
 """
@@ -23,14 +22,11 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Comment {
+type Board {
   id: Float!
-  content: String!
-  file: String!
-  author: User!
-  board: Project!
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  name: String!
+  projectId: Int!
+  tasks: [Task!]!
 }
 
 type User {
@@ -38,29 +34,33 @@ type User {
   username: String!
   password: String!
   email: String!
-  name: String!
-  avatar: String!
-  projects: [Project!]!
-  projectUsers: [ProjectUser!]!
-  comments: [Comment!]!
+  name: Int!
+  avatarFileId: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type ProjectUserOutput {
+  id: Int!
+  userId: Int!
+  name: String!
+  role: Int!
+  avatar: String!
 }
 
 type Project {
   id: Int!
   name: String!
-  coverPhoto: String!
+  coverPhotoFileId: Int!
   privacy: Privacy!
   description: String!
-  boards: [Board!]!
-  owner: User!
-  projectUsers: [ProjectUser!]!
-  comments: [Comment!]!
-  tasks: [Task!]!
-  userCount: Float!
+  ownerUserId: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
+  boards: [Board!]!
+  projectUsers: [ProjectUserOutput!]!
+  userCount: Float!
+  coverPhotoUrl: String!
 }
 
 enum Privacy {
@@ -68,50 +68,34 @@ enum Privacy {
   PRIVATE
 }
 
-type Board {
-  id: Float!
-  name: String!
-  project: Project!
-  tasks: [Task!]!
-}
-
-type Task {
-  id: Float!
-  name: String!
-  description: String!
-  reportedBy: ProjectUser!
-  assignedTo: ProjectUser!
-  attachments: [Attachment!]!
-  project: Project!
-  board: Board!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type Attachment {
-  id: Float!
-  file: String!
-  task: Task!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
 type Query {
   task(id: Int!): Task!
   projects(offset: Int = 0, limit: Int = 20): [Project!]!
   project(id: Int!): Project!
   boardList(id: Int!): Board!
-  getProjectUsers(offset: Int = 0, limit: Int = 20, projectId: Int!): [ProjectUser!]!
 }
 
 type Mutation {
+  createTask(createTaskInput: CreateTaskInput!): Task!
   createProject(createProjectInput: CreateProjectInput!): Project!
+}
+
+input CreateTaskInput {
+  assigneeUserId: Int!
+  boardId: Int!
+  description: String!
+  name: String!
+  priority: Int!
+  reporterUserId: Int!
+  summary: String!
+  attachmentFileIds: String!
+  projectId: Int!
 }
 
 input CreateProjectInput {
   name: String!
-  coverPhoto: String = ""
+  coverPhotoFileId: Int
   privacy: Int!
   description: String = ""
-  ownerId: Int!
+  ownerUserId: Int!
 }

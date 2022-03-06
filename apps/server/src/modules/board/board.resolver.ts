@@ -19,7 +19,7 @@ export class BoardResolver {
 
   @Query((returns: any) => Board)
   async boardList(@Args('id', { type: () => Int }) id: number): Promise<Board> {
-    return this.boardListService.findBoardListById(id);
+    return this.boardListService.findBoardById(id);
   }
 
   @ResolveField()

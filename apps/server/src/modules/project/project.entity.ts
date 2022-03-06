@@ -3,21 +3,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-// entities
-import { User } from '../user/user.entity';
-import { Comment } from '../comment/comment.entity';
-import { Board } from '../board/board.entity';
-import { ProjectUser } from '../project-user/project-user.entity';
-
 // enums
 import { EPrivacy } from '../../common/enums';
-import { Task } from '../task/task.entity';
+import { Board } from '../board/board.entity';
+import { ProjectUserOutput } from './dtos/project-user-output.dto';
 
 registerEnumType(EPrivacy, {
   name: 'Privacy',
@@ -28,7 +21,9 @@ registerEnumType(EPrivacy, {
 })
 @ObjectType()
 export class Project {
-  @PrimaryGeneratedColumn('increment')
+  @PrimaryGeneratedColumn('increment', {
+    type: 'bigint',
+  })
   @Field(() => Int)
   id: number;
 
@@ -36,11 +31,13 @@ export class Project {
   @Column()
   name: string;
 
-  @Field(() => String)
+  @Field(() => Int)
   @Column({
-    name: 'cover_photo',
+    name: 'cover_photo_file_id',
+    nullable: true,
+    type: 'bigint',
   })
-  coverPhoto: string;
+  coverPhotoFileId: number;
 
   @Field(() => EPrivacy)
   @Column({
@@ -54,28 +51,12 @@ export class Project {
   @Column()
   description: string;
 
-  @OneToMany(() => Board, (board) => board.project)
-  @Field(() => [Board])
-  boards: Board[];
-
-  @ManyToOne(() => User, (user) => user.projects)
-  @Field(() => User)
-  owner: User;
-
-  @OneToMany(() => ProjectUser, (projectUser) => projectUser.project)
-  @Field(() => [ProjectUser])
-  projectUsers: ProjectUser[];
-
-  @OneToMany(() => Comment, (comment) => comment.board)
-  @Field(() => [Comment])
-  comments: Comment[];
-
-  @OneToMany(() => Task, (task) => task.project)
-  @Field(() => [Task])
-  tasks: Task[];
-
-  @Field(() => Number)
-  userCount: number;
+  @Field(() => Int)
+  @Column({
+    name: 'owner_user_id',
+    type: 'bigint',
+  })
+  ownerUserId: number;
 
   @Field(() => Date)
   @CreateDateColumn({
@@ -88,4 +69,16 @@ export class Project {
     name: 'updated_at',
   })
   updatedAt: Date;
+
+  @Field(() => [Board])
+  boards: Board[];
+
+  @Field(() => [ProjectUserOutput])
+  projectUsers: ProjectUserOutput[];
+
+  @Field(() => Number)
+  userCount: number;
+
+  @Field(() => String)
+  coverPhotoUrl: string;
 }

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Args, Int, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CreateTaskInput } from './dtos/create-task-input.dto';
 import { Task } from './task.entity';
 import { TaskService } from './task.service';
 
@@ -10,5 +11,12 @@ export class TaskResolver {
   @Query((returns) => Task)
   async task(@Args('id', { type: () => Int }) id: number): Promise<Task> {
     return this.taskService.findTaskById(id);
+  }
+
+  @Mutation((returns) => Task)
+  async createTask(
+    @Args('createTaskInput') createTaskInput: CreateTaskInput,
+  ): Promise<Task> {
+    return this.taskService.createNewTask(createTaskInput);
   }
 }

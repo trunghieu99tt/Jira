@@ -1,16 +1,11 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ProjectUser } from '../project-user/project-user.entity';
-import { Project } from '../project/project.entity';
-import { Comment } from '../comment/comment.entity';
-
 @ObjectType()
 @Entity({
   name: 'users',
@@ -40,25 +35,15 @@ export class User {
   })
   email: string;
 
-  @Field(() => String)
+  @Field(() => Int)
   @Column()
   name: string;
 
-  @Field(() => String)
-  @Column()
-  avatar: string;
-
-  @OneToMany(() => Project, (board) => board.owner)
-  @Field(() => [Project])
-  projects: Project[];
-
-  @OneToMany(() => ProjectUser, (boardUser) => boardUser.user)
-  @Field(() => [ProjectUser])
-  projectUsers: ProjectUser[];
-
-  @OneToMany(() => Comment, (comment) => comment.author)
-  @Field(() => [Comment])
-  comments: Comment[];
+  @Field(() => Int)
+  @Column({
+    name: 'avatar_file_id',
+  })
+  avatarFileId: number;
 
   @Field(() => Date)
   @CreateDateColumn({

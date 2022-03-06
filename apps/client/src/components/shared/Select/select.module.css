@@ -1,0 +1,9 @@
+.root {
+  width: 100%;
+}
+
+.value {
+  display: flex;
+  justify-content: space-between;
+  min-height: 2rem;
+}

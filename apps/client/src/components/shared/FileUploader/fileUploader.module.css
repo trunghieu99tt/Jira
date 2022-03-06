@@ -29,7 +29,9 @@
   height: var(--size);
 }
 
-.previewSection {
+.uploadedItemList {
+  max-height: 20rem;
+  overflow: auto;
 }
 
 .previewItem {

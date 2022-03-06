@@ -26,3 +26,10 @@ export interface Size {
 }
 
 export type TTooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
+
+export type TTransformOrigin =
+  | 'top right'
+  | 'top left'
+  | 'bottom right'
+  | 'bottom left'
+  | 'center center';

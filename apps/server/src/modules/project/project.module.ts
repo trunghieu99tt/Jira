@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BoardModule } from '../board/board.module';
-import { BoardUserModule } from '../project-user/project-user.module';
+import { FileModule } from '../file/file.module';
+import { ProjectUserModule } from '../project-user/project-user.module';
+import { UserModule } from '../user/user.module';
 import { ProjectRepository } from './project.repository';
 import { ProjectResolver } from './project.resolver';
 import { ProjectService } from './project.service';
@@ -10,7 +12,10 @@ import { ProjectService } from './project.service';
   imports: [
     TypeOrmModule.forFeature([ProjectRepository]),
     BoardModule,
-    BoardUserModule,
+    FileModule,
+    ProjectUserModule,
+    UserModule,
+    FileModule,
   ],
   exports: [ProjectService],
   providers: [ProjectService, ProjectResolver],

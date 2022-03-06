@@ -7,6 +7,8 @@ import Input from '../Input';
 
 // styles
 import defaultClasses from './form.module.css';
+import TextEditor from '../TextEditor';
+import Select from '../Select';
 
 const generateField = (FormComponent: any) => {
   const FieldComponent = ({
@@ -48,6 +50,8 @@ const generateField = (FormComponent: any) => {
 
 const exportObject = {
   Input: generateField(Input),
+  Select: generateField(Select),
+  TextEditor: generateField(TextEditor),
 };
 
 export default exportObject;

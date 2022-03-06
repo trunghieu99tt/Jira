@@ -1,18 +1,12 @@
-import { Field, ObjectType } from '@nestjs/graphql';
-import { Board } from '../board/board.entity';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
+  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Attachment } from '../attachment/attachment.entity';
-import { ProjectUser } from '../project-user/project-user.entity';
-import { Project } from '../project/project.entity';
 
 @Entity({
   name: 'tasks',
@@ -28,27 +22,53 @@ export class Task {
   name: string;
 
   @Field(() => String)
+  @Column({
+    type: 'longtext',
+  })
   description: string;
 
-  @Field(() => ProjectUser)
-  @ManyToOne(() => ProjectUser, (boardUser) => boardUser.reportedTasks)
-  reportedBy: ProjectUser;
+  @Field(() => String)
+  @Column({
+    type: 'text',
+    name: 'summary',
+  })
+  summary: string;
 
-  @Field(() => ProjectUser)
-  @ManyToOne(() => ProjectUser, (boardUser) => boardUser.assignedTasks)
-  assignedTo: ProjectUser;
+  @Field(() => Number)
+  @Column()
+  priority: number;
 
-  @Field(() => [Attachment])
-  @OneToMany(() => Attachment, (attachment) => attachment.task)
-  attachments: Attachment[];
+  @Field(() => String)
+  @Column()
+  type: number;
 
-  @ManyToOne(() => Project, (project) => project.tasks)
-  @Field(() => Project)
-  project: Project;
+  @Field(() => Int)
+  @Column({
+    name: 'reporter_user_id',
+    type: 'bigint',
+  })
+  reporterUserId: number;
 
-  @Field(() => Board)
-  @ManyToOne(() => Board, (board) => board.tasks)
-  board: Board;
+  @Field(() => Int)
+  @Column({
+    name: 'assignee_user_id',
+    type: 'bigint',
+  })
+  assigneeUserId: number;
+
+  @Field(() => Int)
+  @Column({
+    name: 'project_id',
+    type: 'bigint',
+  })
+  projectId: number;
+
+  @Field(() => Int)
+  @Column({
+    name: 'board_id',
+    type: 'bigint',
+  })
+  boardId: number;
 
   @Field(() => Date)
   @CreateDateColumn({

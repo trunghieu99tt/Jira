@@ -71,10 +71,6 @@ export const useFileUploader = ({
         hasErrors.push('Invalid file');
         continue;
       }
-      if (lookup && !ACCEPT_FILE_FORMATS.includes(lookup)) {
-        hasErrors.push('Invalid file');
-        continue;
-      }
 
       if (lookup && ACCEPT_FILE_FORMATS.includes(lookup)) {
         if (file.size > MAX_FILE_SIZE) {

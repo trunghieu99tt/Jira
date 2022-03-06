@@ -6,13 +6,12 @@ export class CreateProjectInput {
   name: string;
 
   @Field({
-    defaultValue: '',
     nullable: true,
   })
-  coverPhoto: string;
+  @Field(() => Int)
+  coverPhotoFileId: number;
 
-  // privacy should be int
-  @Field((type) => Int)
+  @Field(() => Int)
   privacy: number;
 
   @Field({
@@ -21,6 +20,6 @@ export class CreateProjectInput {
   })
   description: string;
 
-  @Field((type) => Int)
-  ownerId: number;
+  @Field(() => Int)
+  ownerUserId: number;
 }

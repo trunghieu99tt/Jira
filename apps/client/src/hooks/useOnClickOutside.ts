@@ -5,7 +5,7 @@ const useOnOutsideClick = (
   $ignoredElementRefs: RefObject<any>,
   isListening: boolean,
   onOutsideClick: any,
-  $listeningElementRef: RefObject<any>,
+  $listeningElementRef?: RefObject<any>,
 ) => {
   const $mouseDownTargetRef = useRef<RefObject<any>>();
   const $ignoredElementRefsMemoized = useDeepCompareMemoize(

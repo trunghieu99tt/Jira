@@ -1,14 +1,12 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
+  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Project } from '../project/project.entity';
-import { User } from '../user/user.entity';
 
 @Entity({
   name: 'comments',
@@ -25,19 +23,19 @@ export class Comment {
   })
   content: string;
 
-  @Field(() => String)
+  @Field(() => Int)
   @Column({
-    nullable: true,
+    name: 'user_id',
+    type: 'bigint',
   })
-  file: string;
+  userId: number;
 
-  @Field(() => User)
-  @ManyToOne(() => User, (user) => user.comments)
-  author: User;
-
-  @Field(() => Project)
-  @ManyToOne(() => Project, (board) => board.comments)
-  board: Project;
+  @Field(() => Int)
+  @Column({
+    name: 'board_id',
+    type: 'bigint',
+  })
+  boardId: number;
 
   @CreateDateColumn({
     name: 'created_at',

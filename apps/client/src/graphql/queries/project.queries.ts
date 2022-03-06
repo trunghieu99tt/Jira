@@ -1,21 +1,19 @@
 import { gql } from '@apollo/client';
+import { PROJECT_USER_FRAGMENT } from 'graphql/fragments/projectUser.fragment';
 
 export const GET_PROJECT_LIST = gql`
   query getAllProjects($offset: Int, $limit: Int) {
     projects(offset: $offset, limit: $limit) {
       id
       name
-      coverPhoto
+      coverPhotoUrl
       userCount
       projectUsers {
-        user {
-          id
-          name
-          avatar
-        }
+        ...projectUserFragment
       }
     }
   }
+  ${PROJECT_USER_FRAGMENT}
 `;
 
 export const GET_PROJECT_BY_ID = gql`
@@ -23,7 +21,7 @@ export const GET_PROJECT_BY_ID = gql`
     project(id: $id) {
       id
       name
-      coverPhoto
+      coverPhotoUrl
       createdAt
       updatedAt
       privacy
@@ -31,6 +29,10 @@ export const GET_PROJECT_BY_ID = gql`
         id
         name
       }
+      projectUsers {
+        ...projectUserFragment
+      }
     }
   }
+  ${PROJECT_USER_FRAGMENT}
 `;

@@ -38,3 +38,14 @@ export const DEFAULT_API_KEY = getEnv('DEFAULT_API_KEY');
 // Mailer
 export const MAILER_EMAIL_ID = getEnv('MAILER_EMAIL_ID');
 export const MAILER_PASSWORD = getEnv('MAILER_PASSWORD');
+
+// Infura
+export const INFURA_PROJECT_ID = getEnv('INFURA_PROJECT_ID');
+export const INFURA_PROTOCOL = getEnv('INFURA_PROTOCOL');
+export const INFURA_HOST = getEnv('INFURA_HOST');
+export const INFURA_PORT = getEnv('INFURA_PORT')
+  ? parseInt(getEnv('INFURA_PORT'), 10)
+  : 5001;
+export const INFURA_PROJECT_SECRET = getEnv('INFURA_PROJECT_SECRET');
+
+export const SERVER_ADDRESS = getEnv('SERVER_ADDRESS');
