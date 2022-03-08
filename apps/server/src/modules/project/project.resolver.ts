@@ -5,6 +5,7 @@ import {
   Parent,
   Query,
   ResolveField,
+  ResolveProperty,
   Resolver,
 } from '@nestjs/graphql';
 import { PaginationArgs } from 'src/common/dto/pagination-args.dto';
@@ -20,6 +21,7 @@ import { UserService } from '../user/user.service';
 import { In } from 'typeorm';
 import { ProjectUserOutput } from './dtos/project-user-output.dto';
 import { plainToClass } from 'class-transformer';
+import { BoardTask } from '../task/dtos/board-task-output.dto';
 
 @Resolver((of: any) => Project)
 export class ProjectResolver {
@@ -45,7 +47,6 @@ export class ProjectResolver {
   async project(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<Partial<Project>> {
-    console.log('Go here');
     return this.projectService.findProjectById(id);
   }
 
@@ -69,8 +70,12 @@ export class ProjectResolver {
       where: {
         projectId: id,
       },
-      select: ['userId', 'role'],
+      select: ['userId', 'role', 'id'],
     });
+
+    console.log('projectId', id, 'projectUsers', projectUsers);
+
+    if (!projectUsers?.length) return [];
     const userIds = projectUsers.map(({ userId }) => userId);
     const users = await this.userService.findList({
       where: {
@@ -93,13 +98,19 @@ export class ProjectResolver {
       projectUsers.map((projectUser) => {
         const userId = projectUser.userId;
         let avatar = '';
+        let name = '';
         if (userId) {
           avatar = fileUrlsMapping[userId];
+        }
+        const user = users.find((u) => u.id === userId);
+        if (user) {
+          name = user?.name || '';
         }
 
         return {
           ...projectUser,
           avatar,
+          name,
         };
       }),
     );

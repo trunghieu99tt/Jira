@@ -1,21 +1,24 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class ProjectUserOutput {
+export class BoardTask {
   @Field(() => Int)
   id: number;
-
-  @Field(() => Int)
-  userId: number;
-
-  @Field(() => Int)
-  role: number;
 
   @Field(() => String)
   name: string;
 
+  @Field(() => Int)
+  priority: number;
+
+  @Field(() => String)
+  type: string;
+
   @Field(() => String, {
     defaultValue: '',
   })
-  avatar: string;
+  assigneeAvatar: string;
+
+  @Field(() => String)
+  assigneeName: string;
 }

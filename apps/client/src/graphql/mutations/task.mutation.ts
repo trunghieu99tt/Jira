@@ -9,7 +9,9 @@ export const CREATE_TASK_MUTATION = gql`
     $name: String!
     $priority: Int!
     $description: String
+    $summary: String
     $attachmentFileIds: String
+    $type: String!
   ) {
     createTask(
       createTaskInput: {
@@ -21,13 +23,16 @@ export const CREATE_TASK_MUTATION = gql`
         priority: $priority
         description: $description
         attachmentFileIds: $attachmentFileIds
+        summary: $summary
+        type: $type
       }
     ) {
       id
-      owner {
-        id
-        name
-      }
+      name
+      description
+      summary
+      priority
+      type
     }
   }
 `;

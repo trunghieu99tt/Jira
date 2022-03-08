@@ -10,7 +10,7 @@ import CreateTask from '@components/Task/Create';
 type Props = {};
 
 const ProjectPage = (props: Props) => {
-  const { data, error, loading } = useProjectPage();
+  const { data, error, loading, onDropEnd } = useProjectPage();
 
   const {
     open: openCreateTaskModal,
@@ -40,10 +40,10 @@ const ProjectPage = (props: Props) => {
       )}
       <header>
         <Button variant="primary" onClick={openCreateTaskModal}>
-          Add issue
+          Add task
         </Button>
       </header>
-      <DragDropContext onDragEnd={() => {}}>
+      <DragDropContext onDragEnd={onDropEnd}>
         <div>
           {boards?.map((board: IBoard) => {
             return <BoardItem key={board.id} data={board} />;

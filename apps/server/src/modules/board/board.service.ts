@@ -20,6 +20,7 @@ export class BoardService extends Service<Board, BoardRepository> {
   async findBoardsByProjectId(projectId: number): Promise<Board[]> {
     return this.repository.find({
       where: { projectId },
+      select: ['id', 'name'],
     });
   }
 }

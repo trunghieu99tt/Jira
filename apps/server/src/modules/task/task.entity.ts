@@ -40,7 +40,7 @@ export class Task {
 
   @Field(() => String)
   @Column()
-  type: number;
+  type: string;
 
   @Field(() => Int)
   @Column({
@@ -69,6 +69,12 @@ export class Task {
     type: 'bigint',
   })
   boardId: number;
+
+  @Field(() => Int)
+  @Column({
+    name: 'list_position',
+  })
+  listPosition: number;
 
   @Field(() => Date)
   @CreateDateColumn({

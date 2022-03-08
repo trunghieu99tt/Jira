@@ -1,5 +1,3 @@
-import { IUser } from './user.types';
-
 export enum ProjectUserRole {
   ADMIN = 'ADMIN',
   MEMBER = 'MEMBER',
@@ -8,7 +6,8 @@ export enum ProjectUserRole {
 export interface IProjectUser {
   id: number;
   role: ProjectUserRole;
-  user: IUser;
+  name: string;
+  avatar?: string;
 }
 
 export interface IProject {

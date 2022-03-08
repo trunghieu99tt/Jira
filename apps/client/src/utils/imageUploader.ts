@@ -49,5 +49,5 @@ export const uploadFiles = async (
       'Content-Type': 'multipart/form-data',
     },
   });
-  return response.data;
+  return response.data?.fileIds || [];
 };

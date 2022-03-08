@@ -11,7 +11,7 @@ export const projectsUsersState = atom<{
 });
 
 export const selectProjectUsersByProjectId = selectorFamily<
-  IUser[],
+  IProjectUser[],
   string | undefined
 >({
   key: 'selectProjectUsersByProjectId',
@@ -20,11 +20,7 @@ export const selectProjectUsersByProjectId = selectorFamily<
     ({ get }) => {
       if (!projectId) return [];
       const projectsUsers = get(projectsUsersState);
-      return (
-        projectsUsers[projectId]?.map(
-          (projectUser: IProjectUser) => projectUser.user,
-        ) || []
-      );
+      return projectsUsers[projectId];
     },
 });
 

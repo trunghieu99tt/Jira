@@ -1,11 +1,11 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Task } from '../task/task.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { BoardTask } from '../task/dtos/board-task-output.dto';
 
 @Entity({
   name: 'boards',
@@ -39,6 +39,6 @@ export class Board {
   })
   updatedAt: Date;
 
-  @Field(() => [Task])
-  tasks: Task[];
+  @Field(() => [BoardTask])
+  tasks: BoardTask[];
 }

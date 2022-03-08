@@ -64,10 +64,13 @@ const CreateTask = ({ classes: propsClasses }: Props) => {
   };
 
   const userOptions = useMemo(() => {
-    return projectUsers.map((user) => ({
-      value: user.id,
-      label: user.name,
-    }));
+    console.log('projectUsers', projectUsers);
+    return (
+      projectUsers?.map((user) => ({
+        value: user.id,
+        label: user.name,
+      })) || []
+    );
   }, [projectUsers]);
 
   const renderUserOption = ({ value: userId }: { value: number }) => {
@@ -80,10 +83,12 @@ const CreateTask = ({ classes: propsClasses }: Props) => {
   };
 
   const boardOptions = useMemo(() => {
-    return projectBoards.map((board) => ({
-      value: board.id,
-      label: board.name,
-    }));
+    return (
+      projectBoards?.map((board) => ({
+        value: board.id,
+        label: board.name,
+      })) || []
+    );
   }, [projectBoards]);
 
   const renderBoardOption = ({ value: boardId }: { value: number }) => {
@@ -116,7 +121,7 @@ const CreateTask = ({ classes: propsClasses }: Props) => {
       initialValues={{
         name: '',
         description: '',
-        task_type: TASK_TYPES.TASK,
+        type: TASK_TYPES.TASK,
       }}
       validations={{
         name: Form.is.required(),
@@ -128,7 +133,7 @@ const CreateTask = ({ classes: propsClasses }: Props) => {
         <h3>Create a new task</h3>
 
         <Form.Field.Select
-          name="task_type"
+          name="type"
           label="Task type"
           defaultValue={TASK_TYPES.TASK}
           options={taskTypeOptions}
@@ -139,14 +144,14 @@ const CreateTask = ({ classes: propsClasses }: Props) => {
         <Form.Field.Input name="summary" label="Short Summary" />
         <Form.Field.TextEditor name="description" label="Description" />
         <Form.Field.Select
-          name="reporterId"
+          name="reporterUserId"
           label="Reporter"
           options={userOptions}
           renderOption={renderUserOption}
           renderValue={renderUserOption}
         />
         <Form.Field.Select
-          name="assigneeId"
+          name="assigneeUserId"
           label="Assignee"
           options={userOptions}
           renderOption={renderUserOption}

@@ -8,7 +8,10 @@ export class CreateTaskInput {
   @Field((type) => Int)
   boardId: number;
 
-  @Field()
+  @Field({
+    nullable: true,
+    defaultValue: '',
+  })
   description: string;
 
   @Field()
@@ -20,11 +23,18 @@ export class CreateTaskInput {
   @Field((type) => Int)
   reporterUserId: number;
 
-  @Field((type) => String)
+  @Field((type) => String, {
+    defaultValue: '',
+  })
   summary: string;
 
-  @Field()
+  @Field({
+    defaultValue: '',
+  })
   attachmentFileIds: string;
+
+  @Field()
+  type: string;
 
   @Field((type) => Int)
   projectId: number;
