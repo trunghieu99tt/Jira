@@ -16,6 +16,8 @@ const BoardItem = ({ data: propData }: Props) => {
   if (loading) {
     return <div>Loading...</div>;
   }
+  
+  
 
   return (
     <Droppable droppableId={id.toString()}>

@@ -60,11 +60,31 @@ const calcDiffTimeString = (date: Date): string => {
   return date.toLocaleDateString();
 };
 
+const moveItemWithinArray = (arr: any[], item: any, toIndex: number) => {
+  const fromIndex = arr.indexOf(item);
+
+  if (fromIndex === -1) {
+    return;
+  }
+
+  const newArr = [...arr];
+  newArr.splice(toIndex, 0, newArr.splice(fromIndex, 1)[0]);
+  return newArr;
+};
+
+const insertItemIntoArray = (arr: any[], item: any, toIndex: number) => {
+  const newArr = [...arr];
+  newArr.splice(toIndex, 0, item);
+  return newArr;
+};
+
 export {
   urlify,
   nFormatter,
   formatNumber,
   validateEmail,
   calcDiffTimeString,
+  moveItemWithinArray,
+  insertItemIntoArray,
   getDaysDiffBetweenDates,
 };

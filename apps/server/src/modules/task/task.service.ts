@@ -11,6 +11,8 @@ import { CreateTaskInput } from './dtos/create-task-input.dto';
 import { Task } from './task.entity';
 import { TaskRepository } from './task.repository';
 import { ObjectTool } from 'tools';
+import { UpdateTaskInput } from './dtos/update-task-input.dto';
+import { UPDATE_TYPE } from './constants/task.constant';
 
 @Injectable()
 export class TaskService extends Service<Task, TaskRepository> {
@@ -41,7 +43,14 @@ export class TaskService extends Service<Task, TaskRepository> {
       where: {
         boardId,
       },
-      select: ['id', 'name', 'priority', 'type', 'assigneeUserId'],
+      select: [
+        'id',
+        'name',
+        'priority',
+        'type',
+        'assigneeUserId',
+        'listPosition',
+      ],
       order: {
         updatedAt: 'DESC',
       },
@@ -106,5 +115,38 @@ export class TaskService extends Service<Task, TaskRepository> {
       await manager.save(updatedAttachments);
       return newTaskDb;
     });
+  }
+
+  async updateTask(input: UpdateTaskInput): Promise<Task> {
+    const { updateType, id } = input;
+
+    const task = await this.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!task) {
+      throw new NotFoundException('Task not found');
+    }
+
+    switch (updateType) {
+      case UPDATE_TYPE.MOVE_TASK:
+        {
+          const { newBoardId, listPosition } = input;
+          if (!newBoardId || !listPosition) {
+            throw new Error(
+              'newBoardId and listPosition is required for move task update.Please check your input',
+            );
+          }
+          task.boardId = newBoardId;
+          task.listPosition = listPosition;
+        }
+        break;
+      default: {
+        console.error(`updateType ${updateType} is not supported`);
+      }
+    }
+
+    return this.repository.save(task);
   }
 }

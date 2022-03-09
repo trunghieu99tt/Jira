@@ -12,6 +12,7 @@ export const GET_BOARD_BY_ID = gql`
         type
         assigneeAvatar
         assigneeName
+        listPosition
       }
     }
   }

@@ -36,3 +36,26 @@ export const CREATE_TASK_MUTATION = gql`
     }
   }
 `;
+
+export const UPDATE_TASK_MUTATION = gql`
+  mutation updateTask(
+    $id: Int!
+    $updateType: String!
+    $newBoardId: Int
+    $listPosition: Int
+  ) {
+    updateTask(
+      updateTaskInput: {
+        id: $id
+        updateType: $updateType
+        newBoardId: $newBoardId
+        listPosition: $listPosition
+      }
+    ) {
+      id
+      name
+      boardId
+      listPosition
+    }
+  }
+`;

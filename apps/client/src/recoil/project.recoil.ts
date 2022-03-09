@@ -1,6 +1,5 @@
 import { IBoard } from '@type/board.type';
 import { IProjectUser } from '@type/project.type';
-import { IUser } from '@type/user.types';
 import { atom, selectorFamily } from 'recoil';
 
 export const projectsUsersState = atom<{

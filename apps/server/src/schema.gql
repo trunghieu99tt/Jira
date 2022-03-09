@@ -41,6 +41,7 @@ type BoardTask {
   type: String!
   assigneeAvatar: String!
   assigneeName: String!
+  listPosition: Int!
 }
 
 type Board {
@@ -87,6 +88,7 @@ type Query {
 
 type Mutation {
   createTask(createTaskInput: CreateTaskInput!): Task!
+  updateTask(updateTaskInput: UpdateTaskInput!): Task!
   createProject(createProjectInput: CreateProjectInput!): Project!
 }
 
@@ -101,6 +103,13 @@ input CreateTaskInput {
   attachmentFileIds: String = ""
   type: String!
   projectId: Int!
+}
+
+input UpdateTaskInput {
+  id: Int!
+  updateType: String!
+  newBoardId: Int
+  listPosition: Int
 }
 
 input CreateProjectInput {
