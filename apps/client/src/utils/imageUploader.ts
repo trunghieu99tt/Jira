@@ -3,6 +3,7 @@ import {
   CLOUDINARY_UPLOAD_PRESET,
   CLOUDINARY_URL,
 } from '@config/secret';
+import client from 'api/client';
 import axios from 'axios';
 
 export const checkImage = (file: File) => {
@@ -34,4 +35,19 @@ export const imageUpload = async (
   );
 
   return imageUrls;
+};
+
+export const uploadFiles = async (
+  files: FileList | never[] | File[],
+): Promise<number[]> => {
+  const formData = new FormData();
+  Array.from(files).forEach((file) => formData.append('files', file));
+  formData.append('uploadStrategy', 'ipfs');
+  console.log(files);
+  const response = await client.post('file/upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data?.fileIds || [];
 };

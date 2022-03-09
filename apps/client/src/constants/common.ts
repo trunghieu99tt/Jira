@@ -42,3 +42,6 @@ export const KeyCodes = {
 export const ACCEPT_FILE_FORMATS = ['image/jpeg', 'image/jpg', 'image/png'];
 export const MAX_NUMBER_OF_FILES = 5;
 export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
+export const MAX_NUMBER_OF_ATTACHMENTS = 20;
+export const MAX_NUMBER_OF_COVER_PHOTO = 1;

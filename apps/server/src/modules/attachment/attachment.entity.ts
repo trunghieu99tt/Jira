@@ -1,13 +1,12 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
+  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Task } from '../task/task.entity';
 
 @Entity({
   name: 'attachments',
@@ -20,13 +19,19 @@ export class Attachment {
   })
   id: number;
 
-  @Field(() => String)
-  @Column()
-  file: string;
+  @Field(() => Number)
+  @Column({
+    type: 'bigint',
+    name: 'file_id',
+  })
+  fileId: number;
 
-  @Field(() => Task)
-  @ManyToOne(() => Task, (task) => task.attachments)
-  task: Task;
+  @Field(() => Int)
+  @Column({
+    type: 'bigint',
+    name: 'task_id',
+  })
+  taskId: number;
 
   @Field(() => Date)
   @CreateDateColumn({

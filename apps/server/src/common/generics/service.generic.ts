@@ -1,10 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
-import { DEFAULT_LIMIT } from '../constants/common.constant';
 
 @Injectable()
 export class Service<E, R extends Repository<E>> {
-  constructor(private readonly repository: R) {}
+  constructor(protected readonly repository: R) {}
 
   async findOne(options?: FindOneOptions<E>): Promise<Partial<E>> {
     const record = await this.repository.findOne(options);

@@ -1,5 +1,5 @@
 import { useBoards } from '@talons/useBoards';
-import { imageUpload } from '@utils/imageUploader';
+import { uploadFiles } from '@utils/imageUploader';
 import { useCallback, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user.recoil';
@@ -17,11 +17,10 @@ export const useCreateProject = () => {
   }, []);
 
   const onSubmit = async (values: any, form: any) => {
-    console.log('values', values);
-    let coverPhotoUrl = '';
+    let coverPhotoFileId = null;
     if (coverPhoto) {
-      const uploadResponses = await imageUpload([coverPhoto]);
-      coverPhotoUrl = uploadResponses?.[0] || '';
+      const uploadFileResponse = await uploadFiles([coverPhoto]);
+      coverPhotoFileId = uploadFileResponse[0];
     }
     const { name, description } = values;
 
@@ -29,9 +28,9 @@ export const useCreateProject = () => {
       variables: {
         name,
         description,
-        coverPhoto: coverPhotoUrl,
+        coverPhotoFileId,
         privacy: audience,
-        ownerId: currentUser?.id || 1,
+        ownerUserId: currentUser?.id || 1,
       },
     });
   };

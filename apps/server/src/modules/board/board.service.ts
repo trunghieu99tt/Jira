@@ -1,12 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Service } from 'src/common/generics/service.generic';
 import { Board } from './board.entity';
 import { BoardRepository } from './board.repository';
 
 @Injectable()
-export class BoardService {
-  constructor(private readonly repository: BoardRepository) {}
+export class BoardService extends Service<Board, BoardRepository> {
+  constructor(repository: BoardRepository) {
+    super(repository);
+  }
 
-  async findBoardListById(id: number): Promise<Board> {
+  async findBoardById(id: number): Promise<Board> {
     const boardList = await this.repository.findOne(id);
     if (!boardList) {
       throw new NotFoundException('BoardList not found');
@@ -16,7 +19,8 @@ export class BoardService {
 
   async findBoardsByProjectId(projectId: number): Promise<Board[]> {
     return this.repository.find({
-      where: { project: { id: projectId } },
+      where: { projectId },
+      select: ['id', 'name'],
     });
   }
 }

@@ -1,13 +1,11 @@
-import { Field, ObjectType } from '@nestjs/graphql';
-import { Project } from '../project/project.entity';
-import { Task } from '../task/task.entity';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
   Column,
+  CreateDateColumn,
   Entity,
-  ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { BoardTask } from '../task/dtos/board-task-output.dto';
 
 @Entity({
   name: 'boards',
@@ -24,11 +22,23 @@ export class Board {
   @Field(() => String)
   name: string;
 
-  @ManyToOne(() => Project, (project) => project.boards)
-  @Field(() => Project)
-  project: Project;
+  @Field(() => Int)
+  @Column({
+    name: 'project_id',
+    type: 'bigint',
+  })
+  projectId: number;
 
-  @OneToMany(() => Task, (task) => task.board)
-  @Field(() => [Task])
-  tasks: Task[];
+  @CreateDateColumn({
+    name: 'created_at',
+  })
+  createdAt: Date;
+
+  @CreateDateColumn({
+    name: 'updated_at',
+  })
+  updatedAt: Date;
+
+  @Field(() => [BoardTask])
+  tasks: BoardTask[];
 }

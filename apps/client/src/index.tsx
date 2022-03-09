@@ -9,6 +9,7 @@ import reportWebVitals from './reportWebVitals';
 
 import AppProvider from '@context/app.context';
 
+import 'react-quill/dist/quill.snow.css';
 import './index.css';
 import './i18.config';
 import App from './App';

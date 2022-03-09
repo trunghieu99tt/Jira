@@ -6,7 +6,6 @@ import { Connection, EntityManager } from 'typeorm';
 import { Service } from 'src/common/generics/service.generic';
 
 // entities
-import { User } from '../user/user.entity';
 import { Project } from './project.entity';
 
 // repositories
@@ -19,6 +18,7 @@ import {
 import { CreateProjectInput } from './dtos/create-project-input.dto';
 import { DEFAULT_BOARD_NAMES } from './constants/project.constant';
 import { Board } from '../board/board.entity';
+import { ProjectUser } from '../project-user/entities/project-user.entity';
 
 @Injectable()
 export class ProjectService extends Service<Project, ProjectRepository> {
@@ -47,7 +47,6 @@ export class ProjectService extends Service<Project, ProjectRepository> {
       where: {
         id,
       },
-      relations: ['boards'],
     });
   }
 
@@ -56,21 +55,26 @@ export class ProjectService extends Service<Project, ProjectRepository> {
   ): Promise<Project> {
     const response = await this.connection.transaction(
       async (manager: EntityManager) => {
-        const newProject = plainToClass(Project, createBoardInput);
-        const user = await manager.findOne(User, createBoardInput.ownerId);
-        if (!user) throw new Error('User not found');
-        newProject.owner = user;
-        const board = await manager.save(newProject);
+        const newProjectObj = plainToClass(Project, createBoardInput);
+        const newProjectDb = await manager.save(newProjectObj);
 
-        // create some default boards
+        const newBoardList = [];
         for (let i = 0; i < DEFAULT_BOARD_NAMES.length; i += 1) {
           const newBoard = plainToClass(Board, {
             name: DEFAULT_BOARD_NAMES[i],
-            project: board,
+            projectId: newProjectDb.id,
           });
-          await manager.save(newBoard);
+          newBoardList.push(newBoard);
         }
-        return board;
+        await manager.save(newBoardList);
+
+        const newProjectUser = plainToClass(ProjectUser, {
+          projectId: newProjectDb.id,
+          userId: newProjectDb.ownerUserId,
+          role: 0,
+        });
+        await manager.save(newProjectUser);
+        return newProjectDb;
       },
     );
     return response;

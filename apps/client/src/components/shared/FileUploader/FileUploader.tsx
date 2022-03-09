@@ -8,12 +8,18 @@ import { useFileUploader } from './useFileUploader';
 import { MAX_NUMBER_OF_FILES } from '@constants/common';
 
 // icons
-import { AiOutlineCloudUpload } from 'react-icons/ai';
+import {
+  AiOutlineCloudUpload,
+  AiFillFileZip,
+  AiFillFilePdf,
+  AiFillFileImage,
+} from 'react-icons/ai';
 
 // styles
 import defaultClasses from './fileUploader.module.css';
 
 interface FileUploaderProps {
+  title: string;
   classes?: any;
   maxNumberOfFiles?: number;
   shouldHavePreview?: boolean;
@@ -21,9 +27,9 @@ interface FileUploaderProps {
 }
 
 const FileUploader = ({
+  title,
   handleFiles,
   classes: propsClasses,
-  shouldHavePreview = false,
   maxNumberOfFiles = MAX_NUMBER_OF_FILES,
 }: FileUploaderProps) => {
   const classes = mergeClasses(defaultClasses, propsClasses);
@@ -46,6 +52,7 @@ const FileUploader = ({
 
   return (
     <section className={classes.root}>
+      <p>{title}</p>
       {errors.length > 0 && (
         <ul className={classes.errorList}>
           {errors.map((error: string, idx: number) => (
@@ -58,20 +65,30 @@ const FileUploader = ({
           ))}
         </ul>
       )}
-      {shouldHavePreview && uploaded?.length > 0 && (
-        <section className={classes.previewSection}>
-          {uploaded?.slice(0, 3).map(({ file, preview }, idx: number) => {
+      {uploaded?.length > 0 && (
+        <section className={classes.uploadedItemList}>
+          {uploaded?.map(({ file, preview }, idx: number) => {
+            let icon = null;
+
+            switch (file.type) {
+              case 'application/zip':
+                icon = <AiFillFileZip />;
+                break;
+              case 'application/pdf':
+                icon = <AiFillFilePdf />;
+                break;
+              default:
+                icon = <AiFillFileImage />;
+            }
+
             return (
-              <figure
+              <article
                 key={`file-${file.name}-${idx}`}
-                className={classes.previewItem}
+                className={classes.uploadedItem}
               >
-                <img
-                  src={preview}
-                  alt={`file-${file.name}`}
-                  className={classes.previewImage}
-                />
-              </figure>
+                {icon}
+                <span className={classes.uploadItemName}>{file.name}</span>
+              </article>
             );
           })}
         </section>
@@ -87,7 +104,7 @@ const FileUploader = ({
           <AiOutlineCloudUpload className={classes.uploadIcon} />
 
           <h3 className="text-sm text-gray4 pointer-events-none">
-            Drag & Drop your image here
+            Drag & Drop your file(s) here
           </h3>
           <span className={classes.uploadMaximumNumber}>
             ( Maximum {maxNumberOfFiles} )

@@ -14,6 +14,7 @@ const ProjectList = ({ data }: Props) => {
     <section className={classes.root}>
       {data?.map((project: IProject) => {
         const { projectUsers } = project;
+        console.log('projectUsers', projectUsers);
         return (
           <Link
             to={`/project/${project.id}`}
@@ -31,14 +32,13 @@ const ProjectList = ({ data }: Props) => {
                 <p className={classes.description}>{project.description}</p>
                 <div className={classes.projectUsers}>
                   {projectUsers?.map((projectUser: IProjectUser) => {
-                    const { user } = projectUser;
                     return (
                       <Avatar
-                        src={user?.avatar}
-                        alt={user?.name}
-                        tooltip={user?.name}
+                        src={projectUser?.avatar || ''}
+                        alt={projectUser?.name}
+                        tooltip={projectUser?.name}
                         size="MEDIUM"
-                        key={`project-list-item-user-avatar-${user?.id}`}
+                        key={`project-list-item-user-avatar-${projectUser?.id}`}
                       ></Avatar>
                     );
                   })}

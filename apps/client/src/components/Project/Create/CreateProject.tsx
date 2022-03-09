@@ -38,6 +38,7 @@ const CreateProject = ({ classes: propsClasses }: Props) => {
       <Form.Element className={classes.formWrapper}>
         <h3>Create a new project</h3>
         <FileUploader
+          title="Cover photo"
           handleFiles={handleFiles}
           shouldHavePreview={true}
           maxNumberOfFiles={1}
