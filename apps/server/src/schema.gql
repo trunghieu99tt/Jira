@@ -18,6 +18,19 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type AttachmentOutput {
+  id: Int!
+  name: String!
+  createdAt: Int!
+  url: String!
+}
+
+type TaskUser {
+  userId: Int!
+  name: String!
+  avatar: String!
+}
+
 type Task {
   id: Float!
   name: String!
@@ -32,6 +45,9 @@ type Task {
   listPosition: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
+  assignee: TaskUser!
+  reporter: TaskUser!
+  attachments: [AttachmentOutput!]!
 }
 
 type BoardTask {

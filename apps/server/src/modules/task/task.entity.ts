@@ -3,10 +3,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { AttachmentOutput } from './dtos/attachment-output.dto';
+import { TaskUser } from './dtos/task-user-output.dto';
 
 @Entity({
   name: 'tasks',
@@ -87,4 +88,13 @@ export class Task {
     name: 'updated_at',
   })
   updatedAt: Date;
+
+  @Field(() => TaskUser)
+  assignee: TaskUser;
+
+  @Field(() => TaskUser)
+  reporter: TaskUser;
+
+  @Field(() => [AttachmentOutput])
+  attachments: AttachmentOutput[];
 }

@@ -27,7 +27,7 @@ import { useMemo, useRef } from 'react';
 import { useParams } from 'react-router';
 import { useRecoilValue } from 'recoil';
 import {
-  selectProjectBoardByProjectId,
+  selectProjectBoardsByProjectId,
   selectProjectUsersByProjectId,
 } from 'recoil/project.recoil';
 
@@ -40,7 +40,7 @@ const CreateTask = ({ classes: propsClasses }: Props) => {
   const { projectId } = useParams();
   const projectUsers = useRecoilValue(selectProjectUsersByProjectId(projectId));
   const projectBoards = useRecoilValue(
-    selectProjectBoardByProjectId(projectId),
+    selectProjectBoardsByProjectId(projectId),
   );
 
   const { onSubmit, handleAttachment } = useCreateTask();

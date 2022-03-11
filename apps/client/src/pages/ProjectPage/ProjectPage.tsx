@@ -6,10 +6,12 @@ import Button from '@components/shared/Button';
 import { useQueryParamModal } from '@talons/useQueryParamModal';
 import Modal from '@components/shared/Modal';
 import CreateTask from '@components/Task/Create';
+import { Route, Routes, useLocation, useNavigate } from 'react-router';
+import TaskDetail from '@components/Task/Detail';
 
-type Props = {};
-
-const ProjectPage = (props: Props) => {
+const ProjectPage = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const { data, error, loading, onDropEnd } = useProjectPage();
 
   const {

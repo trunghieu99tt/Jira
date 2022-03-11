@@ -30,5 +30,6 @@ export const useQueryParamModal = (param: string) => {
     open,
     close,
     isOpen,
+    param,
   };
 };

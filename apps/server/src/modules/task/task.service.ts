@@ -13,6 +13,9 @@ import { TaskRepository } from './task.repository';
 import { ObjectTool } from 'tools';
 import { UpdateTaskInput } from './dtos/update-task-input.dto';
 import { UPDATE_TYPE } from './constants/task.constant';
+import { TaskUser } from './dtos/task-user-output.dto';
+import { ProjectUserService } from '../project-user/services/project-user.service';
+import { AttachmentOutput } from './dtos/attachment-output.dto';
 
 @Injectable()
 export class TaskService extends Service<Task, TaskRepository> {
@@ -22,6 +25,7 @@ export class TaskService extends Service<Task, TaskRepository> {
     private readonly userService: UserService,
     private readonly fileService: FileService,
     private readonly attachmentService: AttachmentService,
+    private readonly projectUserService: ProjectUserService,
   ) {
     super(repository);
   }
@@ -142,11 +146,82 @@ export class TaskService extends Service<Task, TaskRepository> {
           task.listPosition = listPosition;
         }
         break;
+      case UPDATE_TYPE.UPDATE_BOARD: {
+        const { newBoardId } = input;
+        if (!newBoardId) {
+          throw new Error(
+            'newBoardId is required for update board update.Please check your input',
+          );
+        }
+        task.boardId = newBoardId;
+      }
       default: {
         console.error(`updateType ${updateType} is not supported`);
       }
     }
 
     return this.repository.save(task);
+  }
+
+  async getTaskUser(projectUserId: number): Promise<TaskUser> {
+    const projectUser = await this.projectUserService.findOne({
+      where: {
+        id: projectUserId,
+      },
+      select: ['userId'],
+    });
+
+    if (!projectUser) {
+      throw new NotFoundException(`ProjectUser ${projectUserId} not found`);
+    }
+
+    const taskUser = await this.userService.findOne({
+      where: {
+        id: projectUser.userId,
+      },
+      select: ['id', 'name', 'avatarFileId'],
+    });
+    if (!taskUser) {
+      throw new NotFoundException('User not found');
+    }
+
+    let avatar = '';
+    if (taskUser?.avatarFileId) {
+      avatar = await this.fileService.getFileUrl(taskUser.avatarFileId);
+    }
+
+    return plainToClass(TaskUser, {
+      projectUserId: projectUser.id,
+      userId: taskUser.id,
+      name: taskUser.name,
+      avatar,
+    });
+  }
+
+  async getTaskAttachments(taskId: number): Promise<AttachmentOutput[]> {
+    const attachments = await this.attachmentService.findList({
+      where: {
+        taskId,
+      },
+      select: ['id', 'fileId', 'createdAt', 'fileName'],
+    });
+
+    const attachmentFileIds =
+      attachments
+        ?.map((attachment) => attachment?.fileId || null)
+        ?.filter(Boolean) || [];
+    const attachmentFileUrls = await this.fileService.getFileUrls(
+      attachmentFileIds as number[],
+    );
+
+    return plainToClass(
+      AttachmentOutput,
+      attachments.map((attachment) => ({
+        id: attachment.id,
+        fileName: attachment?.fileName || '',
+        url: attachment?.fileId ? attachmentFileUrls[attachment.fileId] : '',
+        createdAt: attachment?.createdAt?.getTime() || 0,
+      })),
+    );
   }
 }

@@ -39,3 +39,8 @@ export const TASK_PRIORITY_LABEL = {
   [TASK_PRIORITY.LOW]: 'Low',
   [TASK_PRIORITY.LOWEST]: 'Lowest',
 };
+
+export const UPDATE_TYPE = {
+  MOVE_TASK: 'MOVE_TASK',
+  UPDATE_BOARD: 'UPDATE_BOARD',
+};

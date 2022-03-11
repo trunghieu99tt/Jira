@@ -3,7 +3,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -25,6 +24,12 @@ export class Attachment {
     name: 'file_id',
   })
   fileId: number;
+
+  @Field(() => String)
+  @Column({
+    name: 'file_name',
+  })
+  fileName: string;
 
   @Field(() => Int)
   @Column({

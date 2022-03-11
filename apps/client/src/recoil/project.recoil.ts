@@ -30,7 +30,7 @@ export const projectsBoardsState = atom<{
   default: {},
 });
 
-export const selectProjectBoardByProjectId = selectorFamily<
+export const selectProjectBoardsByProjectId = selectorFamily<
   IBoard[],
   string | undefined
 >({

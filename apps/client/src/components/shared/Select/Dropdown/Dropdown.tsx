@@ -45,6 +45,8 @@ const Dropdown = ({
     [transformOrigin],
   );
 
+  console.log('onChange', onChange);
+
   return (
     <AnimatePresence>
       {isVisible && (
@@ -56,7 +58,10 @@ const Dropdown = ({
                   <li
                     key={`dropdown-item-${idx}`}
                     className={classes.dropdownListItem}
-                    onClick={() => onChange(option.value)}
+                    onClick={() => {
+                      console.log('option.value', option.value);
+                      onChange(option.value);
+                    }}
                   >
                     {renderOption({ value: option.value })}
                   </li>

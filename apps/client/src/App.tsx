@@ -9,7 +9,9 @@ const App: React.FC = () => {
     <div>
       <Routes>
         <Route path="/" element={<ProjectListPage />} />
-        <Route path="/project/:projectId" element={<ProjectPage />} />
+        <Route path="/project" element={<ProjectPage />}>
+          <Route path=":projectId" element={<ProjectPage />} />
+        </Route>
       </Routes>
     </div>
   );

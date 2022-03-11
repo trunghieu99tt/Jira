@@ -6,7 +6,7 @@ type Props = {
   defaultValue?: string;
   value?: string;
   onChange?: (event: any) => void;
-  getEditor: () => any;
+  getEditor?: () => any;
 };
 
 const TextEditor = ({

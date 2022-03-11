@@ -10,7 +10,7 @@ type Props = {
   classes?: any;
   options: any;
   value: any;
-  defaultValue: any;
+  defaultValue?: any;
   onChange: (value: string) => void;
   renderOption: ({ value }: { value: any }) => JSX.Element;
   renderValue: ({ value }: { value: any }) => JSX.Element;
