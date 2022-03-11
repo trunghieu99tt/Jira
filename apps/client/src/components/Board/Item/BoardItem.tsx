@@ -1,30 +1,24 @@
 import { IBoard } from '@type/board.type';
-import { memo } from 'react';
 import { Droppable } from 'react-beautiful-dnd';
-import { useBoardItem } from './useBoardItem';
 import TaskItem from '@components/Task/Item';
+import { useRecoilValue } from 'recoil';
+import { boardSelector } from 'recoil/board.recoil';
 
 type Props = {
   data: IBoard;
 };
 
-const BoardItem = ({ data: propData }: Props) => {
-  const { id, name } = propData;
-
-  const { data, error, loading } = useBoardItem(id);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+const BoardItem = ({ data }: Props) => {
+  const boardDetail = useRecoilValue(boardSelector(data.id));
 
   return (
-    <Droppable droppableId={id.toString()}>
+    <Droppable droppableId={data?.id.toString()}>
       {(provided, snapshot) => (
         <article>
-          <p>{name}</p>
+          <p>{boardDetail?.name}</p>
 
           <div ref={provided.innerRef}>
-            {data?.tasks?.map((task: any, idx: number) => {
+            {boardDetail?.tasks?.map((task: any, idx: number) => {
               return (
                 <TaskItem
                   data={task}
@@ -42,4 +36,4 @@ const BoardItem = ({ data: propData }: Props) => {
   );
 };
 
-export default memo(BoardItem);
+export default BoardItem;

@@ -1,8 +1,15 @@
-import { useQuery } from '@apollo/client';
-import { GET_PROJECT_LIST } from 'graphql/queries/project.queries';
+import { useProjects } from '@talons/useProjects';
+import { useEffect } from 'react';
 
 export const useProjectListPage = () => {
-  const { loading, data, error } = useQuery(GET_PROJECT_LIST);
+  const {
+    getProjectList,
+    getProjectListResponse: { data, loading, error },
+  } = useProjects();
+
+  useEffect(() => {
+    getProjectList();
+  }, []);
 
   const projects = data?.projects;
 

@@ -1,6 +1,5 @@
-import { useMutation } from '@apollo/client';
+import { useTaskService } from '@talons/useTasks';
 import { uploadFiles } from '@utils/imageUploader';
-import { CREATE_TASK_MUTATION } from 'graphql/mutations/task.mutation';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 
@@ -9,8 +8,7 @@ export const useCreateTask = () => {
 
   const [attachment, setAttachments] = useState<File[] | null>(null);
 
-  const [createTaskFunction, createTaskResponse] =
-    useMutation(CREATE_TASK_MUTATION);
+  const { createTask } = useTaskService();
 
   const onSubmit = async (values: any, form: any) => {
     let attachmentFileIds: string = '';
@@ -25,22 +23,15 @@ export const useCreateTask = () => {
       projectId: parseInt(projectId || '1', 10),
       priority: parseInt(values.priority || '1', 10),
     };
-    createTaskFunction({
-      variables: data,
-    });
+
+    createTask(data, [parseInt(values.boardId)]);
   };
 
   const handleAttachment = (files: File[]) => {
     setAttachments(files);
   };
 
-  if (createTaskResponse) {
-    console.log('createTaskResponse', createTaskResponse);
-  }
-
   return {
-    createTaskResponse,
-
     onSubmit,
     handleAttachment,
   };

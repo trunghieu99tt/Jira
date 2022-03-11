@@ -1,11 +1,12 @@
 import { useQuery } from '@apollo/client';
-import { useTasks } from '@talons/useTasks';
+import { useBoardService } from '@talons/useBoards';
+import { useTaskService } from '@talons/useTasks';
 import { insertItemIntoArray, moveItemWithinArray } from '@utils/helper';
 import { GET_PROJECT_BY_ID } from 'graphql/queries/project.queries';
 import { useEffect } from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import { useParams } from 'react-router';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { boardsState } from 'recoil/board.recoil';
 import { projectsBoardsState, projectsUsersState } from 'recoil/project.recoil';
 
@@ -13,7 +14,7 @@ export const useProjectPage = () => {
   const { projectId } = useParams();
   const setProjectsUsers = useSetRecoilState(projectsUsersState);
   const setProjectsBoards = useSetRecoilState(projectsBoardsState);
-  const [boards, setBoards] = useRecoilState(boardsState);
+  const boards = useRecoilValue(boardsState);
 
   const { loading, data, error } = useQuery(GET_PROJECT_BY_ID, {
     variables: {
@@ -21,7 +22,8 @@ export const useProjectPage = () => {
     },
   });
 
-  const { updateTaskFunction } = useTasks();
+  const { updateTask } = useTaskService();
+  const { fetchMultiBoards } = useBoardService();
 
   const project = data?.project;
   const projectUsers = project?.projectUsers || [];
@@ -36,6 +38,10 @@ export const useProjectPage = () => {
         ...prevValue,
         [projectId]: project?.boards || [],
       }));
+      if (project?.boards) {
+        const boardIds = project?.boards.map((board: any) => board.id);
+        fetchMultiBoards(boardIds);
+      }
     }
   }, [projectId, projectUsers]);
 
@@ -125,67 +131,15 @@ export const useProjectPage = () => {
       index,
     );
 
-    updateTaskFunction({
-      variables: {
-        id: droppedTaskId,
+    updateTask(
+      droppedTaskId,
+      {
+        listPosition: newListPosition,
         updateType: 'MOVE_TASK',
         newBoardId: destinationBoardId,
-        listPosition: newListPosition,
       },
-      onCompleted: (data) => {
-        console.log('data', data.updateTask);
-        if (data?.updateTask) {
-          const { id, boardId } = data.updateTask;
-
-          // remove task from old board
-          const oldBoardIdStr = Object.keys(boards).find((boardId: string) => {
-            const board = boards[+boardId];
-            return board?.tasks?.find((task) => task.id === id);
-          });
-
-          if (oldBoardIdStr) {
-            setBoards((prevBoards) => {
-              const oldBoardId = parseInt(oldBoardIdStr);
-              if (oldBoardId !== boardId) {
-                const oldBoard = prevBoards[oldBoardId];
-                const newBoard = boards[boardId];
-
-                const updatedOldBoard = {
-                  ...oldBoard,
-                  tasks:
-                    oldBoard?.tasks
-                      ?.filter((task) => task.id !== id)
-                      .sort((a, b) => a.listPosition - b.listPosition) || [],
-                };
-                const updatedNewBoard = {
-                  ...newBoard,
-                  tasks: [...(newBoard?.tasks || []), data.updateTask],
-                };
-
-                return {
-                  ...prevBoards,
-                  [oldBoardId]: updatedOldBoard,
-                  [boardId]: updatedNewBoard,
-                };
-              } else {
-                const newBoard = boards[boardId];
-                const updatedNewBoard = {
-                  ...newBoard,
-                  tasks: [...(newBoard?.tasks || []), data.updateTask].sort(
-                    (a, b) => a.listPosition - b.listPosition,
-                  ),
-                };
-
-                return {
-                  ...prevBoards,
-                  [boardId]: updatedNewBoard,
-                };
-              }
-            });
-          }
-        }
-      },
-    });
+      [sourceBoardId, destinationBoardId],
+    );
   };
 
   return {

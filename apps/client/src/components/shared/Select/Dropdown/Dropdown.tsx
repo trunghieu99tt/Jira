@@ -45,8 +45,6 @@ const Dropdown = ({
     [transformOrigin],
   );
 
-  console.log('onChange', onChange);
-
   return (
     <AnimatePresence>
       {isVisible && (

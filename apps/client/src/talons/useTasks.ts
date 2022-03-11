@@ -1,44 +1,64 @@
-import { useMutation } from '@apollo/client';
-import { UPDATE_TYPE } from '@constants/task';
-import { UPDATE_TASK_MUTATION } from 'graphql/mutations/task.mutation';
-import { useRecoilState } from 'recoil';
-import { boardsState } from 'recoil/board.recoil';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import {
+  CREATE_TASK_MUTATION,
+  UPDATE_TASK_MUTATION,
+} from 'graphql/mutations/task.mutation';
+import { GET_TASK_BY_ID } from 'graphql/queries/task.queries';
+import { useBoardService } from './useBoards';
 
-export const useTasks = () => {
-  const [updateTaskFunction] = useMutation(UPDATE_TASK_MUTATION);
-  const [boards, setBoards] = useRecoilState(boardsState);
+export const useTaskService = () => {
+  const [updateTaskMutation] = useMutation(UPDATE_TASK_MUTATION);
+  const [createTaskMutation] = useMutation(CREATE_TASK_MUTATION);
+  const [getTaskDetailQuery, getTaskDetailQueryResponse] =
+    useLazyQuery(GET_TASK_BY_ID);
 
-  const updateLocalBoards = ({
-    task,
-    updateType,
-    data,
-  }: {
-    task: any;
-    updateType: string;
-    data: any;
-  }) => {
-    switch (updateType) {
-      case UPDATE_TYPE.UPDATE_BOARD: {
-        const { oldBoardId, newBoardId } = data;
-        let sourceBoard = boards[oldBoardId];
-        let targetBoard = boards[newBoardId];
+  const { fetchMultiBoards } = useBoardService();
 
-        if (sourceBoard && targetBoard) {
-          sourceBoard = {
-            ...sourceBoard,
-            tasks:
-              sourceBoard?.tasks?.filter((task) => task.id !== taskId) || [],
-          };
-          targetBoard = {
-            ...targetBoard,
-            tasks: [...(targetBoard?.tasks || [])],
-          };
+  const updateTask = async (
+    taskId: number,
+    data: any,
+    refetchBoardIds: number[],
+  ) => {
+    await updateTaskMutation({
+      variables: {
+        id: taskId,
+        ...data,
+      },
+      onCompleted: (data) => {
+        if (data?.updateTask) {
+          fetchMultiBoards(refetchBoardIds);
+          fetchTaskDetail(taskId);
         }
-      }
-    }
+      },
+    });
+  };
+
+  const createTask = async (data: any, refetchBoardIds: number[]) => {
+    await createTaskMutation({
+      variables: {
+        ...data,
+      },
+      onCompleted: (data) => {
+        if (data?.createTask) {
+          fetchMultiBoards(refetchBoardIds);
+        }
+      },
+    });
+  };
+
+  const fetchTaskDetail = async (taskId: number) => {
+    await getTaskDetailQuery({
+      variables: {
+        taskId,
+      },
+    });
   };
 
   return {
-    updateTaskFunction,
+    getTaskDetailResponse: getTaskDetailQueryResponse,
+
+    updateTask,
+    createTask,
+    fetchTaskDetail,
   };
 };

@@ -1,6 +1,7 @@
 import Button from '@components/shared/Button';
 import TextEditor from '@components/shared/TextEditor';
 import TaskDetailBoardSelector from './BoardSelector/TaskDetailBoardSelector';
+import TaskDetailProjectUserSelector from './ProjectUserSelector/TaskDetailProjectUserSelector';
 import mergeClasses from '@utils/mergeClasses';
 
 import defaultClasses from './taskDetail.module.css';
@@ -69,6 +70,15 @@ const TaskDetail = ({ classes: propClasses, taskId, modalClose }: Props) => {
             <p>Board</p>
             <TaskDetailBoardSelector
               defaultValue={data?.boardId}
+              projectId={data?.projectId}
+              onChange={onChangeBoard}
+            />
+          </div>
+
+          <div>
+            <p>Board</p>
+            <TaskDetailProjectUserSelector
+              defaultValue={data?.reporterUserId}
               projectId={data?.projectId}
               onChange={onChangeBoard}
             />

@@ -10,10 +10,7 @@ import Button from '@components/shared/Button';
 import FileUploader from '@components/shared/FileUploader';
 
 // constants
-import {
-  MAX_NUMBER_OF_ATTACHMENTS,
-  MAX_NUMBER_OF_COVER_PHOTO,
-} from '@constants/common';
+import { MAX_NUMBER_OF_ATTACHMENTS } from '@constants/common';
 
 // styles
 import defaultClasses from './createTask.module.css';

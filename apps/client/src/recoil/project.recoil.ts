@@ -11,11 +11,11 @@ export const projectsUsersState = atom<{
 
 export const selectProjectUsersByProjectId = selectorFamily<
   IProjectUser[],
-  string | undefined
+  string | number | undefined
 >({
   key: 'selectProjectUsersByProjectId',
   get:
-    (projectId: string | undefined) =>
+    (projectId: string | number | undefined) =>
     ({ get }) => {
       if (!projectId) return [];
       const projectsUsers = get(projectsUsersState);
@@ -32,11 +32,11 @@ export const projectsBoardsState = atom<{
 
 export const selectProjectBoardsByProjectId = selectorFamily<
   IBoard[],
-  string | undefined
+  string | number | undefined
 >({
   key: 'selectProjectBoardByProjectId',
   get:
-    (projectId: string | undefined) =>
+    (projectId: string | number | undefined) =>
     ({ get }) => {
       if (!projectId) return [];
       const projectsBoards = get(projectsBoardsState);

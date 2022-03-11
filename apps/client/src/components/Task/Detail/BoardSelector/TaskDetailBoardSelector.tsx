@@ -30,19 +30,17 @@ const TaskDetailBoardSelector = ({
   };
 
   return (
-    <div>
-      <Select
-        value={defaultValue}
-        options={boards.map((board: IBoard) => ({
-          value: board.id,
-          label: board.name,
-        }))}
-        onChange={onChange}
-        defaultValue={defaultValue}
-        renderOption={renderBoardOption}
-        renderValue={renderBoardOption}
-      />
-    </div>
+    <Select
+      value={defaultValue}
+      options={boards.map((board: IBoard) => ({
+        value: board.id,
+        label: board.name,
+      }))}
+      onChange={onChange}
+      defaultValue={defaultValue}
+      renderOption={renderBoardOption}
+      renderValue={renderBoardOption}
+    />
   );
 };
 

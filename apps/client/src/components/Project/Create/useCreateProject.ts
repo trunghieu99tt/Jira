@@ -1,4 +1,4 @@
-import { useBoards } from '@talons/useBoards';
+import { useBoardService } from '@talons/useBoards';
 import { uploadFiles } from '@utils/imageUploader';
 import { useCallback, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
@@ -8,7 +8,7 @@ export const useCreateProject = () => {
   const [audience, setAudience] = useState<number>(0);
   const [coverPhoto, setCoverPhoto] = useState<File | null>(null);
 
-  const { createBoardFunction, createBoardResponse } = useBoards();
+  const { createBoardFunction, createBoardResponse } = useBoardService();
 
   const currentUser = useRecoilValue(userState);
 

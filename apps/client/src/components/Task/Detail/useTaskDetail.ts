@@ -1,17 +1,19 @@
-import { useMutation, useQuery } from '@apollo/client';
-import { UPDATE_TASK_MUTATION } from 'graphql/mutations/task.mutation';
-import { GET_TASK_BY_ID } from 'graphql/queries/task.queries';
-import { useState } from 'react';
+import { useTaskService } from '@talons/useTasks';
+import { useEffect, useState } from 'react';
 
 export const useTaskDetail = (taskId: number) => {
-  const { loading, data, error, refetch } = useQuery(GET_TASK_BY_ID, {
-    variables: {
-      taskId,
-    },
-  });
-  const task = data?.task;
+  const {
+    getTaskDetailResponse: { data, loading, error },
 
-  const [updateTaskFunction] = useMutation(UPDATE_TASK_MUTATION);
+    updateTask,
+    fetchTaskDetail,
+  } = useTaskService();
+
+  useEffect(() => {
+    if (taskId) {
+      fetchTaskDetail(taskId);
+    }
+  }, [taskId]);
 
   const [isEditingDescription, setIsEditingDescription] =
     useState<boolean>(false);
@@ -21,7 +23,6 @@ export const useTaskDetail = (taskId: number) => {
       setIsEditingDescription(true);
     } else {
       // update task
-
       setIsEditingDescription(false);
     }
   };
@@ -29,20 +30,19 @@ export const useTaskDetail = (taskId: number) => {
   const onChangeBoard = (newBoardIdStr: string) => {
     // update board
     const newBoardId = parseInt(newBoardIdStr, 10);
-    console.log('newBoardId', newBoardId);
     if (task?.boardId && newBoardId !== task?.boardId) {
-      updateTaskFunction({
-        variables: {
-          id: task.id,
-          updateType: 'UPDATE_BOARD',
+      updateTask(
+        task.id,
+        {
           newBoardId,
+          updateType: 'UPDATE_BOARD',
         },
-        onCompleted: () => {
-          refetch();
-        },
-      });
+        [newBoardId, task.boardId],
+      );
     }
   };
+
+  const task = data?.task;
 
   return {
     loading,
