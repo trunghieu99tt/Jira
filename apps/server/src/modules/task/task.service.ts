@@ -69,12 +69,13 @@ export class TaskService extends Service<Task, TaskRepository> {
       where: {
         id: In(assigneeUserIds),
       },
-      select: ['avatarFileId', 'name'],
+      select: ['avatarFileId', 'name', 'id'],
     });
 
     const userAvatarFileIds = (users
       ?.map((user: Partial<User>) => user?.avatarFileId)
       .filter(Boolean) || []) as number[];
+
     const userAvatarList = await this.fileService.getFileUrls(
       userAvatarFileIds,
     );
@@ -82,13 +83,23 @@ export class TaskService extends Service<Task, TaskRepository> {
     return plainToClass(
       BoardTask,
       boardTasks.map((boardTask: Partial<Task>) => {
-        const assignee = users?.find(
-          (user: Partial<User>) => user.id === boardTask.assigneeUserId,
-        );
+        let assignee = null;
+        if (boardTask?.assigneeUserId) {
+          assignee = users?.find((user: Partial<User>) => {
+            if (!boardTask?.assigneeUserId) {
+              return false;
+            }
+            if (!user.id || !boardTask?.assigneeUserId) return false;
+            return +user.id === +boardTask.assigneeUserId;
+          });
+        }
+
         let assigneeAvatar = '';
         let assigneeName = '';
-        if (assignee?.avatarFileId && assignee?.name) {
+        if (assignee?.avatarFileId) {
           assigneeAvatar = userAvatarList[assignee.avatarFileId];
+        }
+        if (assignee?.name) {
           assigneeName = assignee.name;
         }
 
@@ -146,15 +157,40 @@ export class TaskService extends Service<Task, TaskRepository> {
           task.listPosition = listPosition;
         }
         break;
-      case UPDATE_TYPE.UPDATE_BOARD: {
-        const { newBoardId } = input;
-        if (!newBoardId) {
-          throw new Error(
-            'newBoardId is required for update board update.Please check your input',
-          );
+      case UPDATE_TYPE.UPDATE_BOARD:
+        {
+          const { newBoardId } = input;
+          if (!newBoardId) {
+            throw new Error(
+              'newBoardId is required for update board update.Please check your input',
+            );
+          }
+          task.boardId = newBoardId;
         }
-        task.boardId = newBoardId;
-      }
+        break;
+      case UPDATE_TYPE.UPDATE_ASSIGNEE:
+        {
+          const { assigneeUserId } = input;
+          if (!assigneeUserId) {
+            throw new Error(
+              'assigneeUserId is required for update assignee update.Please check your input',
+            );
+          }
+          task.assigneeUserId = assigneeUserId;
+        }
+        break;
+      case UPDATE_TYPE.UPDATE_DESCRIPTION:
+        {
+          const { description } = input;
+          if (!description) {
+            throw new Error(
+              'description is required for update description update.Please check your input',
+            );
+          }
+          task.description = description;
+        }
+        break;
+
       default: {
         console.error(`updateType ${updateType} is not supported`);
       }
@@ -163,21 +199,10 @@ export class TaskService extends Service<Task, TaskRepository> {
     return this.repository.save(task);
   }
 
-  async getTaskUser(projectUserId: number): Promise<TaskUser> {
-    const projectUser = await this.projectUserService.findOne({
-      where: {
-        id: projectUserId,
-      },
-      select: ['userId'],
-    });
-
-    if (!projectUser) {
-      throw new NotFoundException(`ProjectUser ${projectUserId} not found`);
-    }
-
+  async getTaskUser(userId: number): Promise<TaskUser> {
     const taskUser = await this.userService.findOne({
       where: {
-        id: projectUser.userId,
+        id: userId,
       },
       select: ['id', 'name', 'avatarFileId'],
     });
@@ -191,7 +216,6 @@ export class TaskService extends Service<Task, TaskRepository> {
     }
 
     return plainToClass(TaskUser, {
-      projectUserId: projectUser.id,
       userId: taskUser.id,
       name: taskUser.name,
       avatar,

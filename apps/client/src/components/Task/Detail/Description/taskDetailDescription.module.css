@@ -1,0 +1,48 @@
+.root {
+  margin-bottom: 3rem;
+}
+
+.actionsBtn {
+  display: flex;
+  margin-top: 1rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 3.2rem;
+  vertical-align: middle;
+  line-height: 1;
+  white-space: nowrap;
+  border-radius: 0.3rem;
+  transition: all 0.3s;
+  appearance: none;
+  background-color: var(--primary);
+  font-weight: 500;
+  outline: none;
+  color: #fff;
+  border: none;
+  min-width: 8rem;
+  font-size: 1.2rem;
+}
+
+.btnCancel {
+  background: #fff;
+  color: #000;
+}
+
+.label {
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: rgb(94, 108, 132);
+}
+
+.value {
+  font-size: 1.3rem;
+  cursor: text;
+}

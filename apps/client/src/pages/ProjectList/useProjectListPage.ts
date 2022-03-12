@@ -1,20 +1,18 @@
-import { useProjects } from '@talons/useProjects';
+import { useProjectService } from '@talons/useProjectService';
 import { useEffect } from 'react';
 
 export const useProjectListPage = () => {
   const {
     getProjectList,
     getProjectListResponse: { data, loading, error },
-  } = useProjects();
+  } = useProjectService();
 
   useEffect(() => {
     getProjectList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const projects = data?.projects;
-
-  console.log('boards', projects);
-  console.log('loading', loading);
 
   return {
     loading,

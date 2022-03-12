@@ -126,6 +126,8 @@ input UpdateTaskInput {
   updateType: String!
   newBoardId: Int
   listPosition: Int
+  assigneeUserId: Int
+  description: String
 }
 
 input CreateProjectInput {

@@ -1,12 +1,18 @@
-import Select from '@components/shared/Select';
-import { IBoard } from '@type/board.type';
 import { useRecoilValue } from 'recoil';
+
+// components
+import Select from '@components/shared/Select';
+
+// global state
 import { selectProjectBoardsByProjectId } from 'recoil/project.recoil';
+
+// types
+import { IBoard } from '@type/board.type';
 
 type Props = {
   projectId: number;
   defaultValue: number;
-  onChange: (newBoardId: string) => void;
+  onChange: (newBoardId: string | number) => void;
 };
 
 const TaskDetailBoardSelector = ({
@@ -29,13 +35,23 @@ const TaskDetailBoardSelector = ({
     );
   };
 
+  const boardOptions = boards
+    ?.map((board: IBoard) => {
+      if (board.id !== defaultValue) {
+        return {
+          value: board.id,
+          label: board.name,
+        };
+      }
+
+      return null;
+    })
+    .filter(Boolean);
+
   return (
     <Select
       value={defaultValue}
-      options={boards.map((board: IBoard) => ({
-        value: board.id,
-        label: board.name,
-      }))}
+      options={boardOptions}
       onChange={onChange}
       defaultValue={defaultValue}
       renderOption={renderBoardOption}

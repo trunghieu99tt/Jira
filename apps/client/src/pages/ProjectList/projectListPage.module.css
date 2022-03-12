@@ -1,6 +1,11 @@
 .root {
+  background: #f8f9fd;
+  min-height: 100vh;
+}
+
+.inner {
   max-width: 1140px;
-  margin: 5rem auto;
+  margin: 0 auto;
 }
 
 .header {
@@ -9,12 +14,4 @@
   align-items: center;
   margin-bottom: 2rem;
   font-family: 'Poppins', sans-serif;
-}
-
-.list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
 }

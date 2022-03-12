@@ -1,11 +1,20 @@
-import { useProjectPage } from './useProjectPage';
 import { DragDropContext } from 'react-beautiful-dnd';
-import { IBoard } from '@type/board.type';
+
+// talons
+import { useProjectPage } from './useProjectPage';
+import { useQueryParamModal } from '@talons/useQueryParamModal';
+
+// components
+import Modal from '@components/shared/Modal';
 import BoardItem from '@components/Board/Item';
 import Button from '@components/shared/Button';
-import { useQueryParamModal } from '@talons/useQueryParamModal';
-import Modal from '@components/shared/Modal';
 import CreateTask from '@components/Task/Create';
+
+// types
+import { IBoard } from '@type/board.type';
+
+// styles
+import classes from './projectPage.module.css';
 
 const ProjectPage = () => {
   const { data, error, loading, onDropEnd } = useProjectPage();
@@ -23,7 +32,7 @@ const ProjectPage = () => {
   const boards = data?.boards || [];
 
   return (
-    <div>
+    <section className={classes.root}>
       {isCreateTaskModalOpen() && (
         <Modal
           renderContent={(modal) => {
@@ -42,13 +51,13 @@ const ProjectPage = () => {
         </Button>
       </header>
       <DragDropContext onDragEnd={onDropEnd}>
-        <div>
+        <section className={classes.boardList}>
           {boards?.map((board: IBoard) => {
             return <BoardItem key={board.id} data={board} />;
           })}
-        </div>
+        </section>
       </DragDropContext>
-    </div>
+    </section>
   );
 };
 

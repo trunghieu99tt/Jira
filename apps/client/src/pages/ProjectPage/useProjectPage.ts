@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
-import { useBoardService } from '@talons/useBoards';
-import { useTaskService } from '@talons/useTasks';
+import { useBoardService } from '@talons/useBoardService';
+import { useTaskService } from '@talons/useTaskService';
 import { insertItemIntoArray, moveItemWithinArray } from '@utils/helper';
 import { GET_PROJECT_BY_ID } from 'graphql/queries/project.queries';
 import { useEffect } from 'react';
@@ -39,10 +39,12 @@ export const useProjectPage = () => {
         [projectId]: project?.boards || [],
       }));
       if (project?.boards) {
+        console.log('project.boards', project.boards);
         const boardIds = project?.boards.map((board: any) => board.id);
         fetchMultiBoards(boardIds);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId, projectUsers]);
 
   const isPositionChanged = (

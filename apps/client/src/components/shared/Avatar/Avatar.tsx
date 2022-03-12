@@ -48,9 +48,13 @@ const Avatar = ({
       setHasError(true);
     };
     img.onload = () => {
-      setLoading(true);
+      setLoading(false);
     };
   }, [src]);
+
+  console.log('src', src);
+  console.log('hasError', hasError);
+  console.log('loading', loading);
 
   return (
     <button className={classes.root} onClick={handleClick}>

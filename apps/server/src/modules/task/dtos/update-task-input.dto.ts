@@ -17,4 +17,14 @@ export class UpdateTaskInput {
     nullable: true,
   })
   listPosition: number;
+
+  @Field(() => Int, {
+    nullable: true,
+  })
+  assigneeUserId: number;
+
+  @Field(() => String, {
+    nullable: true,
+  })
+  description: string;
 }

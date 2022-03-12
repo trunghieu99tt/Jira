@@ -1,3 +1,7 @@
+import { useMemo, useRef } from 'react';
+import { useParams } from 'react-router';
+import { useRecoilValue } from 'recoil';
+
 // talons
 import { useCreateTask } from './useCreateTask';
 
@@ -9,24 +13,26 @@ import Form from '@components/shared/Form';
 import Button from '@components/shared/Button';
 import FileUploader from '@components/shared/FileUploader';
 
+// global state
+import {
+  selectProjectBoardsByProjectId,
+  selectProjectUsersByProjectId,
+} from 'recoil/project.recoil';
+
 // constants
 import { MAX_NUMBER_OF_ATTACHMENTS } from '@constants/common';
-
-// styles
-import defaultClasses from './createTask.module.css';
 import {
   TASK_PRIORITY,
   TASK_PRIORITY_LABEL,
   TASK_TYPES,
   TASK_TYPES_LABEL,
 } from '@constants/task';
-import { useMemo, useRef } from 'react';
-import { useParams } from 'react-router';
-import { useRecoilValue } from 'recoil';
-import {
-  selectProjectBoardsByProjectId,
-  selectProjectUsersByProjectId,
-} from 'recoil/project.recoil';
+
+// types
+import { IProjectUser } from '@type/project.type';
+
+// styles
+import defaultClasses from './createTask.module.css';
 
 type Props = {
   classes?: any;
@@ -34,14 +40,17 @@ type Props = {
 
 const CreateTask = ({ classes: propsClasses }: Props) => {
   const classes = mergeClasses(defaultClasses, propsClasses);
+
   const { projectId } = useParams();
+
   const projectUsers = useRecoilValue(selectProjectUsersByProjectId(projectId));
   const projectBoards = useRecoilValue(
     selectProjectBoardsByProjectId(projectId),
   );
 
-  const { onSubmit, handleAttachment } = useCreateTask();
   const $formRef = useRef<HTMLFormElement>(null);
+
+  const { onSubmit, handleAttachment } = useCreateTask();
 
   const taskTypeOptions = useMemo(
     () =>
@@ -61,11 +70,10 @@ const CreateTask = ({ classes: propsClasses }: Props) => {
   };
 
   const userOptions = useMemo(() => {
-    console.log('projectUsers', projectUsers);
     return (
-      projectUsers?.map((user) => ({
-        value: user.id,
-        label: user.name,
+      projectUsers?.map((projectUser: IProjectUser) => ({
+        value: projectUser.userId,
+        label: projectUser.name,
       })) || []
     );
   }, [projectUsers]);

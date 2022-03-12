@@ -1,0 +1,19 @@
+.inner {
+  box-shadow: var(--box-shadow);
+  border-radius: 1.2rem;
+  padding: 1.2rem;
+}
+
+.inner.isDragging {
+  transform: rotate(3deg);
+  box-shadow: 5px 10px 30px 0px rgba(9, 30, 66, 0.15);
+}
+
+.name {
+  font-size: 1.3rem;
+}
+
+.assignee {
+  display: flex;
+  justify-content: flex-end;
+}

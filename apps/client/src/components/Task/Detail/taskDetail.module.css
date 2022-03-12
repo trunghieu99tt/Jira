@@ -1,0 +1,39 @@
+.root {
+  min-width: 60vw;
+  padding: 3rem;
+}
+
+.main {
+  display: grid;
+  grid-template-columns: 70% 30%;
+  gap: 1rem;
+}
+
+.name {
+  font-size: 2.4rem;
+  font-weight: 600;
+  margin-bottom: 3rem;
+}
+
+.item {
+  margin-bottom: 2rem;
+}
+
+.itemHeader {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.itemName {
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: rgb(94, 108, 132);
+}
+
+.itemValue {
+  font-size: 1.45rem;
+}

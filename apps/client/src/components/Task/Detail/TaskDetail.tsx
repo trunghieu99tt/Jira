@@ -1,11 +1,20 @@
-import Button from '@components/shared/Button';
-import TextEditor from '@components/shared/TextEditor';
-import TaskDetailBoardSelector from './BoardSelector/TaskDetailBoardSelector';
-import TaskDetailProjectUserSelector from './ProjectUserSelector/TaskDetailProjectUserSelector';
+// talons
+import { useTaskDetail } from './useTaskDetail';
+
+// utils
 import mergeClasses from '@utils/mergeClasses';
 
+// components
+import TaskDetailDescription from './Description/TaskDetailDescription';
+import TaskDetailBoardSelector from './BoardSelector/TaskDetailBoardSelector';
+import TaskDetailProjectUserSelector from './ProjectUserSelector/TaskDetailProjectUserSelector';
+import TaskDetailPrioritySelector from './PrioritySelector/TaskDetailPrioritySelector';
+
+// icons
+import { AiFillFileZip } from 'react-icons/ai';
+
+// styles
 import defaultClasses from './taskDetail.module.css';
-import { useTaskDetail } from './useTaskDetail';
 
 type Props = {
   classes?: any;
@@ -18,56 +27,47 @@ const TaskDetail = ({ classes: propClasses, taskId, modalClose }: Props) => {
 
   const {
     data,
-    error,
     loading,
-    isEditingDescription,
 
     onChangeBoard,
-    onClickDescriptionButton,
+    onChangeAssignee,
+    onChangePriority,
+    updateDescription,
+    onChangeDescription,
   } = useTaskDetail(taskId);
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  console.log('data', data);
-
   return (
     <article className={classes.root}>
-      <header>
+      <header className={classes.header}>
         <figure>
           <img src="" alt="" />
         </figure>
       </header>
-      <main>
+      <main className={classes.main}>
         <section className={classes.content}>
-          <p>{data?.name}</p>
-          <div>
-            <div>
-              <p>Description</p>
-              <Button variant="primary" onClick={onClickDescriptionButton}>
-                {isEditingDescription ? 'Save' : 'Edit'}
-              </Button>
-            </div>
-
-            {(isEditingDescription && (
-              <TextEditor defaultValue={data?.description || ''} />
-            )) || (
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: data?.description || '',
-                }}
-              />
-            )}
+          <p className={classes.name}>{data?.name}</p>
+          <div className={classes.item}>
+            <TaskDetailDescription
+              updateDescription={updateDescription}
+              onChange={onChangeDescription}
+              defaultValue={data?.description || ''}
+            />
           </div>
 
-          <div>
-            <p>Attachments</p>
+          <div className={classes.item}>
+            <p className={classes.itemName}>
+              <AiFillFileZip />
+              Attachments
+            </p>
           </div>
         </section>
         <aside className={classes.sidebar}>
-          <div>
-            <p>Board</p>
+          <div className={classes.item}>
+            <p className={classes.itemName}>Board</p>
             <TaskDetailBoardSelector
               defaultValue={data?.boardId}
               projectId={data?.projectId}
@@ -75,12 +75,30 @@ const TaskDetail = ({ classes: propClasses, taskId, modalClose }: Props) => {
             />
           </div>
 
-          <div>
-            <p>Board</p>
+          <div className={classes.item}>
+            <p className={classes.itemName}>Assignee</p>
             <TaskDetailProjectUserSelector
-              defaultValue={data?.reporterUserId}
+              defaultValue={data?.assignee?.userId}
               projectId={data?.projectId}
-              onChange={onChangeBoard}
+              onChange={onChangeAssignee}
+            />
+          </div>
+
+          <div className={classes.item}>
+            <p className={classes.itemName}> Reporter</p>
+            <TaskDetailProjectUserSelector
+              selectable={false}
+              defaultValue={data?.reporter?.userId}
+              projectId={data?.projectId}
+              onChange={onChangeAssignee}
+            />
+          </div>
+
+          <div className={classes.item}>
+            <p className={classes.itemName}> Priority </p>
+            <TaskDetailPrioritySelector
+              defaultValue={data?.priority}
+              onChange={onChangePriority}
             />
           </div>
         </aside>

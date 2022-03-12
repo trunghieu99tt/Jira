@@ -1,8 +1,13 @@
-import Avatar from '@components/shared/Avatar';
-import Image from '@components/shared/Image';
-import { IProject, IProjectUser } from '@type/project.type';
 import { Link } from 'react-router-dom';
 
+// components
+import Image from '@components/shared/Image';
+import Avatar from '@components/shared/Avatar';
+
+// types
+import { IProject, IProjectUser } from '@type/project.type';
+
+// styles
 import classes from './projectList.module.css';
 
 type Props = {
@@ -14,7 +19,6 @@ const ProjectList = ({ data }: Props) => {
     <section className={classes.root}>
       {data?.map((project: IProject) => {
         const { projectUsers } = project;
-        console.log('projectUsers', projectUsers);
         return (
           <Link
             to={`/project/${project.id}`}

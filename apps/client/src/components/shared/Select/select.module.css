@@ -1,9 +1,17 @@
 .root {
   width: 100%;
+  position: relative;
 }
 
 .value {
   display: flex;
   justify-content: space-between;
   min-height: 2rem;
+  background: rgb(223, 225, 230);
+  padding: 0.5em;
+  border-radius: 0.5rem;
+  color: rgb(66, 82, 110);
+  font-size: 1.45rem;
+  font-weight: 500;
+  align-items: center;
 }

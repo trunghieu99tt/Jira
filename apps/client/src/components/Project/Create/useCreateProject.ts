@@ -1,4 +1,4 @@
-import { useBoardService } from '@talons/useBoards';
+import { useBoardService } from '@talons/useBoardService';
 import { uploadFiles } from '@utils/imageUploader';
 import { useCallback, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';

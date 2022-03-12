@@ -23,6 +23,7 @@ export const boardTasksSelector = selectorFamily<IBoardTask[], number>({
     (boardId: number) =>
     ({ get }) => {
       const board = get(boardSelector(boardId));
+      console.log('board', board, board.tasks);
       return board?.tasks || [];
     },
 });

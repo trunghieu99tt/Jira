@@ -43,6 +43,9 @@ export const UPDATE_TASK_MUTATION = gql`
     $updateType: String!
     $newBoardId: Int
     $listPosition: Int
+    $assigneeUserId: Int
+    $description: String
+    $priority: Int
   ) {
     updateTask(
       updateTaskInput: {
@@ -50,6 +53,9 @@ export const UPDATE_TASK_MUTATION = gql`
         updateType: $updateType
         newBoardId: $newBoardId
         listPosition: $listPosition
+        assigneeUserId: $assigneeUserId
+        description: $description
+        priority: $priority
       }
     ) {
       id

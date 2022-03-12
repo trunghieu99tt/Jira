@@ -1,4 +1,4 @@
-import { useTaskService } from '@talons/useTasks';
+import { useTaskService } from '@talons/useTaskService';
 import { uploadFiles } from '@utils/imageUploader';
 import { useState } from 'react';
 import { useParams } from 'react-router';

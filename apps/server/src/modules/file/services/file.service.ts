@@ -73,7 +73,7 @@ export class FileService extends Service<File, FileRepository> {
       ids.map(async (id: number) => {
         const fileUrl = await this.getFileUrl(id);
         return {
-          id: fileUrl,
+          [id]: fileUrl,
         };
       }),
     );

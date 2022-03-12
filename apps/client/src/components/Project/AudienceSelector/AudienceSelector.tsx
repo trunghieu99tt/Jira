@@ -58,6 +58,7 @@ const AudienceSelector = ({
         <p className={classes.audienceText}>{text}</p>
       </div>
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const selections = audiences.map((audience, index) => {

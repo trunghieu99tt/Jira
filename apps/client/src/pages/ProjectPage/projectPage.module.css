@@ -1,0 +1,10 @@
+.root {
+  background: var(--bg);
+  min-height: 100vh;
+  padding: 1.5rem;
+}
+
+.boardList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 30rem));
+}

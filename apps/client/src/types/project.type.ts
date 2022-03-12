@@ -5,6 +5,7 @@ export enum ProjectUserRole {
 
 export interface IProjectUser {
   id: number;
+  userId: number;
   role: ProjectUserRole;
   name: string;
   avatar?: string;
