@@ -46,3 +46,7 @@
   font-size: 1.3rem;
   cursor: text;
 }
+
+.value * {
+  max-width: 100%;
+}

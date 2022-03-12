@@ -6,10 +6,10 @@ import defaultClasses from './input.module.css';
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   classes?: any;
   value: string | number;
-  icon: string;
-  invalid: boolean;
-  filter: RegExp | undefined;
-  onChange: (el?: any, value?: any) => void;
+  icon?: string;
+  invalid?: boolean;
+  filter?: RegExp | undefined;
+  onChange?: (el?: any, value?: any) => void;
 }
 
 const Input = forwardRef<HTMLInputElement, Props>(
@@ -30,14 +30,19 @@ const Input = forwardRef<HTMLInputElement, Props>(
         !filter ||
         (event?.target?.value && filter.test(event.target.value))
       ) {
-        onChange(event.target.value, event);
+        onChange && onChange(event.target.value, event);
       }
     };
 
     return (
       <div className={classes.wrapper}>
         {icon && <div className={classes.icon}>{icon}</div>}
-        <input {...otherProps} onChange={handleChange} ref={ref} />
+        <input
+          {...otherProps}
+          onChange={handleChange}
+          ref={ref}
+          className={classes.input}
+        />
       </div>
     );
   },

@@ -2,6 +2,20 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Attachment {
+  id: Float!
+  fileId: Float!
+  taskId: Int!
+  commentId: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type User {
   id: Float!
   username: String!
@@ -13,14 +27,12 @@ type User {
   updatedAt: DateTime!
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type AttachmentOutput {
   id: Int!
+  taskId: Int
+  fileId: Int!
   name: String!
+  type: String!
   createdAt: Int!
   url: String!
 }
@@ -95,17 +107,30 @@ enum Privacy {
   PRIVATE
 }
 
+type Comment {
+  id: Float!
+  content: String!
+  userId: Int!
+  taskId: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Query {
   task(id: Int!): Task!
+  getTaskAttachments(taskId: Int!): [Attachment!]!
   projects(offset: Int = 0, limit: Int = 20): [Project!]!
   project(id: Int!): Project!
   board(boardId: Int!): Board!
+  comments(taskId: Int!): [Comment!]!
 }
 
 type Mutation {
   createTask(createTaskInput: CreateTaskInput!): Task!
   updateTask(updateTaskInput: UpdateTaskInput!): Task!
+  createdAttachments(createAttachmentsInput: CreateAttachmentsInput!): [Attachment!]!
   createProject(createProjectInput: CreateProjectInput!): Project!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
 }
 
 input CreateTaskInput {
@@ -128,6 +153,15 @@ input UpdateTaskInput {
   listPosition: Int
   assigneeUserId: Int
   description: String
+  priority: Int
+  type: String
+  name: String
+  summary: String
+}
+
+input CreateAttachmentsInput {
+  taskId: Int!
+  fileIds: [Int!]!
 }
 
 input CreateProjectInput {
@@ -136,4 +170,9 @@ input CreateProjectInput {
   privacy: Int!
   description: String = ""
   ownerUserId: Int!
+}
+
+input CreateCommentInput {
+  taskId: Int!
+  content: String!
 }

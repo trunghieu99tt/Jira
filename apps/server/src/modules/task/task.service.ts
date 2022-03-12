@@ -190,7 +190,50 @@ export class TaskService extends Service<Task, TaskRepository> {
           task.description = description;
         }
         break;
-
+      case UPDATE_TYPE.UPDATE_PRIORITY:
+        {
+          const { priority } = input;
+          if (!priority) {
+            throw new Error(
+              'priority is required for update priority update.Please check your input',
+            );
+          }
+          task.priority = priority;
+        }
+        break;
+      case UPDATE_TYPE.UPDATE_NAME:
+        {
+          const { name } = input;
+          if (!name) {
+            throw new Error(
+              'name is required for update name update.Please check your input',
+            );
+          }
+          task.name = name;
+        }
+        break;
+      case UPDATE_TYPE.UPDATE_TYPE:
+        {
+          const { type } = input;
+          if (!type) {
+            throw new Error(
+              'type is required for update type update.Please check your input',
+            );
+          }
+          task.type = type;
+        }
+        break;
+      case UPDATE_TYPE.UPDATE_SUMMARY:
+        {
+          const { summary } = input;
+          if (!summary) {
+            throw new Error(
+              'summary is required for update summary update.Please check your input',
+            );
+          }
+          task.summary = summary;
+        }
+        break;
       default: {
         console.error(`updateType ${updateType} is not supported`);
       }
@@ -227,13 +270,20 @@ export class TaskService extends Service<Task, TaskRepository> {
       where: {
         taskId,
       },
-      select: ['id', 'fileId', 'createdAt', 'fileName'],
+      select: ['id', 'fileId', 'taskId'],
     });
 
     const attachmentFileIds =
       attachments
         ?.map((attachment) => attachment?.fileId || null)
         ?.filter(Boolean) || [];
+
+    const files = await this.fileService.findList({
+      where: {
+        id: In(attachmentFileIds),
+      },
+      select: ['id', 'filename', 'type'],
+    });
     const attachmentFileUrls = await this.fileService.getFileUrls(
       attachmentFileIds as number[],
     );
@@ -242,9 +292,11 @@ export class TaskService extends Service<Task, TaskRepository> {
       AttachmentOutput,
       attachments.map((attachment) => ({
         id: attachment.id,
-        fileName: attachment?.fileName || '',
         url: attachment?.fileId ? attachmentFileUrls[attachment.fileId] : '',
-        createdAt: attachment?.createdAt?.getTime() || 0,
+        name: files?.find((file) => file.id === attachment.fileId)?.filename,
+        taskId: attachment.taskId,
+        type: files?.find((file) => file.id === attachment.fileId)?.type,
+        fileId: attachment.fileId,
       })),
     );
   }

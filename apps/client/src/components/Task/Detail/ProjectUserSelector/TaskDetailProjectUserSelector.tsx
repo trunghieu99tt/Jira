@@ -37,6 +37,9 @@ const TaskDetailProjectUserSelector = ({
             src={projectUser.avatar}
             alt={projectUser.name}
             size="SMALL"
+            classes={{
+              root: classes.userAvatarRoot,
+            }}
           />
         )}
         <span>{projectUser?.name}</span>

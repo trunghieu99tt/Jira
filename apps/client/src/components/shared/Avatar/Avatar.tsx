@@ -52,10 +52,6 @@ const Avatar = ({
     };
   }, [src]);
 
-  console.log('src', src);
-  console.log('hasError', hasError);
-  console.log('loading', loading);
-
   return (
     <button className={classes.root} onClick={handleClick}>
       {tooltip?.length > 0 && (

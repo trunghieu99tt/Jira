@@ -25,7 +25,9 @@ export const GET_TASK_BY_ID = gql`
         id
         name
         url
-        createdAt
+        taskId
+        type
+        fileId
       }
     }
   }

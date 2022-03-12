@@ -46,6 +46,9 @@ export const UPDATE_TASK_MUTATION = gql`
     $assigneeUserId: Int
     $description: String
     $priority: Int
+    $type: String
+    $name: String
+    $summary: String
   ) {
     updateTask(
       updateTaskInput: {
@@ -56,6 +59,9 @@ export const UPDATE_TASK_MUTATION = gql`
         assigneeUserId: $assigneeUserId
         description: $description
         priority: $priority
+        type: $type
+        name: $name
+        summary: $summary
       }
     ) {
       id

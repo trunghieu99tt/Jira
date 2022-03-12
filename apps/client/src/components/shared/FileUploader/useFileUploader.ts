@@ -100,14 +100,21 @@ export const useFileUploader = ({
     handleFilesProp(uploaded.map((file) => file.file));
   };
 
+  const removeFile = (index: number) => {
+    const newUploaded = uploaded.filter((_, i) => i !== index);
+    setUploaded(newUploaded);
+  };
+
   return {
     ref,
     errors,
     uploaded,
     isEditing,
+
     onSubmit,
     onDropFile,
     onDragOver,
+    removeFile,
     onDragLeave,
     onInputChange,
   };

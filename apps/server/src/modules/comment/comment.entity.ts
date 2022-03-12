@@ -3,7 +3,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -32,10 +31,10 @@ export class Comment {
 
   @Field(() => Int)
   @Column({
-    name: 'board_id',
+    name: 'task_id',
     type: 'bigint',
   })
-  boardId: number;
+  taskId: number;
 
   @CreateDateColumn({
     name: 'created_at',

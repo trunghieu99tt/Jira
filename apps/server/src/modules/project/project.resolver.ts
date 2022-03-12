@@ -5,25 +5,22 @@ import {
   Parent,
   Query,
   ResolveField,
-  ResolveProperty,
   Resolver,
 } from '@nestjs/graphql';
+import { plainToClass } from 'class-transformer';
 import { PaginationArgs } from 'src/common/dto/pagination-args.dto';
+import { In } from 'typeorm';
 import { Board } from '../board/board.entity';
 import { BoardService } from '../board/board.service';
-import { Project } from './project.entity';
-import { ProjectService } from './project.service';
-import { CreateProjectInput } from './dtos/create-project-input.dto';
 import { FileService } from '../file/services/file.service';
 import { ProjectUserService } from '../project-user/services/project-user.service';
-import { ProjectUser } from '../project-user/entities/project-user.entity';
 import { UserService } from '../user/user.service';
-import { In } from 'typeorm';
+import { CreateProjectInput } from './dtos/create-project-input.dto';
 import { ProjectUserOutput } from './dtos/project-user-output.dto';
-import { plainToClass } from 'class-transformer';
-import { BoardTask } from '../task/dtos/board-task-output.dto';
+import { Project } from './project.entity';
+import { ProjectService } from './project.service';
 
-@Resolver((of: any) => Project)
+@Resolver(() => Project)
 export class ProjectResolver {
   constructor(
     private readonly userService: UserService,
@@ -33,7 +30,7 @@ export class ProjectResolver {
     private readonly projectUserService: ProjectUserService,
   ) {}
 
-  @Query((returns) => [Project])
+  @Query(() => [Project])
   async projects(
     @Args() paginationArgs: PaginationArgs,
   ): Promise<Partial<Project>[]> {
@@ -43,14 +40,14 @@ export class ProjectResolver {
     );
   }
 
-  @Query((returns: any) => Project)
+  @Query(() => Project)
   async project(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<Partial<Project>> {
     return this.projectService.findProjectById(id);
   }
 
-  @Mutation((returns) => Project)
+  @Mutation(() => Project)
   async createProject(
     @Args('createProjectInput') createProjectInput: CreateProjectInput,
   ): Promise<Project> {
@@ -72,8 +69,6 @@ export class ProjectResolver {
       },
       select: ['userId', 'role', 'id'],
     });
-
-    console.log('projectId', id, 'projectUsers', projectUsers);
 
     if (!projectUsers?.length) return [];
     const userIds = projectUsers.map(({ userId }) => userId);

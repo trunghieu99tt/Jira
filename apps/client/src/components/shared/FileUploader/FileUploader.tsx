@@ -1,8 +1,11 @@
+// talons
+import { useFileUploader } from './useFileUploader';
+
 // utils
 import mergeClasses from '@utils/mergeClasses';
 
-// talons
-import { useFileUploader } from './useFileUploader';
+// components
+import Button from '../Button';
 
 // constants
 import { MAX_NUMBER_OF_FILES } from '@constants/common';
@@ -13,10 +16,13 @@ import {
   AiFillFileZip,
   AiFillFilePdf,
   AiFillFileImage,
+  AiFillFileAdd,
 } from 'react-icons/ai';
+import { IoMdRemoveCircleOutline } from 'react-icons/io';
 
 // styles
 import defaultClasses from './fileUploader.module.css';
+import { uploadFiles } from '@utils/imageUploader';
 
 interface FileUploaderProps {
   title: string;
@@ -40,11 +46,12 @@ const FileUploader = ({
     uploaded,
     isEditing,
 
-    onDragLeave,
-    onDragOver,
-    onDropFile,
-    onInputChange,
     onSubmit,
+    onDropFile,
+    onDragOver,
+    removeFile,
+    onDragLeave,
+    onInputChange,
   } = useFileUploader({
     handleFiles,
     maxNumberOfFiles,
@@ -88,6 +95,12 @@ const FileUploader = ({
               >
                 {icon}
                 <span className={classes.uploadItemName}>{file.name}</span>
+                <button
+                  className={classes.removeUploadedItemBtn}
+                  onClick={() => removeFile(idx)}
+                >
+                  <IoMdRemoveCircleOutline />
+                </button>
               </article>
             );
           })}
@@ -110,10 +123,10 @@ const FileUploader = ({
             ( Maximum {maxNumberOfFiles} )
           </span>
         </div>
-
-        <p className={classes.text}>or</p>
+        {/* <p className={classes.text}>or</p>
         <label className="btn btn-primary" htmlFor="file-uploader">
           Choose files
+          <AiFillFileAdd />
           <input
             className="hidden"
             type="file"
@@ -121,9 +134,15 @@ const FileUploader = ({
             onChange={onInputChange}
             multiple
           />
-        </label>
+        </label> */}
       </div>
-      {isEditing && <button onClick={onSubmit}>OK</button>}
+      <Button
+        variant="primary"
+        onClick={onSubmit}
+        disabled={!uploaded || uploaded?.length === 0}
+      >
+        Upload
+      </Button>
     </section>
   );
 };

@@ -27,4 +27,24 @@ export class UpdateTaskInput {
     nullable: true,
   })
   description: string;
+
+  @Field(() => Int, {
+    nullable: true,
+  })
+  priority: number;
+
+  @Field(() => String, {
+    nullable: true,
+  })
+  type: string;
+
+  @Field(() => String, {
+    nullable: true,
+  })
+  name: string;
+
+  @Field(() => String, {
+    nullable: true,
+  })
+  summary: string;
 }

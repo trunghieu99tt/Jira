@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { plainToClass } from 'class-transformer';
 import { Service } from 'src/common/generics/service.generic';
 import { Attachment } from './attachment.entity';
 import { AttachmentRepository } from './attachment.repository';
+import { CreateAttachmentsInput } from './dtos/create-attachments-input.dto';
 
 @Injectable()
 export class AttachmentService extends Service<
@@ -18,5 +20,19 @@ export class AttachmentService extends Service<
         taskId,
       },
     });
+  }
+
+  async createNewAttachment(
+    input: CreateAttachmentsInput,
+  ): Promise<Partial<Attachment>[]> {
+    const newAttachments = plainToClass(
+      Attachment,
+      input.fileIds.map((fileId: number) => ({
+        taskId: input.taskId,
+        fileId,
+      })),
+    );
+    const newAttachmentsDb = await this.repository.save(newAttachments);
+    return newAttachmentsDb;
   }
 }

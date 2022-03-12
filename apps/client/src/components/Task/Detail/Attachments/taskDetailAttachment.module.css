@@ -1,0 +1,38 @@
+.item {
+  position: relative;
+  max-width: 15rem;
+  box-shadow: 0 5px 5px rgb(0 0 0 / 12%);
+  border-radius: 0.8rem;
+  overflow: hidden;
+  margin: 0.5rem;
+  height: 15rem;
+  cursor: pointer;
+}
+
+.itemMain {
+  transition: all 0.3s;
+}
+
+.item:hover .itemMain {
+  filter: brightness(0.8);
+}
+
+.image {
+  max-width: 15rem;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.8rem;
+}
+
+.itemMeta {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  word-break: break-all;
+  background-color: #fff;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--gray);
+}

@@ -1,4 +1,7 @@
+import { useAttachmentService } from '@talons/useAttachmentService';
 import { useTaskService } from '@talons/useTaskService';
+import { iAttachment } from '@type/attachment.type';
+import { uploadFiles } from '@utils/imageUploader';
 import { useCallback, useEffect, useState } from 'react';
 
 export const useTaskDetail = (taskId: number) => {
@@ -10,6 +13,7 @@ export const useTaskDetail = (taskId: number) => {
     updateTask,
     fetchTaskDetail,
   } = useTaskService();
+  const { createNewTaskAttachments } = useAttachmentService();
 
   const task = data?.task;
 
@@ -120,6 +124,71 @@ export const useTaskDetail = (taskId: number) => {
     [task?.id, task?.priority, updateTask],
   );
 
+  const onChangeType = useCallback(
+    (newType: string | number) => {
+      if (typeof newType !== 'string') {
+        newType = newType.toString();
+      }
+      if (task?.type !== newType) {
+        updateTask(
+          task.id,
+          {
+            type: newType,
+            updateType: 'UPDATE_TYPE',
+          },
+          [],
+        );
+      }
+    },
+    [task?.id, task?.type, updateTask],
+  );
+
+  const onChangeName = useCallback(
+    (newName: string | number) => {
+      if (typeof newName !== 'string') {
+        newName = newName.toString();
+      }
+      if (task?.name !== newName) {
+        updateTask(
+          task.id,
+          {
+            name: newName,
+            updateType: 'UPDATE_NAME',
+          },
+          [],
+        );
+      }
+    },
+    [task?.id, task?.name, updateTask],
+  );
+
+  const onChangeSummary = useCallback(
+    (newSummary: string | number) => {
+      if (typeof newSummary !== 'string') {
+        newSummary = newSummary.toString();
+      }
+      if (task?.summary !== newSummary) {
+        updateTask(
+          task.id,
+          {
+            summary: newSummary,
+            updateType: 'UPDATE_SUMMARY',
+          },
+          [],
+        );
+      }
+    },
+    [task?.id, task?.summary, updateTask],
+  );
+
+  const onAddAttachments = useCallback(
+    async (files: File[]) => {
+      const newFileIds = await uploadFiles(files);
+      createNewTaskAttachments(task.id, newFileIds);
+    },
+    [createNewTaskAttachments, task?.id],
+  );
+
   return {
     error,
     loading,
@@ -127,10 +196,14 @@ export const useTaskDetail = (taskId: number) => {
     description,
     isEditingDescription,
 
+    onChangeName,
+    onChangeType,
     onChangeBoard,
     setDescription,
+    onChangeSummary,
     onChangePriority,
     onChangeAssignee,
+    onAddAttachments,
     updateDescription,
     onChangeDescription,
     onClickDescriptionButton,

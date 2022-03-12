@@ -1,6 +1,7 @@
 .root {
-  width: 100%;
   position: relative;
+  display: inline-block;
+  min-width: 15rem;
 }
 
 .value {
@@ -14,4 +15,11 @@
   font-size: 1.45rem;
   font-weight: 500;
   align-items: center;
+  gap: 1rem;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.value:hover {
+  transform: scale(1.05);
 }

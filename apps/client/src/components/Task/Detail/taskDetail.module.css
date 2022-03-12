@@ -1,18 +1,20 @@
 .root {
-  min-width: 60vw;
+  width: 60vw;
   padding: 3rem;
 }
 
 .main {
   display: grid;
-  grid-template-columns: 70% 30%;
-  gap: 1rem;
+  grid-template-columns: 60% 35%;
+  gap: 3rem;
+  justify-content: space-between;
 }
 
 .name {
   font-size: 2.4rem;
   font-weight: 600;
   margin-bottom: 3rem;
+  margin-top: 0;
 }
 
 .item {

@@ -21,6 +21,8 @@
   border: 1px solid var(--gray-4);
   border-radius: 0.8rem;
   text-align: center;
+  margin-bottom: 1.5rem;
+  max-width: 20rem;
 }
 
 .uploadZoneInner .uploadIcon {
@@ -32,6 +34,30 @@
 .uploadedItemList {
   max-height: 20rem;
   overflow: auto;
+  margin-bottom: 1.5rem;
+}
+
+.uploadedItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+  color: var(--primary);
+  padding: 1rem 0;
+}
+
+.uploadedItem:hover {
+  background: rgb(210, 229, 254);
+}
+
+.removeUploadedItemBtn {
+  display: flex;
+  margin-left: 2rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: red;
+  cursor: pointer;
 }
 
 .previewItem {

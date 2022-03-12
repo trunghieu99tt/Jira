@@ -25,18 +25,21 @@ export class Attachment {
   })
   fileId: number;
 
-  @Field(() => String)
-  @Column({
-    name: 'file_name',
-  })
-  fileName: string;
-
   @Field(() => Int)
   @Column({
     type: 'bigint',
     name: 'task_id',
+    nullable: true,
   })
   taskId: number;
+
+  @Field(() => Int)
+  @Column({
+    type: 'bigint',
+    name: 'comment_id',
+    nullable: true,
+  })
+  commentId: number;
 
   @Field(() => Date)
   @CreateDateColumn({

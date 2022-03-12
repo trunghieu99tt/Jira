@@ -1,0 +1,16 @@
+.value {
+  cursor: text;
+  font-size: 2.4rem;
+  padding: 1rem 0.5rem;
+}
+
+.value:hover {
+  background: rgb(235, 236, 240);
+}
+
+.input {
+  width: 100%;
+  padding: 1rem;
+  border: 0.5px solid var(--gray-4);
+  font-size: 2.4rem;
+}
