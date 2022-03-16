@@ -91,5 +91,8 @@
       "prettier --write",
       "git add ."
     ]
+  },
+  "engines": {
+    "node": ">= 17.0.0"
   }
 }
