@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { create, IPFSHTTPClient } from 'ipfs-http-client';
+import { create } from 'ipfs-http-client';
 import {
   INFURA_HOST,
   INFURA_PORT,
@@ -15,7 +15,7 @@ const GATE_WAYS = {
 @Injectable()
 export class IpfsUploadService {
   clients: {
-    [key: string]: IPFSHTTPClient;
+    [key: string]: any;
   };
 
   constructor() {
@@ -23,7 +23,7 @@ export class IpfsUploadService {
     this.clients[GATE_WAYS.INFURA] = this.initInfuraClient();
   }
 
-  private initInfuraClient(): IPFSHTTPClient {
+  private initInfuraClient(): any {
     return create({
       host: INFURA_HOST,
       port: INFURA_PORT,
@@ -36,7 +36,7 @@ export class IpfsUploadService {
     });
   }
 
-  private getClient(gateWay = GATE_WAYS.INFURA): IPFSHTTPClient {
+  private getClient(gateWay = GATE_WAYS.INFURA): any {
     return this.clients[gateWay];
   }
 

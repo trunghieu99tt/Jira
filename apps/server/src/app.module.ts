@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { join } from 'path/posix';
+import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { configModuleOptions } from './configuration/config-module';
@@ -32,6 +32,7 @@ import { UploadModule } from './modules/upload/upload.module';
           entities: [join(__dirname, '**/**/**.entity{.ts,.js}')],
           timezone: 'Z',
           synchronize: false,
+          connectTimeout: 100000,
         };
       },
     }),
