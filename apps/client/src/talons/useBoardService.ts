@@ -1,84 +1,113 @@
-import { useApolloClient, useLazyQuery, useMutation } from '@apollo/client';
+import { useApolloClient, useMutation } from '@apollo/client';
+import { IBoard } from '@type/board.type';
+import { ITask } from '@type/task.type';
 import { CREATE_PROJECT_MUTATION } from 'graphql/mutations/project.mutation';
 import { GET_BOARD_BY_ID } from 'graphql/queries/board.queries';
-import { GET_PROJECT_LIST } from 'graphql/queries/project.queries';
 import { useCallback } from 'react';
-import { useRecoilState } from 'recoil';
-import { boardsState } from 'recoil/board.recoil';
 
 export const useBoardService = () => {
   const client = useApolloClient();
-  const [getBoardsQuery, getBoardResponse] = useLazyQuery(GET_PROJECT_LIST);
   const [createBoardMutation, createBoardResponse] = useMutation(
     CREATE_PROJECT_MUTATION,
   );
-  const [boards, setBoards] = useRecoilState(boardsState);
 
-  const fetchMultiBoards = useCallback(
-    async (boardIds: number[]) => {
-      if (!boardIds.length) return;
-
-      try {
-        const responses = await Promise.all(
-          boardIds.map(async (boardId: number) => {
-            return client.query({
-              query: GET_BOARD_BY_ID,
-              variables: {
-                boardId,
-              },
-              fetchPolicy: 'network-only',
-            });
-          }),
-        );
-
-        const newBoards = responses.map((response) => response.data.board);
-        const newLocalBoards = {
-          ...boards,
-          ...newBoards.reduce((acc, board) => {
-            return {
-              ...acc,
-              [board.id]: board,
-            };
-          }, {}),
-        };
-        setBoards(newLocalBoards);
-      } catch (error) {
-        console.error('error', error);
-      }
-    },
-    [boards, client, setBoards],
-  );
-
-  const fetchBoard = useCallback(
+  const getBoard = useCallback(
     async (boardId: number) => {
       try {
-        const response = await client.query({
+        await client.query({
           query: GET_BOARD_BY_ID,
           variables: {
             boardId,
           },
         });
-
-        const newBoard = response.data.board;
-        const newLocalBoards = {
-          ...boards,
-          [boardId]: newBoard,
-        };
-        setBoards(newLocalBoards);
       } catch (error) {
         console.error('error', error);
       }
     },
-    [boards, client, setBoards],
+    [client],
   );
 
-  return {
-    getBoardResponse,
-    createBoardResponse,
+  const getBoards = useCallback(
+    async (boardIds: number[]) => {
+      if (!boardIds.length) return;
 
-    fetchBoard,
-    fetchMultiBoards,
-    getBoards: getBoardsQuery,
-    createBoardFunction: createBoardMutation,
+      try {
+        await Promise.all(
+          boardIds.map(async (boardId) => {
+            getBoard(boardId);
+          }),
+        );
+      } catch (error) {
+        console.error('error', error);
+      }
+    },
+    [getBoard],
+  );
+
+  const getCachedBoard = (boardId: number) => {
+    return client.cache.readQuery({
+      query: GET_BOARD_BY_ID,
+      variables: {
+        boardId,
+      },
+    });
+  };
+
+  const updateCachedBoard = (boardId: number, newBoardData: IBoard) => {
+    client.cache.writeQuery({
+      query: GET_BOARD_BY_ID,
+      variables: {
+        boardId,
+      },
+      data: {
+        board: newBoardData,
+      },
+    });
+  };
+
+  const removeTaskFromBoardCache = (boardId: number, taskId: number) => {
+    const cachedBoard: any = getCachedBoard(boardId);
+    if (!cachedBoard) return;
+
+    const { tasks } = cachedBoard.board;
+    const updatedTasks = tasks.filter((task: ITask) => task.id !== taskId);
+
+    updateCachedBoard(boardId, {
+      ...cachedBoard.board,
+      tasks: updatedTasks,
+    });
+  };
+
+  const addTaskToBoardCache = (boardId: number, task: ITask) => {
+    const cachedBoard: any = getCachedBoard(boardId);
+    if (!cachedBoard) return;
+
+    const { tasks } = cachedBoard.board;
+    const updatedTasks = [...tasks, task];
+
+    updateCachedBoard(boardId, {
+      ...cachedBoard.board,
+      tasks: updatedTasks,
+    });
+  };
+
+  const updateCacheBoardTasks = (
+    boardId: number,
+    task: any,
+    strategy: 'add' | 'remove',
+  ) => {
+    if (strategy === 'remove') {
+      removeTaskFromBoardCache(boardId, task.id);
+    } else {
+      addTaskToBoardCache(boardId, task);
+    }
+  };
+
+  return {
+    createBoardResponse,
+    updateCacheBoardTasks,
+
+    getBoard,
+    getBoards,
   };
 };

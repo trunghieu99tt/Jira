@@ -1,4 +1,4 @@
-import { useBoardService } from '@talons/useBoardService';
+import { useProjectService } from '@talons/useProjectService';
 import { uploadFiles } from '@utils/imageUploader';
 import { useCallback, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
@@ -8,7 +8,7 @@ export const useCreateProject = () => {
   const [audience, setAudience] = useState<number>(0);
   const [coverPhoto, setCoverPhoto] = useState<File | null>(null);
 
-  const { createBoardFunction, createBoardResponse } = useBoardService();
+  const { createProject, createProjectResponse } = useProjectService();
 
   const currentUser = useRecoilValue(userState);
 
@@ -24,14 +24,12 @@ export const useCreateProject = () => {
     }
     const { name, description } = values;
 
-    createBoardFunction({
-      variables: {
-        name,
-        description,
-        coverPhotoFileId,
-        privacy: audience,
-        ownerUserId: currentUser?.id || 1,
-      },
+    createProject({
+      name,
+      description,
+      coverPhotoFileId,
+      privacy: audience,
+      ownerUserId: currentUser?.id || 1,
     });
   };
 
@@ -41,12 +39,12 @@ export const useCreateProject = () => {
   };
 
   useEffect(() => {
-    console.log('createBoardResponse', createBoardResponse);
-  }, [createBoardResponse]);
+    console.log('createProjectResponse', createProjectResponse);
+  }, [createProjectResponse]);
 
   return {
     audience,
-    createBoardResponse,
+    createProjectResponse,
 
     onSubmit,
     handleFiles,

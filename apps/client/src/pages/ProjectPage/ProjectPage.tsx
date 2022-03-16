@@ -6,8 +6,8 @@ import { useQueryParamModal } from '@talons/useQueryParamModal';
 
 // components
 import Modal from '@components/shared/Modal';
-import BoardItem from '@components/Board/Item';
 import Button from '@components/shared/Button';
+import BoardItem from '@components/Board/Item';
 import CreateTask from '@components/Task/Create';
 
 // types
@@ -30,6 +30,7 @@ const ProjectPage = () => {
   if (error) return <div>Error!</div>;
 
   const boards = data?.boards || [];
+  console.log('boards', boards);
 
   return (
     <section className={classes.root}>

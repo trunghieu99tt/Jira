@@ -13,9 +13,9 @@ export const useTaskService = () => {
   const [getTaskDetailQuery, getTaskDetailQueryResponse] =
     useLazyQuery(GET_TASK_BY_ID);
 
-  const { fetchMultiBoards } = useBoardService();
+  const { getBoards, updateCacheBoardTasks } = useBoardService();
 
-  const fetchTaskDetail = useCallback(
+  const getTaskDetail = useCallback(
     async (taskId: number) => {
       await getTaskDetailQuery({
         variables: {
@@ -27,7 +27,17 @@ export const useTaskService = () => {
   );
 
   const updateTask = useCallback(
-    async (taskId: number, data: any, refetchBoardIds: number[]) => {
+    async (
+      taskId: number,
+      data: any,
+      {
+        sourceBoardId,
+        targetBoardId,
+      }: {
+        sourceBoardId?: number;
+        targetBoardId?: number;
+      } = {},
+    ) => {
       await updateTaskMutation({
         variables: {
           id: taskId,
@@ -35,13 +45,20 @@ export const useTaskService = () => {
         },
         onCompleted: (data) => {
           if (data?.updateTask) {
-            fetchMultiBoards(refetchBoardIds);
-            fetchTaskDetail(taskId);
+            if (sourceBoardId) {
+              updateCacheBoardTasks(sourceBoardId, data.updateTask, 'remove');
+            }
+
+            if (targetBoardId) {
+              updateCacheBoardTasks(targetBoardId, data.updateTask, 'add');
+            }
+
+            getTaskDetail(taskId);
           }
         },
       });
     },
-    [updateTaskMutation, fetchMultiBoards, fetchTaskDetail],
+    [updateTaskMutation, getTaskDetail],
   );
 
   const createTask = useCallback(
@@ -52,12 +69,12 @@ export const useTaskService = () => {
         },
         onCompleted: (data) => {
           if (data?.createTask) {
-            fetchMultiBoards(refetchBoardIds);
+            getBoards(refetchBoardIds);
           }
         },
       });
     },
-    [createTaskMutation, fetchMultiBoards],
+    [createTaskMutation, getBoards],
   );
 
   return {
@@ -65,6 +82,6 @@ export const useTaskService = () => {
 
     updateTask,
     createTask,
-    fetchTaskDetail,
+    getTaskDetail,
   };
 };

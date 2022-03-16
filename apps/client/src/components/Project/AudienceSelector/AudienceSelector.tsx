@@ -18,8 +18,8 @@ import defaultClasses from './audience.module.css';
 
 type Props = {
   audience: number;
-  setAudience: (audience: number) => void;
   classes?: any;
+  setAudience: (audience: number) => void;
 };
 
 const AudienceSelector = ({

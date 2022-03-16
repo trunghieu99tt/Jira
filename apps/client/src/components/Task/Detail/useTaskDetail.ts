@@ -1,6 +1,5 @@
 import { useAttachmentService } from '@talons/useAttachmentService';
 import { useTaskService } from '@talons/useTaskService';
-import { iAttachment } from '@type/attachment.type';
 import { uploadFiles } from '@utils/imageUploader';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -11,15 +10,15 @@ export const useTaskDetail = (taskId: number) => {
     getTaskDetailResponse: { data, loading, error },
 
     updateTask,
-    fetchTaskDetail,
+    getTaskDetail,
   } = useTaskService();
-  const { createNewTaskAttachments } = useAttachmentService();
+  const { createTaskAttachments } = useAttachmentService();
 
   const task = data?.task;
 
   useEffect(() => {
     if (taskId) {
-      fetchTaskDetail(taskId);
+      getTaskDetail(taskId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [taskId]);
@@ -55,7 +54,10 @@ export const useTaskDetail = (taskId: number) => {
             newBoardId,
             updateType: 'UPDATE_BOARD',
           },
-          [newBoardId, task.boardId],
+          {
+            sourceBoardId: task.boardId,
+            targetBoardId: newBoardId,
+          },
         );
       }
     },
@@ -70,17 +72,13 @@ export const useTaskDetail = (taskId: number) => {
       }
 
       if (task?.assigneeUserId !== newAssigneeUserId) {
-        updateTask(
-          task.id,
-          {
-            assigneeUserId: newAssigneeUserId,
-            updateType: 'UPDATE_ASSIGNEE',
-          },
-          [task.boardId],
-        );
+        updateTask(task.id, {
+          assigneeUserId: newAssigneeUserId,
+          updateType: 'UPDATE_ASSIGNEE',
+        });
       }
     },
-    [task?.assigneeUserId, task?.boardId, task?.id, updateTask],
+    [task?.assigneeUserId, task.id, updateTask],
   );
 
   const onChangeDescription = (newDescription: string) => {
@@ -93,14 +91,10 @@ export const useTaskDetail = (taskId: number) => {
 
   const updateDescription = () => {
     if (task?.description !== description) {
-      updateTask(
-        task.id,
-        {
-          description,
-          updateType: 'UPDATE_DESCRIPTION',
-        },
-        [task.boardId],
-      );
+      updateTask(task.id, {
+        description,
+        updateType: 'UPDATE_DESCRIPTION',
+      });
     }
   };
 
@@ -111,14 +105,10 @@ export const useTaskDetail = (taskId: number) => {
       }
 
       if (task?.priority !== newPriority) {
-        updateTask(
-          task.id,
-          {
-            priority: newPriority,
-            updateType: 'UPDATE_PRIORITY',
-          },
-          [],
-        );
+        updateTask(task.id, {
+          priority: newPriority,
+          updateType: 'UPDATE_PRIORITY',
+        });
       }
     },
     [task?.id, task?.priority, updateTask],
@@ -130,14 +120,10 @@ export const useTaskDetail = (taskId: number) => {
         newType = newType.toString();
       }
       if (task?.type !== newType) {
-        updateTask(
-          task.id,
-          {
-            type: newType,
-            updateType: 'UPDATE_TYPE',
-          },
-          [],
-        );
+        updateTask(task.id, {
+          type: newType,
+          updateType: 'UPDATE_TYPE',
+        });
       }
     },
     [task?.id, task?.type, updateTask],
@@ -149,14 +135,10 @@ export const useTaskDetail = (taskId: number) => {
         newName = newName.toString();
       }
       if (task?.name !== newName) {
-        updateTask(
-          task.id,
-          {
-            name: newName,
-            updateType: 'UPDATE_NAME',
-          },
-          [],
-        );
+        updateTask(task.id, {
+          name: newName,
+          updateType: 'UPDATE_NAME',
+        });
       }
     },
     [task?.id, task?.name, updateTask],
@@ -168,14 +150,10 @@ export const useTaskDetail = (taskId: number) => {
         newSummary = newSummary.toString();
       }
       if (task?.summary !== newSummary) {
-        updateTask(
-          task.id,
-          {
-            summary: newSummary,
-            updateType: 'UPDATE_SUMMARY',
-          },
-          [],
-        );
+        updateTask(task.id, {
+          summary: newSummary,
+          updateType: 'UPDATE_SUMMARY',
+        });
       }
     },
     [task?.id, task?.summary, updateTask],
@@ -184,9 +162,9 @@ export const useTaskDetail = (taskId: number) => {
   const onAddAttachments = useCallback(
     async (files: File[]) => {
       const newFileIds = await uploadFiles(files);
-      createNewTaskAttachments(task.id, newFileIds);
+      createTaskAttachments(task.id, newFileIds);
     },
-    [createNewTaskAttachments, task?.id],
+    [createTaskAttachments, task?.id],
   );
 
   return {
