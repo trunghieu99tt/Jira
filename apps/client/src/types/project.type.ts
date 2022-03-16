@@ -19,3 +19,11 @@ export interface IProject {
   description: string;
   projectUsers: IProjectUser[];
 }
+
+export interface IProjectCreateInput {
+  name: string;
+  privacy: number;
+  description: string;
+  ownerUserId: number;
+  coverPhotoFileId: number | null;
+}

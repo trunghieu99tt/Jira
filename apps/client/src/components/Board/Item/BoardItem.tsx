@@ -7,26 +7,28 @@ import mergeClasses from '@utils/mergeClasses';
 // components
 import TaskItem from '@components/Task/Item';
 
-// global state
-import { boardSelector } from 'recoil/board.recoil';
-
 // types
 import { IBoard } from '@type/board.type';
 
 import defaultClasses from './boardItem.module.css';
+import { useBoardItem } from './useBoardItem';
 
 type Props = {
   data: IBoard;
   classes?: any;
 };
 
-const BoardItem = ({ data, classes: propsClasses }: Props) => {
+const BoardItem = ({ data: propData, classes: propsClasses }: Props) => {
   const classes = mergeClasses(defaultClasses, propsClasses);
 
-  const boardDetail = useRecoilValue(boardSelector(data.id));
+  const {
+    getBoardDetailResponse: { data },
+  } = useBoardItem(propData.id);
+
+  const boardDetail = data?.board || {};
 
   return (
-    <Droppable droppableId={data?.id.toString()}>
+    <Droppable droppableId={propData?.id.toString()}>
       {(provided, snapshot) => (
         <article className={classes.root}>
           <h4 className={classes.name}>{boardDetail?.name}</h4>

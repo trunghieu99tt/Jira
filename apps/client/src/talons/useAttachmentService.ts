@@ -4,10 +4,10 @@ import { useCallback } from 'react';
 import { useTaskService } from './useTaskService';
 
 export const useAttachmentService = () => {
-  const { fetchTaskDetail } = useTaskService();
+  const { getTaskDetail } = useTaskService();
   const [createAttachmentsMutation] = useMutation(CREATE_NEW_ATTACHMENT);
 
-  const createNewTaskAttachments = useCallback(
+  const createTaskAttachments = useCallback(
     async (taskId: number, fileIds: number[]) => {
       await createAttachmentsMutation({
         variables: {
@@ -15,17 +15,16 @@ export const useAttachmentService = () => {
           fileIds,
         },
         onCompleted: (data) => {
-          console.log('data', data);
           if (data?.createdAttachments) {
-            fetchTaskDetail(taskId);
+            getTaskDetail(taskId);
           }
         },
       });
     },
-    [createAttachmentsMutation],
+    [createAttachmentsMutation, getTaskDetail],
   );
 
   return {
-    createNewTaskAttachments,
+    createTaskAttachments,
   };
 };

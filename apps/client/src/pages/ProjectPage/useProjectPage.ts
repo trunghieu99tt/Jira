@@ -1,20 +1,12 @@
 import { useQuery } from '@apollo/client';
-import { useBoardService } from '@talons/useBoardService';
 import { useTaskService } from '@talons/useTaskService';
 import { insertItemIntoArray, moveItemWithinArray } from '@utils/helper';
 import { GET_PROJECT_BY_ID } from 'graphql/queries/project.queries';
-import { useEffect } from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import { useParams } from 'react-router';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { boardsState } from 'recoil/board.recoil';
-import { projectsBoardsState, projectsUsersState } from 'recoil/project.recoil';
 
 export const useProjectPage = () => {
   const { projectId } = useParams();
-  const setProjectsUsers = useSetRecoilState(projectsUsersState);
-  const setProjectsBoards = useSetRecoilState(projectsBoardsState);
-  const boards = useRecoilValue(boardsState);
 
   const { loading, data, error } = useQuery(GET_PROJECT_BY_ID, {
     variables: {
@@ -23,29 +15,9 @@ export const useProjectPage = () => {
   });
 
   const { updateTask } = useTaskService();
-  const { fetchMultiBoards } = useBoardService();
 
   const project = data?.project;
-  const projectUsers = project?.projectUsers || [];
-
-  useEffect(() => {
-    if (projectId) {
-      setProjectsUsers((prevValue) => ({
-        ...prevValue,
-        [projectId]: projectUsers,
-      }));
-      setProjectsBoards((prevValue) => ({
-        ...prevValue,
-        [projectId]: project?.boards || [],
-      }));
-      if (project?.boards) {
-        console.log('project.boards', project.boards);
-        const boardIds = project?.boards.map((board: any) => board.id);
-        fetchMultiBoards(boardIds);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projectId, projectUsers]);
+  const boards = project?.boards;
 
   const isPositionChanged = (
     destination: DraggableLocation | undefined,
@@ -67,7 +39,7 @@ export const useProjectPage = () => {
       boards[destinationBoardId]?.tasks || [];
     const isSameBoard = sourceBoardId === destinationBoardId;
     const droppedTask = boards[sourceBoardId]?.tasks?.find(
-      (task) => task.id === droppedTaskId,
+      (task: any) => task.id === droppedTaskId,
     );
 
     const afterDropDestinationTaskList = isSameBoard
@@ -140,7 +112,10 @@ export const useProjectPage = () => {
         updateType: 'MOVE_TASK',
         newBoardId: destinationBoardId,
       },
-      [sourceBoardId, destinationBoardId],
+      {
+        sourceBoardId,
+        targetBoardId: destinationBoardId,
+      },
     );
   };
 
