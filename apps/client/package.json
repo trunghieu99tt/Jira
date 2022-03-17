@@ -45,8 +45,8 @@
     "yarn": "^1.22.17"
   },
   "scripts": {
-    "dev": "SET NODE_OPTIONS=--openssl-legacy-provider && craco start",
-    "build": "SET NODE_OPTIONS=--openssl-legacy-provider && craco build",
+    "dev": "set NODE_OPTIONS=--openssl-legacy-provider && craco start",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider && craco build",
     "test": "craco test",
     "eject": "craco eject",
     "lint": "eslint \"{src,test}/**/*.ts\" --fix",
