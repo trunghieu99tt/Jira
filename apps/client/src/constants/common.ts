@@ -45,3 +45,24 @@ export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export const MAX_NUMBER_OF_ATTACHMENTS = 20;
 export const MAX_NUMBER_OF_COVER_PHOTO = 1;
+
+export const TIME_TO_MILLISECONDS: {
+  [key: string]: number;
+} = {
+  SECONDS: 1000,
+  MINUTE: 1000 * 60,
+  HOUR: 1000 * 60 * 60,
+  DAY: 1000 * 60 * 60 * 24,
+  MONTH: 1000 * 60 * 60 * 24 * 30,
+  YEAR: 1000 * 60 * 60 * 24 * 30 * 12,
+};
+export const TIME_UNIT: {
+  [key: string]: string;
+} = {
+  SECONDS: 'second',
+  MINUTE: 'minute',
+  HOUR: 'hour',
+  DAY: 'day',
+  MONTH: 'month',
+  YEAR: 'year',
+};

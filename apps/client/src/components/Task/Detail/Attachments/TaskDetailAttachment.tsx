@@ -1,15 +1,11 @@
-import Slider from 'react-slick';
-
+import FileUploader from '@components/shared/FileUploader';
 // components
 import Image from '@components/shared/Image';
-import FileUploader from '@components/shared/FileUploader';
-
 // types
 import { iAttachment } from '@type/attachment.type';
-
+import Slider from 'react-slick';
 // styles
 import classes from './taskDetailAttachment.module.css';
-import Button from '@components/shared/Button';
 
 type Props = {
   defaultValue: iAttachment[];
@@ -48,7 +44,10 @@ const TaskDetailAttachment = ({ defaultValue, onChange }: Props) => {
           if (!el) return null;
 
           return (
-            <article className={classes.item}>
+            <article
+              className={classes.item}
+              key={`attachment-${attachment.id}`}
+            >
               <div className={classes.itemMain}>{el}</div>
               <div className={classes.itemMeta}>{attachment.name}</div>
             </article>

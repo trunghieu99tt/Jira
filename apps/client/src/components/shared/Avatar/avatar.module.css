@@ -98,6 +98,18 @@
   background-color: rgb(235, 236, 240);
 }
 
+.image.MEDIUM {
+  --size: 3.2rem;
+  width: var(--size);
+  height: var(--size);
+}
+
+.image.LARGE {
+  --size: 5rem;
+  width: var(--size);
+  height: var(--size);
+}
+
 .placeholder {
   width: 100%;
   height: 100%;

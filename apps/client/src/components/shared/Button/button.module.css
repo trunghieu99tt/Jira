@@ -15,6 +15,7 @@
   min-width: 10rem;
   color: #fff;
   border: none;
+  cursor: pointer;
 }
 
 .root:disabled {
@@ -39,5 +40,6 @@
 }
 
 .root.secondary {
-  background-color: var(--secondary);
+  background: none;
+  color: #000;
 }

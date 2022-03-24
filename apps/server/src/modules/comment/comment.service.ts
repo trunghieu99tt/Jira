@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { Service } from 'src/common/generics/service.generic';
+import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
 import { Comment } from './comment.entity';
 import { CommentRepository } from './comment.repository';
@@ -21,7 +22,7 @@ export class CommentService extends Service<Comment, CommentRepository> {
       where: {
         taskId,
       },
-      select: ['id', 'content', 'taskId', 'userId'],
+      select: ['id', 'content', 'taskId', 'userId', 'updatedAt'],
       order: {
         createdAt: 'DESC',
       },
@@ -44,14 +45,22 @@ export class CommentService extends Service<Comment, CommentRepository> {
         }
         return {
           ...comment,
-          userName: author.name,
-          userAvatar: author.avatar,
+          userName: author?.name || '',
+          userAvatar: author?.avatar || '',
         };
       }),
     );
   }
 
   async createComment(input: CreateCommentInput): Promise<Comment> {
-    return this.repository.save(input);
+    const newComment = await this.repository.save(input);
+    return {
+      ...newComment,
+      owner: await this.getOwnerInfo(input.userId),
+    };
+  }
+
+  async getOwnerInfo(userId: number): Promise<Partial<User>> {
+    return this.userService.getUserInfo(userId);
   }
 }

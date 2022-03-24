@@ -28,6 +28,7 @@ const Avatar = ({
   src,
   alt,
   onClick,
+  size,
   tooltip = '',
   tooltipPlacement = 'bottom',
   classes: propsClasses,
@@ -50,6 +51,10 @@ const Avatar = ({
     img.onload = () => {
       setLoading(false);
     };
+    
+    return () => {
+    }
+    
   }, [src]);
 
   return (
@@ -61,7 +66,7 @@ const Avatar = ({
       )}
       {loading && <Skeleton height={10}></Skeleton>}
       {!loading && !hasError && (
-        <img src={src} alt={alt} className={classes.image} />
+        <img src={src} alt={alt} className={cn(classes.image, classes[size])} />
       )}
       {!loading && hasError && (
         <div

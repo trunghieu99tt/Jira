@@ -1,0 +1,14 @@
+.root {
+  display: flex;
+  gap: 1rem;
+}
+
+.form {
+  flex: 1;
+}
+
+.textarea {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}

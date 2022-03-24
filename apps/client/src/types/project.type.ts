@@ -1,3 +1,5 @@
+import { IBoard } from './board.type';
+
 export enum ProjectUserRole {
   ADMIN = 'ADMIN',
   MEMBER = 'MEMBER',
@@ -18,6 +20,7 @@ export interface IProject {
   privacy: string;
   description: string;
   projectUsers: IProjectUser[];
+  boards: IBoard[];
 }
 
 export interface IProjectCreateInput {

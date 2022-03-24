@@ -16,6 +16,18 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type User {
+  id: Float!
+  username: String!
+  password: String!
+  email: String!
+  name: String!
+  avatarFileId: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  avatar: String!
+}
+
 type AttachmentOutput {
   id: Int!
   taskId: Int
@@ -103,6 +115,7 @@ type Comment {
   taskId: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
+  owner: User!
 }
 
 type Query {
@@ -164,4 +177,5 @@ input CreateProjectInput {
 input CreateCommentInput {
   taskId: Int!
   content: String!
+  userId: Int!
 }

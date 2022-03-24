@@ -35,7 +35,7 @@ export class User {
   })
   email: string;
 
-  @Field(() => Int)
+  @Field(() => String)
   @Column()
   name: string;
 
@@ -56,4 +56,7 @@ export class User {
     name: 'updated_at',
   })
   updatedAt: Date;
+
+  @Field(() => String)
+  avatar: string;
 }

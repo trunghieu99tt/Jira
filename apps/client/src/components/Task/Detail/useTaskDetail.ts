@@ -78,7 +78,7 @@ export const useTaskDetail = (taskId: number) => {
         });
       }
     },
-    [task?.assigneeUserId, task.id, updateTask],
+    [task?.assigneeUserId, task?.id, updateTask],
   );
 
   const onChangeDescription = (newDescription: string) => {

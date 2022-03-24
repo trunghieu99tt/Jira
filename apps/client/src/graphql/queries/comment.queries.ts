@@ -5,6 +5,12 @@ export const GET_TASK_COMMENTS = gql`
     comments(taskId: $taskId) {
       id
       content
+      owner {
+        id
+        name
+        avatar
+      }
+      updatedAt
     }
   }
 `;

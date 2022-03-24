@@ -1,8 +1,10 @@
-import { useCommentService } from '@talons/useCommentService';
-import { ChangeEvent, useRef, useState } from 'react';
+import Avatar from '@components/shared/Avatar';
+import Button from '@components/shared/Button';
 import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user.recoil';
 import classes from './createComment.module.css';
+import Protip from './Protip';
+import { useCreateComment } from './useCreateComment';
 
 type Props = {
   taskId: number;
@@ -11,33 +13,48 @@ type Props = {
 const CreateComment = ({ taskId }: Props) => {
   const currentUser = useRecoilValue(userState);
 
-  const [comment, setComment] = useState<string>('');
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const {
+    comment,
+    isEditing,
+    $commentInputRef,
 
-  const { addComment } = useCommentService();
-
-  const $commentInputRef = useRef<HTMLTextAreaElement>(null);
-
-  const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setComment(e.target.value);
-  };
+    startEdit,
+    cancelEdit,
+    changeComment,
+    handleKeyDown,
+    submitCreateComment,
+  } = useCreateComment({
+    taskId,
+  });
 
   return (
     <section className={classes.root}>
-      <div>
-        <img src={currentUser?.avatar} alt={currentUser?.name} />
+      <div className={classes.user}>
+        <Avatar
+          src={currentUser?.avatar || ''}
+          alt={currentUser?.name || ''}
+          size="SMALL"
+        />
       </div>
-      <div>
+      <div className={classes.form}>
         <textarea
           ref={$commentInputRef}
           className={classes.textarea}
           placeholder="Write a comment..."
           value={comment}
-          onChange={onChange}
+          onFocus={startEdit}
+          onChange={changeComment}
         />
-        <p>
-          Tips: Press <strong>M</strong> to comment
-        </p>
+        {(!isEditing && <Protip handleKeyDown={handleKeyDown} />) || (
+          <div>
+            <Button variant="primary" onClick={submitCreateComment}>
+              Save
+            </Button>
+            <Button variant="secondary" onClick={cancelEdit}>
+              Cancel
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );

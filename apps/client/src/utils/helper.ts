@@ -1,3 +1,5 @@
+import { TIME_TO_MILLISECONDS, TIME_UNIT } from '@constants/common';
+
 const nFormatter = (num: number, digits = 2): string => {
   const lookup = [
     { value: 1, symbol: '' },
@@ -45,17 +47,42 @@ const calcDiffTimeString = (date: Date): string => {
     date = new Date(date);
   }
 
-  const diff = Math.floor((Date.now() - date.getTime()) / 1000);
+  const diff = Math.floor(Date.now() - date.getTime());
 
-  if (diff < 60) {
-    return `${diff} seconds ago`;
-  }
-  if (diff < 3600) {
-    return `${Math.floor(diff / 60)} minutes ago`;
-  }
-  if (diff < 86400) {
-    return `${Math.floor(diff / 3600)} hours ago`;
-  }
+  const calculateUnits = (
+    value: number,
+    unitValue: number,
+  ): {
+    units: number;
+    isGreaterThan1: boolean;
+  } => {
+    const units = Math.floor(value / unitValue);
+    return {
+      units,
+      isGreaterThan1: units > 1,
+    };
+  };
+
+  const calcResultValue = (unitToShow: string) => {
+    const { isGreaterThan1, units } = calculateUnits(
+      diff,
+      TIME_TO_MILLISECONDS[unitToShow],
+    );
+    if (units <= 0) return 'Just now';
+    return `${units} ${TIME_UNIT[unitToShow]}${isGreaterThan1 ? 's' : ''} ago`;
+  };
+
+  if (diff < TIME_TO_MILLISECONDS.MINUTE) return calcResultValue('SECONDS');
+
+  if (diff < TIME_TO_MILLISECONDS.HOUR) return calcResultValue('MINUTE');
+
+  if (diff < TIME_TO_MILLISECONDS.DAY) return calcResultValue('HOUR');
+
+  if (diff < TIME_TO_MILLISECONDS.MONTH) return calcResultValue('DAY');
+
+  if (diff < TIME_TO_MILLISECONDS.YEAR) return calcResultValue('MONTH');
+
+  if (diff >= TIME_TO_MILLISECONDS.YEAR) return calcResultValue('YEAR');
 
   return date.toLocaleDateString();
 };

@@ -69,13 +69,7 @@ const TaskDetailDescription = ({
           </Button>
 
           {isEditing && (
-            <Button
-              variant="secondary"
-              classes={{
-                root: classNames(classes.btn, classes.btnCancel),
-              }}
-              onClick={onCloseEdit}
-            >
+            <Button variant="secondary" onClick={onCloseEdit}>
               Cancel
             </Button>
           )}

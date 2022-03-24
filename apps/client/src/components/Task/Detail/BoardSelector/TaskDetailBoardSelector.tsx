@@ -8,6 +8,8 @@ import { selectProjectBoardsByProjectId } from 'recoil/project.recoil';
 
 // types
 import { IBoard } from '@type/board.type';
+import { useProjectService } from '@talons/useProjectService';
+import { useEffect, useState } from 'react';
 
 type Props = {
   projectId: number;
@@ -20,7 +22,16 @@ const TaskDetailBoardSelector = ({
   defaultValue,
   onChange,
 }: Props) => {
-  const boards = useRecoilValue(selectProjectBoardsByProjectId(`${projectId}`));
+  const [boards, setBoards] = useState<IBoard[]>([]);
+
+  const { getCachedProjectBoards } = useProjectService();
+
+  useEffect(() => {
+    const cachedBoards = getCachedProjectBoards(projectId);
+    if (cachedBoards) {
+      setBoards(cachedBoards);
+    }
+  }, [projectId]);
 
   if (!boards) {
     return null;

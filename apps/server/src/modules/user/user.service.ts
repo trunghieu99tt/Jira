@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { plainToClass } from 'class-transformer';
 import { Service } from 'src/common/generics/service.generic';
 import { In } from 'typeorm';
 import { FileService } from '../file/services/file.service';
@@ -36,6 +37,24 @@ export class UserService extends Service<User, UserRepository> {
     }
 
     return user;
+  }
+
+  async getUserInfo(userId: number): Promise<Partial<User>> {
+    const user = await this.findOne({
+      where: {
+        id: userId,
+      },
+      select: ['id', 'name', 'avatarFileId'],
+    });
+    let avatar = '';
+    if (user.avatarFileId && typeof user.avatarFileId === 'number') {
+      avatar = await this.fileService.getFileUrl(user.avatarFileId);
+    }
+
+    return plainToClass(UserOutput, {
+      ...user,
+      avatar,
+    });
   }
 
   async getUserInfos(userIds: number[]): Promise<{

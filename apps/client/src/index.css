@@ -17,6 +17,7 @@ html {
   --secondary: #f4f5f7;
   --gray: #868e96;
   --gray-4: #bdbdbd;
+  --gray-1: rgb(66, 82, 110);
 
   --bg: #f8f9fd;
 
@@ -45,4 +46,9 @@ ul {
 
 li {
   list-style: none;
+}
+
+p {
+  margin: 0;
+  margin-block: 0;
 }

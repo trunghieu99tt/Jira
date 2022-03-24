@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { User } from '../user/user.entity';
 
 @Entity({
   name: 'comments',
@@ -47,4 +48,7 @@ export class Comment {
     name: 'updated_at',
   })
   updatedAt: Date;
+
+  @Field(() => User)
+  owner: Partial<User>;
 }
