@@ -24,4 +24,7 @@ export class BoardTask {
 
   @Field(() => Int)
   listPosition: number;
+
+  @Field(() => Date)
+  updatedAt: Date;
 }

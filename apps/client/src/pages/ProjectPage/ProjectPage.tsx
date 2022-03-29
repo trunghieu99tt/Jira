@@ -15,6 +15,8 @@ import { IBoard } from '@type/board.type';
 
 // styles
 import classes from './projectPage.module.css';
+import { IProjectUser } from '@type/project.type';
+import Avatar from '@components/shared/Avatar';
 
 const ProjectPage = () => {
   const { data, error, loading, onDropEnd } = useProjectPage();
@@ -30,7 +32,8 @@ const ProjectPage = () => {
   if (error) return <div>Error!</div>;
 
   const boards = data?.boards || [];
-  console.log('boards', boards);
+  const projectUsers = data?.projectUsers || [];
+  console.log('projectUsers', projectUsers);
 
   return (
     <section className={classes.root}>
@@ -50,6 +53,19 @@ const ProjectPage = () => {
         <Button variant="primary" onClick={openCreateTaskModal}>
           Add task
         </Button>
+        <div className={classes.projectUsers}>
+          {projectUsers?.map((projectUser: IProjectUser) => {
+            return (
+              <article key={`projectUser-${projectUser.id}`}>
+                <Avatar
+                  src={projectUser.avatar || ''}
+                  alt={projectUser.name}
+                  size="MEDIUM"
+                />
+              </article>
+            );
+          })}
+        </div>
       </header>
       <DragDropContext onDragEnd={onDropEnd}>
         <section className={classes.boardList}>

@@ -36,7 +36,6 @@ const TaskDetail = ({ classes: propClasses, taskId, modalClose }: Props) => {
     onChangeName,
     onChangeType,
     onChangeBoard,
-    onChangeSummary,
     onChangeAssignee,
     onChangePriority,
     updateDescription,

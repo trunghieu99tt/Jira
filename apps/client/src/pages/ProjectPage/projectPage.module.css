@@ -7,4 +7,5 @@
 .boardList {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(20rem, 30rem));
+  gap: 2rem;
 }

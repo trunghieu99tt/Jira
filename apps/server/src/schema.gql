@@ -71,6 +71,7 @@ type BoardTask {
   assigneeAvatar: String!
   assigneeName: String!
   listPosition: Int!
+  updatedAt: DateTime!
 }
 
 type Board {

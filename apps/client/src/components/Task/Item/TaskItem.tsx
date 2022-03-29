@@ -36,8 +36,6 @@ const TaskItem = ({ data, index, classes: propClasses }: Props) => {
     param,
   } = useQueryParamModal(`task-view-${data.id}`);
 
-  console.log('data', data);
-
   return (
     <React.Fragment>
       {isTaskViewModalOpen() && (
@@ -63,8 +61,8 @@ const TaskItem = ({ data, index, classes: propClasses }: Props) => {
               {...provided.dragHandleProps}
               onClick={openTaskViewModal}
               className={cn(classes.root, {
-                // [classes.isDragging]:
-                //   snapshot.isDragging && !snapshot.isDropAnimating,
+                [classes.isDragging]:
+                  snapshot.isDragging && !snapshot.isDropAnimating,
               })}
             >
               <div

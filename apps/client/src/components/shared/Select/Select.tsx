@@ -67,12 +67,14 @@ const Select = ({
           </span>
         )}
       </div>
-      <Dropdown
-        isVisible={isDropdownOpen && selectable}
-        onChange={onChange}
-        options={options}
-        renderOption={renderOption}
-      />
+      {options?.length > 0 && (
+        <Dropdown
+          isVisible={isDropdownOpen && selectable}
+          onChange={onChange}
+          options={options}
+          renderOption={renderOption}
+        />
+      )}
     </section>
   );
 };

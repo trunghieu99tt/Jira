@@ -1,7 +1,14 @@
 .inner {
   box-shadow: var(--box-shadow);
-  border-radius: 1.2rem;
+  border-radius: 0.5rem;
   padding: 1.2rem;
+  background-color: #fff;
+  transition: all 0.2s;
+  margin-bottom: 1rem;
+}
+
+.inner:hover {
+  filter: brightness(0.9);
 }
 
 .inner.isDragging {

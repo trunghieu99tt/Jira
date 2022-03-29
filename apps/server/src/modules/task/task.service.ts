@@ -54,6 +54,7 @@ export class TaskService extends Service<Task, TaskRepository> {
         'type',
         'assigneeUserId',
         'listPosition',
+        'updatedAt',
       ],
       order: {
         updatedAt: 'DESC',
@@ -119,7 +120,15 @@ export class TaskService extends Service<Task, TaskRepository> {
         id: In(attachmentIds),
       },
     });
-    const newTaskObj = plainToClass(Task, input);
+    const countTasks = await this.count({
+      where: {
+        boardId: input.boardId,
+      },
+    });
+    const newTaskObj = plainToClass(Task, {
+      ...input,
+      listPosition: countTasks + 1,
+    });
 
     return this.connection.transaction(async (manager) => {
       const newTaskDb = await manager.save(newTaskObj);
@@ -148,9 +157,9 @@ export class TaskService extends Service<Task, TaskRepository> {
       case UPDATE_TYPE.MOVE_TASK:
         {
           const { newBoardId, listPosition } = input;
-          if (!newBoardId || !listPosition) {
+          if (!newBoardId) {
             throw new Error(
-              'newBoardId and listPosition is required for move task update.Please check your input',
+              'newBoardId is required for move task update.Please check your input',
             );
           }
           task.boardId = newBoardId;

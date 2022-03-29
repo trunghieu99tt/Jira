@@ -23,7 +23,6 @@ const Dropdown = ({
   renderOption,
 }: Props) => {
   const classes = mergeClasses(defaultClasses, propClasses);
-
   return (
     <div
       className={cn(classes.wrapper, {

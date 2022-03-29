@@ -48,17 +48,10 @@ export const useTaskDetail = (taskId: number) => {
         newBoardId = parseInt(newBoardId);
       }
       if (task?.boardId && newBoardId !== task?.boardId) {
-        updateTask(
-          task.id,
-          {
-            newBoardId,
-            updateType: 'UPDATE_BOARD',
-          },
-          {
-            sourceBoardId: task.boardId,
-            targetBoardId: newBoardId,
-          },
-        );
+        updateTask(task.id, {
+          newBoardId,
+          updateType: 'UPDATE_BOARD',
+        });
       }
     },
     [task?.boardId, task?.id, updateTask],

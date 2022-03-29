@@ -95,6 +95,7 @@ const moveItemWithinArray = (arr: any[], item: any, toIndex: number) => {
   }
 
   const newArr = [...arr];
+  console.log('fromIndex', fromIndex);
   newArr.splice(toIndex, 0, newArr.splice(fromIndex, 1)[0]);
   return newArr;
 };
