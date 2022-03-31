@@ -11,9 +11,7 @@
   background: #fff;
   min-width: 20rem;
   z-index: 2;
-}
-
-.dropdownList {
+  left: 0;
 }
 
 .dropdownListItem {

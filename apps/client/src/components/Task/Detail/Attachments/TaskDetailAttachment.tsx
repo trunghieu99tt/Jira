@@ -54,11 +54,7 @@ const TaskDetailAttachment = ({ defaultValue, onChange }: Props) => {
           );
         })}
       </Slider>
-      <FileUploader
-        handleFiles={onChange}
-        title="Add attachment"
-        maxNumberOfFiles={5}
-      />
+      <FileUploader title="" handleFiles={onChange} maxNumberOfFiles={5} />
     </section>
   );
 };

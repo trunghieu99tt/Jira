@@ -28,6 +28,16 @@ type User {
   avatar: String!
 }
 
+type Comment {
+  id: Float!
+  content: String!
+  userId: Int!
+  taskId: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  owner: User!
+}
+
 type AttachmentOutput {
   id: Int!
   taskId: Int
@@ -71,6 +81,8 @@ type BoardTask {
   assigneeAvatar: String!
   assigneeName: String!
   listPosition: Int!
+  numberOfAttachments: Int!
+  numberOfComments: Int!
   updatedAt: DateTime!
 }
 
@@ -109,31 +121,21 @@ enum Privacy {
   PRIVATE
 }
 
-type Comment {
-  id: Float!
-  content: String!
-  userId: Int!
-  taskId: Int!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  owner: User!
-}
-
 type Query {
   task(id: Int!): Task!
   getTaskAttachments(taskId: Int!): [Attachment!]!
+  comments(taskId: Int!): [Comment!]!
   projects(offset: Int = 0, limit: Int = 20): [Project!]!
   project(id: Int!): Project!
   board(boardId: Int!): Board!
-  comments(taskId: Int!): [Comment!]!
 }
 
 type Mutation {
   createTask(createTaskInput: CreateTaskInput!): Task!
   updateTask(updateTaskInput: UpdateTaskInput!): Task!
   createdAttachments(createAttachmentsInput: CreateAttachmentsInput!): [Attachment!]!
-  createProject(createProjectInput: CreateProjectInput!): Project!
   createComment(createCommentInput: CreateCommentInput!): Comment!
+  createProject(createProjectInput: CreateProjectInput!): Project!
 }
 
 input CreateTaskInput {
@@ -167,16 +169,16 @@ input CreateAttachmentsInput {
   fileIds: [Int!]!
 }
 
+input CreateCommentInput {
+  taskId: Int!
+  content: String!
+  userId: Int!
+}
+
 input CreateProjectInput {
   name: String!
   coverPhotoFileId: Int
   privacy: Int!
   description: String = ""
   ownerUserId: Int!
-}
-
-input CreateCommentInput {
-  taskId: Int!
-  content: String!
-  userId: Int!
 }

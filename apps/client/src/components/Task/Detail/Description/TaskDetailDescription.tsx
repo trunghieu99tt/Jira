@@ -41,8 +41,7 @@ const TaskDetailDescription = ({
 
   return (
     <section className={classes.root}>
-      <p className={classes.label}>
-        {' '}
+      <p className={classes.label} onClick={onOpenEdit}>
         <MdOutlineDescription /> Description
       </p>
       {(isEditing && (

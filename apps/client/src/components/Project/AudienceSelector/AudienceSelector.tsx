@@ -20,12 +20,14 @@ type Props = {
   audience: number;
   classes?: any;
   setAudience: (audience: number) => void;
+  transformOrigin?: string;
 };
 
 const AudienceSelector = ({
   audience,
   setAudience,
   classes: propClasses,
+  transformOrigin = 'top left',
 }: Props) => {
   const classes = mergeClasses(defaultClasses, propClasses);
 
@@ -76,7 +78,11 @@ const AudienceSelector = ({
   return (
     <div className={classes.root} ref={dropdownRef}>
       {renderAudience}
-      <Dropdown isVisible={visibleDropdown} items={selections} />
+      <Dropdown
+        transformOrigin={transformOrigin}
+        isVisible={visibleDropdown}
+        items={selections}
+      />
     </div>
   );
 };

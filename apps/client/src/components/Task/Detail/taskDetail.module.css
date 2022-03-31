@@ -28,12 +28,12 @@
 
 .itemName {
   font-size: 1.25rem;
-  text-transform: uppercase;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-weight: 600;
   color: rgb(94, 108, 132);
+  margin-bottom: 1rem;
 }
 
 .itemValue {

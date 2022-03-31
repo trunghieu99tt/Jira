@@ -12,7 +12,8 @@
       "@layout/*": ["layout/*"],
       "@context/*": ["context/*"],
       "@components/*": ["components/*"],
-      "@constants/*": ["constants/*"]
+      "@constants/*": ["constants/*"],
+      "@images/*": ["assets/images/*"]
     }
   }
 }

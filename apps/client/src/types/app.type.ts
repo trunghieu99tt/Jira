@@ -33,3 +33,5 @@ export type TTransformOrigin =
   | 'bottom right'
   | 'bottom left'
   | 'center center';
+
+export type TPrivacy = 'PUBLIC' | 'PRIVATE';

@@ -5,36 +5,41 @@ import mergeClasses from '@utils/mergeClasses';
 
 // style
 import defaultClasses from './dropdown.module.css';
+import { useMemo } from 'react';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   items?: any;
   isVisible?: boolean;
   classes?: any;
+  transformOrigin?: string;
 }
-
-const motionConfig = {
-  initial: {
-    opacity: 0,
-    scale: 0,
-  },
-  animate: {
-    opacity: 1,
-    scale: 1,
-    transformOrigin: 'top right',
-  },
-  exit: {
-    opacity: 0,
-    scale: 0,
-  },
-};
 
 const Dropdown = ({
   isVisible,
   items,
   children,
   classes: propsClasses,
+  transformOrigin = 'top right',
 }: Props) => {
   const classes = mergeClasses(defaultClasses, propsClasses);
+
+  const motionConfig = useMemo(() => {
+    return {
+      initial: {
+        opacity: 0,
+        scale: 0,
+      },
+      animate: {
+        opacity: 1,
+        scale: 1,
+        transformOrigin,
+      },
+      exit: {
+        opacity: 0,
+        scale: 0,
+      },
+    };
+  }, [transformOrigin]);
 
   return (
     <AnimatePresence>

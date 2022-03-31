@@ -3,6 +3,7 @@ import { useBoardService } from '@talons/useBoardService';
 import { useTaskService } from '@talons/useTaskService';
 import { insertItemIntoArray, moveItemWithinArray } from '@utils/helper';
 import { GET_PROJECT_BY_ID } from 'graphql/queries/project.queries';
+import { useEffect, useState } from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import { useParams } from 'react-router';
 
@@ -17,6 +18,14 @@ export const useProjectPage = () => {
 
   const { updateTask } = useTaskService();
   const { getCachedBoard } = useBoardService();
+
+  const [audience, setAudience] = useState<number>(0);
+
+  useEffect(() => {
+    if (data?.project?.privacy) {
+      setAudience(data.project.privacy);
+    }
+  }, [data]);
 
   const project = data?.project;
 
@@ -123,6 +132,8 @@ export const useProjectPage = () => {
   };
 
   return {
+    audience,
+    setAudience,
     loading,
     data: project,
     error,

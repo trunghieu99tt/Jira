@@ -1,5 +1,16 @@
 .input {
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid #ccc;
+  height: 100%;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 3px;
+  border: 1px solid rgb(223, 225, 230);
+  color: rgb(23, 43, 77);
+  background: rgb(244, 245, 247);
+  transition: background 0.1s ease 0s;
+  font-weight: normal;
+  font-size: 15px;
+}
+
+.input:focus {
+  background-color: #fff;
 }

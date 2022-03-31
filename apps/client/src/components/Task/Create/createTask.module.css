@@ -1,8 +1,16 @@
 .formWrapper {
   padding: 2rem;
+  min-width: 40vw;
 }
 
 .heading {
   font-size: 2.1rem;
   font-weight: 500;
+}
+
+.actions {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
