@@ -23,3 +23,9 @@ export interface ITask {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface ITaskLabel {
+  id: number;
+  name: string;
+  color: string;
+}

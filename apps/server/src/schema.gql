@@ -121,6 +121,28 @@ enum Privacy {
   PRIVATE
 }
 
+type TaskLabel {
+  id: Float!
+  taskId: Float!
+  labelId: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Label {
+  id: Float!
+  name: String!
+  color: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type TaskLabelOutput {
+  labelId: Int!
+  name: String!
+  color: String!
+}
+
 type Query {
   task(id: Int!): Task!
   getTaskAttachments(taskId: Int!): [Attachment!]!
@@ -128,6 +150,8 @@ type Query {
   projects(offset: Int = 0, limit: Int = 20): [Project!]!
   project(id: Int!): Project!
   board(boardId: Int!): Board!
+  taskLabels(taskId: Int!): [TaskLabelOutput!]!
+  labels: [Label!]!
 }
 
 type Mutation {
@@ -136,6 +160,8 @@ type Mutation {
   createdAttachments(createAttachmentsInput: CreateAttachmentsInput!): [Attachment!]!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   createProject(createProjectInput: CreateProjectInput!): Project!
+  updateTaskLabels(updateTaskLabelsInput: UpdateTaskLabelsInputDto!): TaskLabel!
+  createLabel(createLabelInput: CreateLabelInputDto!): Label!
 }
 
 input CreateTaskInput {
@@ -181,4 +207,14 @@ input CreateProjectInput {
   privacy: Int!
   description: String = ""
   ownerUserId: Int!
+}
+
+input UpdateTaskLabelsInputDto {
+  labelId: Int!
+  taskId: Int!
+}
+
+input CreateLabelInputDto {
+  name: String!
+  color: String!
 }

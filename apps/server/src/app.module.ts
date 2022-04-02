@@ -14,6 +14,8 @@ import { TaskModule } from './modules/task/task.module';
 import { UserModule } from './modules/user/user.module';
 import { FileModule } from './modules/file/file.module';
 import { UploadModule } from './modules/upload/upload.module';
+import { TaskLabelModule } from './modules/task-label/task-label.module';
+import { LabelModule } from './modules/label/label.module';
 
 @Module({
   imports: [
@@ -55,6 +57,8 @@ import { UploadModule } from './modules/upload/upload.module';
     UserModule,
     FileModule,
     UploadModule,
+    TaskLabelModule,
+    LabelModule,
   ],
   controllers: [AppController],
   providers: [AppService],

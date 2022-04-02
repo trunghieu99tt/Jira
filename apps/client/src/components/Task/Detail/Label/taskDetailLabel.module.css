@@ -1,0 +1,35 @@
+.label {
+    mix-blend-mode: darken;
+    border-radius: .4rem;
+    height: 3rem;
+    min-width: 5rem;
+    padding: 0 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    position: relative;
+}
+
+.deleteLabelBtn {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(5px, -1rem);
+    background: #2F80ED;
+    border: none;
+    border-radius: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    cursor: pointer;
+}
+
+.label:hover > .deleteLabelBtn {
+    display: flex;
+}
+
+.addLabelBtn {
+    
+}

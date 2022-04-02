@@ -44,74 +44,6 @@ export class TaskService extends Service<Task, TaskRepository> {
     return this.repository.findByIds(ids);
   }
 
-  private async getTasksAssignees(
-    tasks: Partial<Task>[],
-  ): Promise<Partial<User>[]> {
-    const assigneeUserIds = tasks
-      .map((task: Partial<Task>) => task.assigneeUserId)
-      .filter(Boolean);
-    const assigneeUsers = await this.userService.findList({
-      where: {
-        id: In(assigneeUserIds),
-      },
-      select: ['avatarFileId', 'name', 'id'],
-    });
-    return assigneeUsers;
-  }
-
-  private getTaskAssignee(
-    assignees: Partial<User>[],
-    assigneeUserId: number,
-  ): Partial<User> | undefined {
-    return assignees?.find((user: Partial<User>) => {
-      if (!assigneeUserId) {
-        return false;
-      }
-      if (!user.id || assigneeUserId) return false;
-      return +user.id === +assigneeUserId;
-    });
-  }
-
-  private async getAssigneesAvatars(assignees: Partial<User>[]): Promise<{
-    [key: string]: string;
-  }> {
-    const userAvatarFileIds = (assignees
-      ?.map((user: Partial<User>) => user?.avatarFileId)
-      .filter(Boolean) || []) as number[];
-
-    return this.fileService.getFileUrls(userAvatarFileIds);
-  }
-
-  private async getTaskStatistic(taskId: number | undefined): Promise<{
-    numberOfComments: number;
-    numberOfAttachments: number;
-  }> {
-    if (!taskId) {
-      return {
-        numberOfComments: 0,
-        numberOfAttachments: 0,
-      };
-    }
-
-    const [numberOfAttachments, numberOfComments] = await Promise.all([
-      this.attachmentService.count({
-        where: {
-          taskId,
-        },
-      }),
-      this.commentService.count({
-        where: {
-          taskId,
-        },
-      }),
-    ]);
-
-    return {
-      numberOfAttachments,
-      numberOfComments,
-    };
-  }
-
   async findTasksByBoardId(boardId: number): Promise<BoardTask[]> {
     const boardTasks = await this.findList({
       where: {
@@ -134,11 +66,10 @@ export class TaskService extends Service<Task, TaskRepository> {
     const assignees = await this.getTasksAssignees(boardTasks);
     const assigneesAvatars = await this.getAssigneesAvatars(assignees);
 
-    const boardTaskOutputs = await Promise.all(
+    return Promise.all(
       boardTasks?.map(async (task: Partial<Task>) => {
         const { numberOfAttachments, numberOfComments } =
           await this.getTaskStatistic(task.id);
-
         const assignee =
           (task?.assigneeUserId &&
             this.getTaskAssignee(assignees, task.assigneeUserId)) ||
@@ -156,8 +87,6 @@ export class TaskService extends Service<Task, TaskRepository> {
         });
       }),
     );
-
-    return boardTaskOutputs;
   }
 
   async createNewTask(input: CreateTaskInput): Promise<Task> {
@@ -355,5 +284,71 @@ export class TaskService extends Service<Task, TaskRepository> {
         fileId: attachment.fileId,
       })),
     );
+  }
+
+  private async getTasksAssignees(
+    tasks: Partial<Task>[],
+  ): Promise<Partial<User>[]> {
+    const assigneeUserIds = tasks
+      .map((task: Partial<Task>) => task.assigneeUserId)
+      .filter(Boolean);
+    return this.userService.findList({
+      where: {
+        id: In(assigneeUserIds),
+      },
+      select: ['avatarFileId', 'name', 'id'],
+    });
+  }
+
+  private getTaskAssignee(
+    assignees: Partial<User>[],
+    assigneeUserId: number,
+  ): Partial<User> | undefined {
+    return assignees?.find((user: Partial<User>) => {
+      if (!assigneeUserId) {
+        return false;
+      }
+      if (!user.id || !assigneeUserId) return false;
+      return +user.id === +assigneeUserId;
+    });
+  }
+
+  private async getAssigneesAvatars(assignees: Partial<User>[]): Promise<{
+    [key: string]: string;
+  }> {
+    const userAvatarFileIds = (assignees
+      ?.map((user: Partial<User>) => user?.avatarFileId)
+      .filter(Boolean) || []) as number[];
+    return this.fileService.getFileUrls(userAvatarFileIds);
+  }
+
+  private async getTaskStatistic(taskId: number | undefined): Promise<{
+    numberOfComments: number;
+    numberOfAttachments: number;
+  }> {
+    if (!taskId) {
+      return {
+        numberOfComments: 0,
+        numberOfAttachments: 0,
+      };
+    }
+
+    const [numberOfAttachments, numberOfComments] = await Promise.all([
+      this.attachmentService.count({
+        where: {
+          taskId,
+        },
+      }),
+      this.commentService.count({
+        where: {
+          taskId,
+        },
+      }),
+    ]);
+
+    return {
+      numberOfAttachments,
+      numberOfComments,
+    };
   }
 }

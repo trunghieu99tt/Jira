@@ -19,6 +19,7 @@ import { AiFillFileZip } from 'react-icons/ai';
 
 // styles
 import defaultClasses from './taskDetail.module.css';
+import TaskDetailLabel from '@components/Task/Detail/Label';
 
 type Props = {
   classes?: any;
@@ -46,8 +47,6 @@ const TaskDetail = ({ classes: propClasses, taskId, modalClose }: Props) => {
   if (loading) {
     return <div>Loading...</div>;
   }
-
-  console.log('data', data);
 
   return (
     <article className={classes.root}>
@@ -131,6 +130,11 @@ const TaskDetail = ({ classes: propClasses, taskId, modalClose }: Props) => {
               defaultValue={data?.priority}
               onChange={onChangePriority}
             />
+          </div>
+
+          <div className={classes.item}>
+            <p className={classes.itemName}> Labels </p>
+            <TaskDetailLabel taskId={taskId} />
           </div>
         </aside>
       </main>
