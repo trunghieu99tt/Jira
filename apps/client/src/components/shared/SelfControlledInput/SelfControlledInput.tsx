@@ -1,10 +1,22 @@
 import { useState, ChangeEvent, memo } from 'react';
+import defaultClasses from './selfControlledInput.module.css';
+import mergeClasses from '@utils/mergeClasses';
 
 type Props = {
+  placeholder?: string;
+  label?: string;
   name: string;
+  classes?: any;
 };
 
-const SelfControlledInput = ({ name }: Props) => {
+const SelfControlledInput = ({
+  name,
+  classes: propClasses,
+  placeholder = '',
+  label,
+}: Props) => {
+  const classes = mergeClasses(defaultClasses, propClasses);
+
   const [value, setValue] = useState('');
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -12,15 +24,20 @@ const SelfControlledInput = ({ name }: Props) => {
   };
 
   return (
-    <div key={name}>
-      <label htmlFor={`${name}-input`}>{name}:</label>
+    <div key={name} className={classes.root}>
+      {label && (
+        <label htmlFor={`${name}-input`} className={classes.label}>
+          {name}:
+        </label>
+      )}
       <input
+        className={classes.input}
         id={`${name}-input`}
         name={name}
         type="text"
         value={value}
         onChange={onChange}
-        pattern="[a-z]{3,10}"
+        placeholder={placeholder}
         required
       />
     </div>

@@ -1,11 +1,11 @@
 import { useTaskDetailLabel } from '@components/Task/Detail/Label/useTaskDetailLabel';
 import defaultClasses from './taskDetailLabel.module.css';
 import mergeClasses from '@utils/mergeClasses';
-import { ITaskLabel } from '@type/task.type';
 import CreateLabel from '@components/Task/Label/Create';
-import { TiDeleteOutline } from 'react-icons/ti';
 import { IoAdd } from 'react-icons/all';
 import LabelList from '@components/Task/Label/List';
+import { AiOutlineTag } from 'react-icons/ai';
+import { Fragment } from 'react';
 
 type Props = {
   taskId: number;
@@ -16,6 +16,7 @@ const TaskDetailLabel = ({ taskId, classes: propClasses }: Props) => {
   const classes = mergeClasses(defaultClasses, propClasses);
 
   const {
+    labels,
     updateTaskLabelHandler,
     taskLabels,
     showAddLabel,
@@ -24,38 +25,33 @@ const TaskDetailLabel = ({ taskId, classes: propClasses }: Props) => {
     taskId,
   });
 
+  console.log('taskLabels', taskLabels);
+  console.log('labels', labels);
+
   return (
     <section className={classes.root}>
-      <div className={classes.labels}>
-        <div className={classes.labelsList}>
-          {taskLabels.map((taskLabel: ITaskLabel) => {
-            return (
-              <div
-                key={`task-label-${taskId}-${taskLabel.id}`}
-                className={classes.label}
-                style={{
-                  backgroundColor: taskLabel.color,
-                }}
-              >
-                {taskLabel.name}
-                <button className={classes.deleteLabelBtn}>
-                  <TiDeleteOutline />
-                </button>
-              </div>
-            );
-          })}
-        </div>
+      <div className={classes.labelContainer}>
+        <LabelList data={taskLabels} onClick={updateTaskLabelHandler} />
         <button
           onClick={onToggleAddLabelHandler}
           className={classes.addLabelBtn}
         >
-          Add Label <IoAdd />
+          <IoAdd />
         </button>
       </div>
       {showAddLabel && (
-        <section>
+        <section className={classes.labelForms}>
           <CreateLabel />
-          <LabelList />
+          {labels?.length > 0 && (
+            <Fragment>
+              <div className={classes.availableLabels}>
+                <p className={classes.availableLabelsHeading}>
+                  <AiOutlineTag /> Available Labels
+                </p>
+                <LabelList data={labels} onClick={updateTaskLabelHandler} />
+              </div>
+            </Fragment>
+          )}
         </section>
       )}
     </section>

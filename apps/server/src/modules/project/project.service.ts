@@ -43,40 +43,42 @@ export class ProjectService extends Service<Project, ProjectRepository> {
   }
 
   async findProjectById(id: number): Promise<Partial<Project>> {
-    return this.findOne({
+    const project = await this.findOne({
       where: {
         id,
       },
     });
+
+    if (!project) {
+      throw new Error('Project not found');
+    }
+    return project;
   }
 
   async createNewProject(
     createBoardInput: CreateProjectInput,
   ): Promise<Project> {
-    const response = await this.connection.transaction(
-      async (manager: EntityManager) => {
-        const newProjectObj = plainToClass(Project, createBoardInput);
-        const newProjectDb = await manager.save(newProjectObj);
+    return this.connection.transaction(async (manager: EntityManager) => {
+      const newProjectObj = plainToClass(Project, createBoardInput);
+      const newProjectDb = await manager.save(newProjectObj);
 
-        const newBoardList = [];
-        for (let i = 0; i < DEFAULT_BOARD_NAMES.length; i += 1) {
-          const newBoard = plainToClass(Board, {
-            name: DEFAULT_BOARD_NAMES[i],
-            projectId: newProjectDb.id,
-          });
-          newBoardList.push(newBoard);
-        }
-        await manager.save(newBoardList);
-
-        const newProjectUser = plainToClass(ProjectUser, {
+      const newBoardList = [];
+      for (let i = 0; i < DEFAULT_BOARD_NAMES.length; i += 1) {
+        const newBoard = plainToClass(Board, {
+          name: DEFAULT_BOARD_NAMES[i],
           projectId: newProjectDb.id,
-          userId: newProjectDb.ownerUserId,
-          role: 0,
         });
-        await manager.save(newProjectUser);
-        return newProjectDb;
-      },
-    );
-    return response;
+        newBoardList.push(newBoard);
+      }
+      await manager.save(newBoardList);
+
+      const newProjectUser = plainToClass(ProjectUser, {
+        projectId: newProjectDb.id,
+        userId: newProjectDb.ownerUserId,
+        role: 0,
+      });
+      await manager.save(newProjectUser);
+      return newProjectDb;
+    });
   }
 }

@@ -24,8 +24,8 @@ export interface ITask {
   updatedAt: Date;
 }
 
-export interface ITaskLabel {
-  id: number;
+export interface iTaskLabel {
+  labelId: number;
   name: string;
   color: string;
 }

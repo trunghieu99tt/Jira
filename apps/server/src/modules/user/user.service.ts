@@ -6,6 +6,8 @@ import { FileService } from '../file/services/file.service';
 import { UserOutput } from './dtos/user-output.dto';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
+import { compare, hash } from 'bcrypt';
+import { RegisterInput } from '../auth/dtos/register-input.dto';
 
 @Injectable()
 export class UserService extends Service<User, UserRepository> {
@@ -47,7 +49,7 @@ export class UserService extends Service<User, UserRepository> {
       select: ['id', 'name', 'avatarFileId'],
     });
     let avatar = '';
-    if (user.avatarFileId && typeof user.avatarFileId === 'number') {
+    if (user?.avatarFileId && typeof user.avatarFileId === 'number') {
       avatar = await this.fileService.getFileUrl(user.avatarFileId);
     }
 
@@ -81,5 +83,34 @@ export class UserService extends Service<User, UserRepository> {
       }
       return acc;
     }, {});
+  }
+
+  async validateUsernamePassword(
+    username: string,
+    password: string,
+  ): Promise<Partial<User>> {
+    const user = await this.repository.findOne({
+      where: {
+        username,
+      },
+      select: ['id', 'username'],
+    });
+
+    if (!user) {
+      throw new NotFoundException('Invalid username.');
+    }
+
+    const match = await compare(password, user.password);
+    if (!match) {
+      throw new NotFoundException('Invalid password.');
+    }
+
+    return user;
+  }
+
+  async createUser(input: RegisterInput): Promise<User> {
+    const user = plainToClass(User, input);
+    user.password = await hash(user.password, 10);
+    return this.repository.save(user);
   }
 }

@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { UPDATE_TASK_LABELS } from '../graphql/mutations/task-label.mutation';
 import { GET_TASK_LABELS } from '../graphql/queries/task-label.queries';
+import { iTaskLabel } from '@type/task.type';
 
 type Props = {
   taskId: number;
@@ -26,8 +27,16 @@ export const useTaskLabelService = ({ taskId }: Props) => {
     });
   };
 
+  const taskLabels =
+    getTaskLabelQuery?.data?.taskLabels?.map((taskLabel: iTaskLabel) => ({
+      // !! id is id of label in db not id of task_label in db
+      id: taskLabel.labelId,
+      name: taskLabel.name,
+      color: taskLabel.color,
+    })) || [];
+
   return {
-    taskLabels: getTaskLabelQuery.data?.taskLabels || [],
+    taskLabels,
     updateTaskLabels,
   };
 };

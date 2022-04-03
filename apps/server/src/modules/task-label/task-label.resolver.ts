@@ -17,7 +17,7 @@ export class TaskLabelResolver {
     return this.taskLabelService.getTaskLabels(taskId);
   }
 
-  @Mutation(() => TaskLabel)
+  @Mutation(() => Boolean)
   async updateTaskLabels(
     @Args('updateTaskLabelsInput') input: UpdateTaskLabelsInputDto,
   ): Promise<boolean> {

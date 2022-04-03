@@ -12,6 +12,9 @@ export const getEnv = (key: string, ignore = false): string => {
 
 export const GRAPHQL_SERVER_URL = getEnv('REACT_APP_GRAPHQL_SERVER_URL');
 
+// auth
+export const JWT_SECRET = getEnv('JWT_SECRET');
+
 // Cloudinary
 export const CLOUDINARY_CLOUD_NAME = getEnv('REACT_APP_CLOUDINARY_CLOUD_NAME');
 export const CLOUDINARY_UPLOAD_PRESET = getEnv(

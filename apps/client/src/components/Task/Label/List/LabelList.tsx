@@ -1,20 +1,30 @@
-import { useLabelService } from '@talons/useLabelService';
 import { iLabel } from '@type/label.types';
 import classes from './labelList.module.css';
 
-const LabelList = () => {
-  const { labels } = useLabelService();
+type Props = {
+  onClick?: (labelId: number) => void;
+  data: iLabel[];
+};
+
+const LabelList = ({ data, onClick }: Props) => {
+  const onClickLabelHandler = (event: any) => {
+    const labelId = Number(event.currentTarget.dataset.labelid);
+    console.log(event.currentTarget.dataset);
+    onClick && typeof onClick === 'function' && onClick(labelId);
+  };
 
   return (
     <div className={classes.root}>
-      <p>Available Labels</p>
-      <div>
-        {labels.map((label: iLabel) => (
+      <div className={classes.list}>
+        {data.map((label: iLabel) => (
           <div
-            key={label.id}
+            key={`label-${label.id}`}
             style={{
               background: label.color,
             }}
+            className={classes.label}
+            onClick={onClickLabelHandler}
+            data-labelid={label.id}
           >
             {label.name}
           </div>

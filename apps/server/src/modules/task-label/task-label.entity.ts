@@ -30,6 +30,13 @@ export class TaskLabel {
   @Field(() => Number)
   labelId: number;
 
+  @Column({
+    type: 'boolean',
+    name: 'is_deleted',
+    default: false,
+  })
+  isDeleted: boolean;
+
   @CreateDateColumn({
     name: 'created_at',
   })

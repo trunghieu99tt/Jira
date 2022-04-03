@@ -23,11 +23,16 @@ type Props = {
 };
 
 const ColorSelector = ({ selectedColor, onSelect }: Props) => {
+  const onClickHandler = (event: any) => {
+    event.preventDefault();
+    const color = event.currentTarget.dataset.color;
+    onSelect && typeof onSelect === 'function' && onSelect(color);
+  };
+
   return (
     <div className={classes.root}>
-      <p className={classes.heading}>Colors</p>
       <div className={classes.list}>
-        {COLORS.map((color: string) => (
+        {COLORS.map((color: string, idx: number) => (
           <button
             type="button"
             className={cn(classes.option, {
@@ -36,7 +41,9 @@ const ColorSelector = ({ selectedColor, onSelect }: Props) => {
             style={{
               backgroundColor: color,
             }}
-            onClick={() => onSelect(color)}
+            onClick={onClickHandler}
+            key={`color-selector-${idx}`}
+            data-color={color}
           />
         ))}
       </div>

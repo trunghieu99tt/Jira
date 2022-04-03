@@ -16,6 +16,8 @@ import TaskDetail from '@components/Task/Detail';
 
 // styles
 import defaultClasses from './taskItem.module.css';
+import { useTaskLabelService } from '@talons/useTaskLabelService';
+import LabelList from '@components/Task/Label/List';
 
 interface Props extends DraggableProps {
   data: any;
@@ -35,6 +37,7 @@ const TaskItem = ({ data, index, classes: propClasses }: Props) => {
     isOpen: isTaskViewModalOpen,
     param,
   } = useQueryParamModal(`task-view-${data.id}`);
+  const { taskLabels } = useTaskLabelService({ taskId: data.id });
 
   return (
     <React.Fragment>
@@ -72,6 +75,10 @@ const TaskItem = ({ data, index, classes: propClasses }: Props) => {
                 })}
               >
                 <p className={classes.name}>{data.name}</p>
+
+                <div className={classes.labelList}>
+                  <LabelList data={taskLabels} />
+                </div>
 
                 {data?.assigneeAvatar && (
                   <div className={classes.assignee}>

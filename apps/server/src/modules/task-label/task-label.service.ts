@@ -21,7 +21,7 @@ export class TaskLabelService extends Service<TaskLabel, TaskLabelRepository> {
 
   async getTaskLabels(taskId: number): Promise<TaskLabelOutput[]> {
     const taskLabels = await this.repository.find({
-      where: { taskId },
+      where: { taskId, isDeleted: false },
       select: ['labelId'],
     });
     const labelIds = taskLabels.map((taskLabel) => taskLabel.labelId);
@@ -54,16 +54,24 @@ export class TaskLabelService extends Service<TaskLabel, TaskLabelRepository> {
             labelId,
           },
         });
-        if (taskLabel) {
-          await manager.delete(TaskLabel, {
-            taskId,
-            labelId,
-          });
-        } else {
+
+        console.log('taskLabel', taskLabel);
+        if (!taskLabel) {
           await manager.insert(TaskLabel, {
             taskId,
             labelId,
           });
+        } else {
+          await manager.update(
+            TaskLabel,
+            {
+              taskId,
+              labelId,
+            },
+            {
+              isDeleted: !taskLabel.isDeleted,
+            },
+          );
         }
 
         return true;

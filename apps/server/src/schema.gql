@@ -121,14 +121,6 @@ enum Privacy {
   PRIVATE
 }
 
-type TaskLabel {
-  id: Float!
-  taskId: Float!
-  labelId: Float!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
 type Label {
   id: Float!
   name: String!
@@ -160,7 +152,7 @@ type Mutation {
   createdAttachments(createAttachmentsInput: CreateAttachmentsInput!): [Attachment!]!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   createProject(createProjectInput: CreateProjectInput!): Project!
-  updateTaskLabels(updateTaskLabelsInput: UpdateTaskLabelsInputDto!): TaskLabel!
+  updateTaskLabels(updateTaskLabelsInput: UpdateTaskLabelsInputDto!): Boolean!
   createLabel(createLabelInput: CreateLabelInputDto!): Label!
 }
 
