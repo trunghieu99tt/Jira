@@ -49,3 +49,12 @@ export const INFURA_PORT = getEnv('INFURA_PORT')
 export const INFURA_PROJECT_SECRET = getEnv('INFURA_PROJECT_SECRET');
 
 export const SERVER_ADDRESS = getEnv('SERVER_ADDRESS');
+
+// Google
+export const GOOGLE_CLIENT_ID = getEnv('GOOGLE_CLIENT_ID');
+export const GOOGLE_SECRET = getEnv('GOOGLE_SECRET');
+
+// Github
+export const GITHUB_CLIENT_ID = getEnv('GITHUB_CLIENT_ID');
+export const GITHUB_CLIENT_SECRET = getEnv('GITHUB_CLIENT_SECRET');
+export const GITHUB_REDIRECT_URL = getEnv('GITHUB_REDIRECT_URL');

@@ -22,7 +22,7 @@ type User {
   password: String!
   email: String!
   name: String!
-  avatarFileId: Int!
+  avatarFileId: Int
   createdAt: DateTime!
   updatedAt: DateTime!
   avatar: String!

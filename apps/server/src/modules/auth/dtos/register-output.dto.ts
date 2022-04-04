@@ -1,14 +1,9 @@
-import { Field, ObjectType } from '@nestjs/graphql';
-import { UserOutput } from '../../user/dtos/user-output.dto';
+import { IsString } from 'class-validator';
 
-@ObjectType()
 export class RegisterOutputDto {
-  @Field(() => UserOutput)
-  user: UserOutput;
-
-  @Field(() => String)
+  @IsString()
   accessToken: string;
 
-  @Field(() => String)
+  @IsString()
   refreshToken: string;
 }

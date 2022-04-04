@@ -7,7 +7,7 @@ import { UserOutput } from './dtos/user-output.dto';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 import { compare, hash } from 'bcrypt';
-import { RegisterInput } from '../auth/dtos/register-input.dto';
+import { RegisterInputDto } from '../auth/dtos/register-input.dto';
 
 @Injectable()
 export class UserService extends Service<User, UserRepository> {
@@ -108,7 +108,7 @@ export class UserService extends Service<User, UserRepository> {
     return user;
   }
 
-  async createUser(input: RegisterInput): Promise<User> {
+  async createUser(input: RegisterInputDto): Promise<User> {
     const user = plainToClass(User, input);
     user.password = await hash(user.password, 10);
     return this.repository.save(user);

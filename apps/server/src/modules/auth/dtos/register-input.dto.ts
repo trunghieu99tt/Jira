@@ -1,18 +1,19 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
-import { IsEmail } from 'class-validator';
+import { IsEmail, IsNumber, IsOptional, IsString } from 'class-validator';
 
-@InputType()
-export class RegisterInput {
-  @Field(() => String)
+export class RegisterInputDto {
   @IsEmail()
   email: string;
 
-  @Field(() => String)
+  @IsString()
   password: string;
 
-  @Field(() => String)
+  @IsString()
   name: string;
 
-  @Field(() => Int)
+  @IsString()
+  username: string;
+
+  @IsOptional()
+  @IsNumber()
   avatarFileId?: number;
 }

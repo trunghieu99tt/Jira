@@ -3,6 +3,11 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UserModule } from '../user/user.module';
+import { LocalStrategy } from './strategies/local.strategy';
+import { AuthService } from './services/auth.service';
+import { JWT_SECRET } from '../../configuration/env';
+import { AuthController } from './auth.controller';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -11,13 +16,14 @@ import { UserModule } from '../user/user.module';
     }),
     JwtModule.registerAsync({
       useFactory: async () => ({
-        signOptions: {
-          algorithm: 'RS256',
-        },
+        secret: JWT_SECRET,
       }),
     }),
     UserModule,
+    HttpModule,
   ],
-  providers: [JwtStrategy],
+  providers: [JwtStrategy, LocalStrategy, AuthService],
+  exports: [AuthService],
+  controllers: [AuthController],
 })
 export class AuthModule {}
