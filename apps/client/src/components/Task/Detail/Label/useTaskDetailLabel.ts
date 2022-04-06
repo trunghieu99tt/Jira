@@ -1,7 +1,6 @@
 import { useTaskLabelService } from '@talons/useTaskLabelService';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useLabelService } from '@talons/useLabelService';
-import { iLabel } from '@type/label.types';
 import { iTaskLabel } from '@type/task.type';
 
 type Props = {
@@ -21,11 +20,13 @@ export const useTaskDetailLabel = ({ taskId }: Props) => {
     setShowAddLabel((v) => !v);
   };
 
-  const shownLabels = labels.filter((label: iLabel) => {
-    return taskLabels.some(
-      (taskLabel: iTaskLabel) => taskLabel.labelId === label.id,
-    );
-  });
+  const shownLabels = useMemo(() => {
+    return labels.filter((label) => {
+      return !taskLabels.some(
+        (taskLabel: iTaskLabel) => taskLabel.id === label.id,
+      );
+    });
+  }, [labels, taskLabels]);
 
   return {
     labels: shownLabels,

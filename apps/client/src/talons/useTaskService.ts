@@ -6,6 +6,7 @@ import {
 import { GET_BOARD_BY_ID } from 'graphql/queries/board.queries';
 import { GET_TASK_BY_ID } from 'graphql/queries/task.queries';
 import { useCallback } from 'react';
+import { toast } from 'react-toastify';
 
 export const useTaskService = () => {
   const apolloClient = useApolloClient();
@@ -39,6 +40,10 @@ export const useTaskService = () => {
             });
           }
         },
+        onError: (error) => {
+          console.error('error', error);
+          toast.error(error.message);
+        },
       });
     },
     [updateTaskMutation, apolloClient],
@@ -56,6 +61,10 @@ export const useTaskService = () => {
               include: [GET_TASK_BY_ID, GET_BOARD_BY_ID],
             });
           }
+        },
+        onError: (error) => {
+          console.error('error', error);
+          toast.error(error.message);
         },
       });
     },

@@ -25,7 +25,7 @@ export interface ITask {
 }
 
 export interface iTaskLabel {
-  labelId: number;
+  id: number;
   name: string;
   color: string;
 }

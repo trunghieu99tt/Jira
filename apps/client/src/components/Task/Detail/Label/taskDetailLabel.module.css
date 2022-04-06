@@ -47,6 +47,7 @@
     align-items: center;
     justify-content: center;
     color: #fff;
+    cursor: pointer;
 }
 
 .addLabelBtn svg {

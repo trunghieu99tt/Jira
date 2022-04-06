@@ -20,6 +20,7 @@ import { AiFillFileZip } from 'react-icons/ai';
 // styles
 import defaultClasses from './taskDetail.module.css';
 import TaskDetailLabel from '@components/Task/Detail/Label';
+import TaskDetailCoverPhoto from '@components/Task/Detail/CoverPhoto';
 
 type Props = {
   classes?: any;
@@ -135,6 +136,11 @@ const TaskDetail = ({ classes: propClasses, taskId, modalClose }: Props) => {
           <div className={classes.item}>
             <p className={classes.itemName}> Labels </p>
             <TaskDetailLabel taskId={taskId} />
+          </div>
+
+          <div className={classes.item}>
+            <p className={classes.itemName}> Cover Photo </p>
+            <TaskDetailCoverPhoto taskId={taskId} />
           </div>
         </aside>
       </main>
