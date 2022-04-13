@@ -1,43 +1,47 @@
-import classes from '@components/Task/Label/Create/createLabel.module.css';
+import { lazy, Suspense, useMemo } from 'react';
 import SelfControlledInput from '@components/shared/SelfControlledInput/SelfControlledInput';
-import Button from '@components/shared/Button';
 import { useCoverPhotoForm } from '@components/Task/CoverPhoto/Form/useCoverPhotoForm';
-import CoverPhotoSuggestion from '@components/Task/CoverPhoto/Suggestions';
+import defaultClasses from './coverPhoto.module.css';
+import mergeClasses from '@utils/mergeClasses';
+
+const CoverPhotoSuggestion = lazy(
+  () => import('@components/Task/CoverPhoto/Suggestions'),
+);
 
 type Props = {
   onChange: (coverPhotoUrl: string) => void;
+  classes?: any;
 };
 
-const CoverPhotoForm = ({ onChange }: Props) => {
-  const { photos, hasMore, onFetchPhoto, submitSearchImageFromUnplash } =
+const CoverPhotoForm = ({ onChange, classes: propsClasses }: Props) => {
+  const classes = mergeClasses(defaultClasses, propsClasses);
+
+  const { photos, hasMore, onFetchMore, submitSearchImageFromUnsplash } =
     useCoverPhotoForm();
 
+  const coverPhotoSuggestionProps = useMemo(() => {
+    return {
+      data: photos,
+      hasMore,
+      fetchMore: onFetchMore,
+      onChange,
+      onClick: onChange,
+    };
+  }, [photos, hasMore, onFetchMore, onChange]);
+
   return (
-    <div>
-      <form onSubmit={submitSearchImageFromUnplash}>
-        <h4>Photo search</h4>
-        <p className={classes.description}>Search Unplash for photos</p>
-        <div>
-          <SelfControlledInput
-            name="keyword"
-            placeholder={'Keyword...'}
-            classes={{
-              input: classes.input,
-              label: classes.label,
-            }}
-          />
-          <Button variant="primary" type="submit">
-            Update
-          </Button>
+    <div className={classes.root}>
+      <form onSubmit={submitSearchImageFromUnsplash} className={classes.form}>
+        <h4 className={classes.heading}>Photo search</h4>
+        <p className={classes.description}>Search Unsplash for photos</p>
+        <div className={classes.formItem}>
+          <SelfControlledInput name="keyword" placeholder={'Keyword...'} />
         </div>
       </form>
       {photos?.length > 0 && (
-        <CoverPhotoSuggestion
-          data={photos}
-          fetchMore={onFetchPhoto}
-          hasMore={hasMore}
-          onClick={onChange}
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+          <CoverPhotoSuggestion {...coverPhotoSuggestionProps} />
+        </Suspense>
       )}
     </div>
   );

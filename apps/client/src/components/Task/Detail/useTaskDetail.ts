@@ -2,6 +2,7 @@ import { useAttachmentService } from '@talons/useAttachmentService';
 import { useTaskService } from '@talons/useTaskService';
 import { uploadFiles } from '@utils/imageUploader';
 import { useCallback, useEffect, useState } from 'react';
+import { removeMaliciousTags } from '@utils/helper';
 
 export const useTaskDetail = (taskId: number) => {
   const [description, setDescription] = useState<string>('');
@@ -160,6 +161,22 @@ export const useTaskDetail = (taskId: number) => {
     [createTaskAttachments, task?.id],
   );
 
+  const onChangeCoverPhoto = useCallback(
+    async (newCoverPhotoUrl: string) => {
+      const normilizedCoverPhotoUrl = removeMaliciousTags(newCoverPhotoUrl);
+      if (
+        normilizedCoverPhotoUrl?.length > 0 &&
+        normilizedCoverPhotoUrl?.startsWith('http')
+      ) {
+        updateTask(task.id, {
+          coverPhoto: normilizedCoverPhotoUrl,
+          updateType: 'UPDATE_COVER_PHOTO',
+        });
+      }
+    },
+    [task?.id, updateTask],
+  );
+
   return {
     error,
     loading,
@@ -176,6 +193,7 @@ export const useTaskDetail = (taskId: number) => {
     onChangeAssignee,
     onAddAttachments,
     updateDescription,
+    onChangeCoverPhoto,
     onChangeDescription,
     onClickDescriptionButton,
   };

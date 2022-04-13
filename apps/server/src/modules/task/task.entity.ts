@@ -77,6 +77,12 @@ export class Task {
   })
   listPosition: number;
 
+  @Field(() => String)
+  @Column({
+    name: 'cover_photo',
+  })
+  coverPhoto: string;
+
   @Field(() => Date)
   @CreateDateColumn({
     name: 'created_at',

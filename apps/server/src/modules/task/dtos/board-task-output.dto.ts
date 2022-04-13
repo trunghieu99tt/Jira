@@ -31,6 +31,9 @@ export class BoardTask {
   @Field(() => Int)
   numberOfComments: number;
 
+  @Field(() => String)
+  coverPhoto: string;
+
   @Field(() => Date)
   updatedAt: Date;
 }

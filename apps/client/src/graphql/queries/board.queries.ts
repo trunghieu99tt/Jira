@@ -14,6 +14,7 @@ export const GET_BOARD_BY_ID = gql`
         assigneeName
         listPosition
         updatedAt
+        coverPhoto
         numberOfComments
         numberOfAttachments
       }

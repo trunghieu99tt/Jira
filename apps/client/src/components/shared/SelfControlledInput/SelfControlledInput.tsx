@@ -1,13 +1,6 @@
-import {
-  useState,
-  ChangeEvent,
-  memo,
-  HTMLInputTypeAttribute,
-  InputHTMLAttributes,
-} from 'react';
+import { ChangeEvent, InputHTMLAttributes, memo, useState } from 'react';
 import defaultClasses from './selfControlledInput.module.css';
 import mergeClasses from '@utils/mergeClasses';
-import { HtmlProps } from 'react-helmet-async';
 
 // @ts-ignore
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
@@ -29,6 +22,8 @@ const SelfControlledInput = ({
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
+
+  console.log(classes);
 
   return (
     <div key={name} className={classes.root}>

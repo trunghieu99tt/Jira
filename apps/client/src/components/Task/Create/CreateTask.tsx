@@ -1,6 +1,5 @@
 import { useMemo, useRef } from 'react';
 import { useParams } from 'react-router';
-import { useRecoilValue } from 'recoil';
 
 // talons
 import { useCreateTask } from './useCreateTask';
@@ -12,14 +11,6 @@ import mergeClasses from '@utils/mergeClasses';
 import Form from '@components/shared/Form';
 import Button from '@components/shared/Button';
 import FileUploader from '@components/shared/FileUploader';
-
-// global state
-import {
-  selectProjectBoardsByProjectId,
-  selectProjectUsersByProjectId,
-} from 'recoil/project.recoil';
-
-// constants
 import { MAX_NUMBER_OF_ATTACHMENTS } from '@constants/common';
 import {
   TASK_PRIORITY,
@@ -27,11 +18,7 @@ import {
   TASK_TYPES,
   TASK_TYPES_LABEL,
 } from '@constants/task';
-
-// types
 import { IProjectUser } from '@type/project.type';
-
-// styles
 import defaultClasses from './createTask.module.css';
 import { useQuery } from '@apollo/client';
 import { GET_PROJECT_BY_ID } from 'graphql/queries/project.queries';
@@ -52,7 +39,6 @@ const CreateTask = ({ classes: propsClasses }: Props) => {
       id: parseInt(projectId || '1'),
     },
   });
-  console.log('data', data);
   const projectUsers = useMemo(() => data?.project?.projectUsers || [], [data]);
   const projectBoards = useMemo(() => data?.project?.boards || [], [data]);
 

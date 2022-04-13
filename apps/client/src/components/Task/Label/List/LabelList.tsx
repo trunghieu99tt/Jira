@@ -18,7 +18,7 @@ const LabelList = ({ data, onClick }: Props) => {
       <div className={classes.list}>
         {data.map((label: iLabel) => (
           <div
-            key={`label-${label.id}`}
+            key={`label-${label.id || Math.random()}`}
             style={{
               background: label.color,
             }}

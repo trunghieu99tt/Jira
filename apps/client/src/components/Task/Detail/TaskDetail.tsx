@@ -43,6 +43,7 @@ const TaskDetail = ({ classes: propClasses, taskId, modalClose }: Props) => {
     updateDescription,
     onAddAttachments,
     onChangeDescription,
+    onChangeCoverPhoto,
   } = useTaskDetail(taskId);
 
   if (loading) {
@@ -52,9 +53,17 @@ const TaskDetail = ({ classes: propClasses, taskId, modalClose }: Props) => {
   return (
     <article className={classes.root}>
       <header className={classes.header}>
-        <figure>
-          <img src="" alt="" />
-        </figure>
+        {data?.coverPhoto && (
+          <figure className={classes.coverPhotoWrapper}>
+            <img
+              src={data?.coverPhoto}
+              alt={data?.name}
+              loading={'lazy'}
+              className={classes.coverPhoto}
+            />
+            p
+          </figure>
+        )}
       </header>
       <main className={classes.main}>
         <section className={classes.content}>
@@ -140,7 +149,10 @@ const TaskDetail = ({ classes: propClasses, taskId, modalClose }: Props) => {
 
           <div className={classes.item}>
             <p className={classes.itemName}> Cover Photo </p>
-            <TaskDetailCoverPhoto taskId={taskId} />
+            <TaskDetailCoverPhoto
+              taskId={taskId}
+              onChange={onChangeCoverPhoto}
+            />
           </div>
         </aside>
       </main>

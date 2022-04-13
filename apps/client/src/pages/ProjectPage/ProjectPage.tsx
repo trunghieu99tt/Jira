@@ -1,19 +1,17 @@
+import React, { Suspense } from 'react';
 import BoardItem from '@components/Board/Item';
 import AudienceSelector from '@components/Project/AudienceSelector';
 import Avatar from '@components/shared/Avatar';
 import Button from '@components/shared/Button';
-// components
-import Modal from '@components/shared/Modal';
-import CreateTask from '@components/Task/Create';
 import { useQueryParamModal } from '@talons/useQueryParamModal';
-// types
 import { IBoard } from '@type/board.type';
 import { IProjectUser } from '@type/project.type';
 import { DragDropContext } from 'react-beautiful-dnd';
-// styles
 import classes from './projectPage.module.css';
-// talons
 import { useProjectPage } from './useProjectPage';
+
+const Modal = React.lazy(() => import('@components/shared/Modal'));
+const CreateTask = React.lazy(() => import('@components/Task/Create'));
 
 const ProjectPage = () => {
   const { data, error, loading, onDropEnd, audience, setAudience } =
@@ -35,16 +33,18 @@ const ProjectPage = () => {
   return (
     <section className={classes.root}>
       {isCreateTaskModalOpen() && (
-        <Modal
-          renderContent={(modal) => {
-            return <CreateTask />;
-          }}
-          testid="modal:board-create"
-          isOpen
-          withCloseIcon={false}
-          onClose={closeCreateTaskModal}
-          width={800}
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Modal
+            renderContent={(modal) => {
+              return <CreateTask />;
+            }}
+            testid="modal:board-create"
+            isOpen
+            withCloseIcon={false}
+            onClose={closeCreateTaskModal}
+            width={800}
+          />
+        </Suspense>
       )}
       <section>
         <div className={classes.info}>

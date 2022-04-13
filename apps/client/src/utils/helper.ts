@@ -106,6 +106,15 @@ const insertItemIntoArray = (arr: any[], item: any, toIndex: number) => {
   return newArr;
 };
 
+const removeMaliciousTags = (text: string): string => {
+  const tagsToRemove = ['script', 'style', 'iframe', 'meta', 'link'];
+  const tagsToRemoveRegex = new RegExp(
+    `<(${tagsToRemove.join('|')})[^>]*>.*?</\\1>`,
+    'gi',
+  );
+  return text.replace(tagsToRemoveRegex, '');
+};
+
 export {
   urlify,
   nFormatter,
@@ -114,5 +123,6 @@ export {
   calcDiffTimeString,
   moveItemWithinArray,
   insertItemIntoArray,
+  removeMaliciousTags,
   getDaysDiffBetweenDates,
 };

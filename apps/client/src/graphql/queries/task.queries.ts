@@ -4,6 +4,7 @@ export const GET_TASK_BY_ID = gql`
   query getTaskById($taskId: Int!) {
     task(id: $taskId) {
       id
+      coverPhoto
       name
       description
       summary

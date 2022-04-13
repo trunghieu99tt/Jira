@@ -47,4 +47,9 @@ export class UpdateTaskInput {
     nullable: true,
   })
   summary: string;
+
+  @Field(() => String, {
+    nullable: true,
+  })
+  coverPhoto: string;
 }

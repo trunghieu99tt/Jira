@@ -56,6 +56,7 @@ export class TaskService extends Service<Task, TaskRepository> {
         'type',
         'assigneeUserId',
         'listPosition',
+        'coverPhoto',
         'updatedAt',
       ],
       order: {
@@ -217,6 +218,17 @@ export class TaskService extends Service<Task, TaskRepository> {
             );
           }
           task.summary = summary;
+        }
+        break;
+      case UPDATE_TYPE.UPDATE_COVER_PHOTO:
+        {
+          const { coverPhoto } = input;
+          if (!coverPhoto) {
+            throw new Error(
+              'coverPhoto is required for update coverPhoto update.Please check your input',
+            );
+          }
+          task.coverPhoto = coverPhoto;
         }
         break;
       default: {

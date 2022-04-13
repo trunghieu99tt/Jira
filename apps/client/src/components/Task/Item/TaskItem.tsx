@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { DraggableProps } from 'framer-motion';
 import { Draggable } from 'react-beautiful-dnd';
 import cn from 'classnames';
@@ -10,7 +10,6 @@ import { useQueryParamModal } from '@talons/useQueryParamModal';
 import mergeClasses from '@utils/mergeClasses';
 
 // components
-import Modal from '@components/shared/Modal';
 import Avatar from '@components/shared/Avatar';
 import TaskDetail from '@components/Task/Detail';
 
@@ -18,6 +17,8 @@ import TaskDetail from '@components/Task/Detail';
 import defaultClasses from './taskItem.module.css';
 import { useTaskLabelService } from '@talons/useTaskLabelService';
 import LabelList from '@components/Task/Label/List';
+
+const Modal = React.lazy(() => import('@components/shared/Modal'));
 
 interface Props extends DraggableProps {
   data: any;
@@ -39,21 +40,25 @@ const TaskItem = ({ data, index, classes: propClasses }: Props) => {
   } = useQueryParamModal(`task-view-${data.id}`);
   const { taskLabels } = useTaskLabelService({ taskId: data.id });
 
+  console.log('data', data);
+
   return (
     <React.Fragment>
       {isTaskViewModalOpen() && (
-        <Modal
-          renderContent={(modal) => {
-            const str = param.split('-');
-            const taskId = str[str.length - 1];
-            return <TaskDetail taskId={parseInt(taskId, 10)} />;
-          }}
-          testid={`modal:task-view-${data.id}`}
-          isOpen
-          withCloseIcon={false}
-          onClose={closeTaskViewModal}
-          width={800}
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Modal
+            renderContent={(modal) => {
+              const str = param.split('-');
+              const taskId = str[str.length - 1];
+              return <TaskDetail taskId={parseInt(taskId, 10)} />;
+            }}
+            testid={`modal:task-view-${data.id}`}
+            isOpen
+            withCloseIcon={false}
+            onClose={closeTaskViewModal}
+            width={800}
+          />
+        </Suspense>
       )}
       <Draggable draggableId={`${data.id}`} index={index}>
         {(provided, snapshot) => {
@@ -74,6 +79,15 @@ const TaskItem = ({ data, index, classes: propClasses }: Props) => {
                     snapshot.isDragging && !snapshot.isDropAnimating,
                 })}
               >
+                {data?.coverPhoto && (
+                  <figure className={classes.coverPhotoWrapper}>
+                    <img
+                      src={data?.coverPhoto}
+                      alt={data?.name}
+                      className={classes.coverPhoto}
+                    />
+                  </figure>
+                )}
                 <p className={classes.name}>{data.name}</p>
 
                 <div className={classes.labelList}>

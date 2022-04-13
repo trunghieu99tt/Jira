@@ -30,7 +30,7 @@ export const useTaskLabelService = ({ taskId }: Props) => {
   const taskLabels =
     getTaskLabelQuery?.data?.taskLabels?.map((taskLabel: iTaskLabel) => ({
       // !! id is id of label in db not id of task_label in db
-      id: taskLabel.labelId,
+      id: (taskLabel as any).labelId,
       name: taskLabel.name,
       color: taskLabel.color,
     })) || [];

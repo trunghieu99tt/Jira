@@ -66,6 +66,7 @@ type Task {
   projectId: Int!
   boardId: Int!
   listPosition: Int!
+  coverPhoto: String!
   createdAt: DateTime!
   updatedAt: DateTime!
   assignee: TaskUser!
@@ -83,6 +84,7 @@ type BoardTask {
   listPosition: Int!
   numberOfAttachments: Int!
   numberOfComments: Int!
+  coverPhoto: String!
   updatedAt: DateTime!
 }
 
@@ -180,6 +182,7 @@ input UpdateTaskInput {
   type: String
   name: String
   summary: String
+  coverPhoto: String
 }
 
 input CreateAttachmentsInput {
