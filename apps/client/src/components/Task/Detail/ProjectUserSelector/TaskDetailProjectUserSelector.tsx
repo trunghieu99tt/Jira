@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 // components
-import Avatar from '@components/shared/Avatar';
 import Select from '@components/shared/Select';
 import { useProjectService } from '@talons/useProjectService';
 
@@ -9,7 +8,7 @@ import { useProjectService } from '@talons/useProjectService';
 import { IProjectUser } from '@type/project.type';
 
 // styles
-import classes from './projectUserSelector.module.css';
+import UserOption from '@components/shared/UserOption';
 
 type Props = {
   projectId: number;
@@ -41,20 +40,14 @@ const TaskDetailProjectUserSelector = ({
 
   const renderProjectUserOption = ({ value }: any) => {
     const projectUser = projectUsers.find((u) => u.userId === value);
+
     return (
-      <div className={classes.userOption}>
-        {projectUser?.avatar && (
-          <Avatar
-            src={projectUser.avatar}
-            alt={projectUser.name}
-            size="SMALL"
-            classes={{
-              root: classes.userAvatarRoot,
-            }}
-          />
-        )}
-        <span>{projectUser?.name}</span>
-      </div>
+      <UserOption
+        data={{
+          name: projectUser?.name || '',
+          avatar: projectUser?.avatar || '',
+        }}
+      />
     );
   };
 

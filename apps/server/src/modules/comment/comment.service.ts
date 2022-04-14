@@ -28,7 +28,7 @@ export class CommentService extends Service<Comment, CommentRepository> {
       },
     });
     const commentUserIds = comments.map((comment) => comment.userId);
-    const users = await this.userService.getUserInfos(
+    const users = await this.userService.getUserInfosByUserIds(
       commentUserIds as number[],
     );
 

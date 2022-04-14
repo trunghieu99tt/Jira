@@ -1,14 +1,19 @@
 import { useProjectService } from '@talons/useProjectService';
 import { uploadFiles } from '@utils/imageUploader';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user.recoil';
+import { useUserService } from '@talons/useUserService';
+import { IUser } from '@type/user.types';
 
 export const useCreateProject = () => {
   const [audience, setAudience] = useState<number>(0);
   const [coverPhoto, setCoverPhoto] = useState<File | null>(null);
+  const [addedUserIds, setAddedUserIds] = useState<number[]>([]);
+  const [users, setUsers] = useState<IUser[]>([]);
 
   const { createProject, createProjectResponse } = useProjectService();
+  const { searchUsers } = useUserService();
 
   const currentUser = useRecoilValue(userState);
 
@@ -16,7 +21,7 @@ export const useCreateProject = () => {
     setAudience(value);
   }, []);
 
-  const onSubmit = async (values: any, form: any) => {
+  const submitCreateProject = async (values: any, form: any) => {
     let coverPhotoFileId = null;
     if (coverPhoto) {
       const uploadFileResponse = await uploadFiles([coverPhoto]);
@@ -38,16 +43,35 @@ export const useCreateProject = () => {
     setCoverPhoto(files[0]);
   };
 
-  useEffect(() => {
-    console.log('createProjectResponse', createProjectResponse);
-  }, [createProjectResponse]);
+  const onSearchUsers = async (searchText: string) => {
+    const matchedUsers = await searchUsers(searchText);
+    setUsers(matchedUsers);
+  };
+
+  const onAddUser = (value: number) => {
+    if (value && !isNaN(value)) {
+      setAddedUserIds(Array.from(new Set([...addedUserIds, value])));
+    }
+  };
+
+  const onRemoveUser = (value: number) => (event: any) => {
+    event.preventDefault();
+    if (value && !isNaN(value)) {
+      setAddedUserIds(addedUserIds.filter((id) => id !== value));
+    }
+  };
 
   return {
+    users,
     audience,
+    onAddUser,
+    addedUserIds,
     createProjectResponse,
 
-    onSubmit,
+    onSubmit: submitCreateProject,
     handleFiles,
+    onRemoveUser,
+    onSearchUsers,
     onChangeAudience,
   };
 };

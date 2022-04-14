@@ -1,13 +1,7 @@
 import { useMemo, useRef } from 'react';
 import { useParams } from 'react-router';
-
-// talons
 import { useCreateTask } from './useCreateTask';
-
-// utils
 import mergeClasses from '@utils/mergeClasses';
-
-// components
 import Form from '@components/shared/Form';
 import Button from '@components/shared/Button';
 import FileUploader from '@components/shared/FileUploader';

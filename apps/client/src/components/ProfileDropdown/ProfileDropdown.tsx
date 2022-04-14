@@ -1,5 +1,5 @@
 import Avatar from '@components/shared/Avatar';
-import Dropdown from '@components/shared/Dropdown';
+import AnimatedDropdown from '@components/shared/AnimationDropdown';
 import useOnClickOutsideWithoutOverlay from '@hooks/useOnClickOutsideWithoutOverlay';
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -57,7 +57,7 @@ const ProfileDropdown = () => {
         </button>
       </div>
 
-      {/* <Dropdown isVisible={visibleDropdown} items={dropdownItems} /> */}
+      {/* <AnimatedDropdown isVisible={visibleDropdown} items={dropdownItems} /> */}
     </div>
   );
 };

@@ -28,6 +28,12 @@ type User {
   avatar: String!
 }
 
+type UserOutput {
+  id: Int!
+  name: String!
+  avatar: String!
+}
+
 type Comment {
   id: Float!
   content: String!
@@ -139,6 +145,7 @@ type TaskLabelOutput {
 
 type Query {
   task(id: Int!): Task!
+  searchUsers(search: String!): [UserOutput!]!
   getTaskAttachments(taskId: Int!): [Attachment!]!
   comments(taskId: Int!): [Comment!]!
   projects(offset: Int = 0, limit: Int = 20): [Project!]!

@@ -1,20 +1,13 @@
-import React, { useState, useRef, useCallback, useMemo } from 'react';
-
-// talons
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import useOnClickOutsideWithoutOverlay from '@hooks/useOnClickOutsideWithoutOverlay';
-
-// utils
 import mergeClasses from '@utils/mergeClasses';
-
-// components
-import Dropdown from '@components/shared/Dropdown';
-
-// icons
 import { MdPublic } from 'react-icons/md';
 import { BsFillPeopleFill } from 'react-icons/bs';
-
-// styles
 import defaultClasses from './audience.module.css';
+
+const AnimatedDropdown = React.lazy(
+  () => import('@components/shared/AnimationDropdown'),
+);
 
 type Props = {
   audience: number;
@@ -78,7 +71,7 @@ const AudienceSelector = ({
   return (
     <div className={classes.root} ref={dropdownRef}>
       {renderAudience}
-      <Dropdown
+      <AnimatedDropdown
         transformOrigin={transformOrigin}
         isVisible={visibleDropdown}
         items={selections}

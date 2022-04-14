@@ -1,0 +1,44 @@
+.wrapper {
+  position: absolute;
+  right: 0;
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  box-sizing: border-box;
+  box-shadow: var(--box-shadow-1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transform: translateY(1rem);
+  background: #fff;
+  min-width: 20rem;
+  z-index: 2;
+  left: 0;
+}
+
+.dropdownListItem {
+  padding: 1rem 1.5rem;
+  transition: all 0.5s;
+  border-radius: 5px;
+}
+
+.dropdownListItem:hover {
+  cursor: pointer;
+  background: var(--light-1);
+}
+
+.dropdownListItem a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--gray-2);
+}
+
+.dropdownListItem a svg {
+  --size: 1.6rem;
+  width: var(--size);
+  height: var(--size);
+}
+
+.dropdownListItem a p {
+  font-size: 1.2rem;
+  font-weight: 500;
+}

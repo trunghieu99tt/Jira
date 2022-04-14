@@ -2,21 +2,15 @@ import React, { Suspense } from 'react';
 import { DraggableProps } from 'framer-motion';
 import { Draggable } from 'react-beautiful-dnd';
 import cn from 'classnames';
-
-// talons
 import { useQueryParamModal } from '@talons/useQueryParamModal';
-
-// utils
 import mergeClasses from '@utils/mergeClasses';
-
-// components
 import Avatar from '@components/shared/Avatar';
 import TaskDetail from '@components/Task/Detail';
-
-// styles
 import defaultClasses from './taskItem.module.css';
 import { useTaskLabelService } from '@talons/useTaskLabelService';
 import LabelList from '@components/Task/Label/List';
+import { MdOutlineInsertComment } from 'react-icons/md';
+import { IoMdAttach } from 'react-icons/io';
 
 const Modal = React.lazy(() => import('@components/shared/Modal'));
 
@@ -94,15 +88,27 @@ const TaskItem = ({ data, index, classes: propClasses }: Props) => {
                   <LabelList data={taskLabels} />
                 </div>
 
-                {data?.assigneeAvatar && (
-                  <div className={classes.assignee}>
-                    <Avatar
-                      src={data.assigneeAvatar}
-                      alt={data.assigneeName}
-                      size="SMALL"
-                    />
+                <div className={classes.footer}>
+                  {data?.assigneeAvatar && (
+                    <div className={classes.assignee}>
+                      <Avatar
+                        src={data.assigneeAvatar}
+                        alt={data.assigneeName}
+                        size="SMALL"
+                      />
+                    </div>
+                  )}
+                  <div className={classes.stats}>
+                    <span className={classes.statItem}>
+                      <MdOutlineInsertComment />
+                      {data?.numberOfComments}
+                    </span>
+                    <span className={classes.statItem}>
+                      <IoMdAttach />
+                      {data?.numberOfAttachments}
+                    </span>
                   </div>
-                )}
+                </div>
               </div>
             </article>
           );

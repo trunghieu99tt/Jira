@@ -36,3 +36,22 @@
     display: flex;
     justify-content: flex-end;
 }
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.stats {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+
+.statItem {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+}

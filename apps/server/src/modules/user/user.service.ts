@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { Service } from 'src/common/generics/service.generic';
-import { In } from 'typeorm';
+import { In, Like } from 'typeorm';
 import { FileService } from '../file/services/file.service';
 import { UserOutput } from './dtos/user-output.dto';
 import { User } from './user.entity';
@@ -59,30 +59,36 @@ export class UserService extends Service<User, UserRepository> {
     });
   }
 
-  async getUserInfos(userIds: number[]): Promise<{
+  private async attachAvatars(
+    users: Partial<User>[],
+  ): Promise<Partial<User>[]> {
+    const avatarFileIds = users
+      .map((user: Partial<User>) => user?.avatarFileId)
+      .filter(Boolean) as number[];
+    const avatarFiles = await this.fileService.getFileUrls(avatarFileIds);
+    return users.map((user: Partial<User>) => {
+      if (user?.avatarFileId && typeof user.avatarFileId === 'number') {
+        return {
+          ...user,
+          avatar: avatarFiles[user.avatarFileId],
+        };
+      }
+      return user;
+    });
+  }
+
+  async getUserInfosByUserIds(userIds: number[]): Promise<{
     [key: number]: UserOutput;
   }> {
-    const users = await this.findList({
+    let users = await this.findList({
       where: {
         id: In(userIds),
       },
       select: ['id', 'name', 'avatarFileId'],
     });
 
-    const avatarFileIds = users
-      .map((user) => user?.avatarFileId)
-      .filter(Boolean) as number[];
-    const avatarFiles = await this.fileService.getFileUrls(avatarFileIds);
-
-    return users.reduce((acc, user) => {
-      if (user?.id && typeof user.id === 'number' && user?.avatarFileId) {
-        (acc as any)[user.id] = {
-          ...user,
-          avatar: avatarFiles[user.avatarFileId],
-        };
-      }
-      return acc;
-    }, {});
+    users = await this.attachAvatars(users);
+    return plainToClass(UserOutput, users);
   }
 
   async validateUsernamePassword(
@@ -112,5 +118,16 @@ export class UserService extends Service<User, UserRepository> {
     const user = plainToClass(User, input);
     user.password = await hash(user.password, 10);
     return this.repository.save(user);
+  }
+
+  async searchUser(search: string): Promise<UserOutput[]> {
+    let users = await this.findList({
+      where: {
+        name: Like(`%${search}%`),
+      },
+      select: ['id', 'name', 'avatarFileId'],
+    });
+    users = await this.attachAvatars(users);
+    return plainToClass(UserOutput, users);
   }
 }

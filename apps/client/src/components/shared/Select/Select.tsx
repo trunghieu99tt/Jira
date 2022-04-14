@@ -7,7 +7,7 @@ import useOnOutsideClick from '@hooks/useOnClickOutside';
 import mergeClasses from '@utils/mergeClasses';
 
 // components
-import Dropdown from './Dropdown';
+import Dropdown from '../Dropdown';
 
 // icons
 import { RiArrowDownSLine } from 'react-icons/ri';
