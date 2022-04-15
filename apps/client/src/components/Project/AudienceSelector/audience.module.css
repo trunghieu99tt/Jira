@@ -1,21 +1,22 @@
 .root {
-  position: relative;
+    position: relative;
+    margin: 1rem 0;
 }
 
 .audience {
-  color: var(--blue-1);
-  font-size: 1.2rem;
-  font-weight: 500;
-  display: flex;
-  gap: 0.8rem;
-  align-items: center;
-  cursor: pointer;
+    color: var(--blue-1);
+    font-size: 1.2rem;
+    font-weight: 500;
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+    cursor: pointer;
 }
 
 .audience svg {
-  --size: 1.6rem;
-  width: var(--size);
-  height: var(--size);
+    --size: 1.6rem;
+    width: var(--size);
+    height: var(--size);
 }
 
 .audienceIcon {
@@ -25,14 +26,14 @@
 }
 
 .audienceSelectionItem {
-  font-size: 1.2rem;
-  display: flex;
-  gap: 1rem;
-  align-items: center;
+    font-size: 1.2rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 }
 
 .audienceSelectionItem svg {
-  --size: 1.6rem;
-  width: var(--size);
-  height: var(--size);
+    --size: 1.6rem;
+    width: var(--size);
+    height: var(--size);
 }

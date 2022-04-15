@@ -1,16 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { Connection, EntityManager } from 'typeorm';
-
-// generic
 import { Service } from 'src/common/generics/service.generic';
-
-// entities
 import { Project } from './project.entity';
-
-// repositories
 import { ProjectRepository } from './project.repository';
-
 import {
   DEFAULT_LIMIT,
   DEFAULT_OFFSET,
@@ -56,10 +49,10 @@ export class ProjectService extends Service<Project, ProjectRepository> {
   }
 
   async createNewProject(
-    createBoardInput: CreateProjectInput,
+    createProjectInput: CreateProjectInput,
   ): Promise<Project> {
     return this.connection.transaction(async (manager: EntityManager) => {
-      const newProjectObj = plainToClass(Project, createBoardInput);
+      const newProjectObj = plainToClass(Project, createProjectInput);
       const newProjectDb = await manager.save(newProjectObj);
 
       const newBoardList = [];
@@ -71,13 +64,25 @@ export class ProjectService extends Service<Project, ProjectRepository> {
         newBoardList.push(newBoard);
       }
       await manager.save(newBoardList);
+      const newProjectUsers = [
+        plainToClass(ProjectUser, {
+          projectId: newProjectDb.id,
+          userId: newProjectDb.ownerUserId,
+          role: 0,
+        }),
+      ];
 
-      const newProjectUser = plainToClass(ProjectUser, {
-        projectId: newProjectDb.id,
-        userId: newProjectDb.ownerUserId,
-        role: 0,
+      createProjectInput?.projectUserIds?.forEach((userId) => {
+        newProjectUsers.push(
+          plainToClass(ProjectUser, {
+            projectId: newProjectDb.id,
+            userId,
+            role: 1,
+          }),
+        );
       });
-      await manager.save(newProjectUser);
+
+      await manager.save(newProjectUsers);
       return newProjectDb;
     });
   }

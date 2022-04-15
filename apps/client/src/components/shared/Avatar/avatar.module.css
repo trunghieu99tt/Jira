@@ -1,123 +1,122 @@
 .root {
-  border-radius: 0.8rem;
-  cursor: pointer;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  width: 3rem;
-  height: 4rem;
-  padding: 0.5rem 0;
-  border: none;
-  background: none;
+    border-radius: 0.8rem;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 4rem;
+    padding: 0.5rem 0;
+    border: none;
+    background: none;
 }
 
 .root.active {
-  border: 1px solid #000;
+    border: 1px solid #000;
 }
 
 .tooltip {
-  visibility: hidden;
-  min-width: 12rem;
-  background-color: var(--gray);
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
-  position: absolute;
-  z-index: 1;
+    visibility: hidden;
+    min-width: 12rem;
+    background-color: var(--gray);
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
 }
 
 .tooltip.right {
-  top: -5px;
-  left: 105%;
+    top: -5px;
+    left: 105%;
 }
 
 .tooltip.left {
-  top: -5px;
-  right: 105%;
+    top: -5px;
+    right: 105%;
 }
 
 .tooltip.top {
-  bottom: 100%;
-  left: 50%;
-  margin-left: -6rem;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -6rem;
 }
 
 .tooltip.bottom {
-  top: 100%;
-  left: 50%;
-  margin-left: -6rem;
+    top: 100%;
+    left: 50%;
+    margin-left: -6rem;
 }
 
 .tooltip::after {
-  content: ' ';
-  position: absolute;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: var(--gray) transparent transparent transparent;
+    content: ' ';
+    position: absolute;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: var(--gray) transparent transparent transparent;
 }
 
 .tooltip.top::after {
-  top: 100%;
-  left: 50%;
+    top: 100%;
+    left: 50%;
 }
 
 .tooltip.bottom::after {
-  bottom: 100%; /* At the top of the tooltip */
-  left: 50%;
-  border-color: transparent transparent var(--gray) transparent;
+    bottom: 100%; /* At the top of the tooltip */
+    left: 50%;
+    border-color: transparent transparent var(--gray) transparent;
 }
 
 .tooltip.right::after {
-  top: 50%;
-  right: 100%;
+    top: 50%;
+    right: 100%;
 }
 
 .tooltip.left::after {
-  top: 50%;
-  left: 100%;
+    top: 50%;
+    left: 100%;
 }
 
 .root:hover .tooltip {
-  visibility: visible;
+    visibility: visible;
 }
 
 .image {
-  display: inline-block;
-  --size: 2.5rem;
-  width: var(--size);
-  height: var(--size);
-  border-radius: 100%;
-  background-image: url(https://i.ibb.co/6RJ5hq6/gaben.jpg);
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-color: rgb(235, 236, 240);
+    display: inline-block;
+    --size: 2.5rem;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 100%;
+    background-image: url(https://i.ibb.co/6RJ5hq6/gaben.jpg);
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: rgb(235, 236, 240);
 }
 
 .image.MEDIUM {
-  --size: 3.2rem;
-  width: var(--size);
-  height: var(--size);
+    --size: 3.2rem;
+    width: var(--size);
+    height: var(--size);
 }
 
 .image.LARGE {
-  --size: 5rem;
-  width: var(--size);
-  height: var(--size);
+    --size: 5rem;
+    width: var(--size);
+    height: var(--size);
 }
 
 .placeholder {
-  width: 100%;
-  height: 100%;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 500;
-  font-size: 1.3rem;
-  border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 1.3rem;
+    border-radius: 50%;
 }

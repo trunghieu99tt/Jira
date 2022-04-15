@@ -28,6 +28,7 @@ export const useCreateProject = () => {
       coverPhotoFileId = uploadFileResponse[0];
     }
     const { name, description } = values;
+    const userIds = users?.map((user: IUser) => user.id);
 
     createProject({
       name,
@@ -39,7 +40,6 @@ export const useCreateProject = () => {
   };
 
   const handleFiles = (files: File[]) => {
-    console.log('files', files);
     setCoverPhoto(files[0]);
   };
 

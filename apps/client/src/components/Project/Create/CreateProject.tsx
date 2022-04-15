@@ -65,39 +65,56 @@ const CreateProject = ({ classes: propsClasses }: Props) => {
     >
       <Form.Element className={classes.formWrapper}>
         <h3>Create a new project</h3>
-        <FileUploader
-          title="Cover photo"
-          handleFiles={handleFiles}
-          shouldHavePreview={true}
-          maxNumberOfFiles={1}
-        />
-        <Form.Field.Input name="name" label="Name" />
-        <Form.Field.Input name="description" label="Description" />
-        <AudienceSelector audience={audience} setAudience={onChangeAudience} />
-        {users
-          ?.filter((user: IUser) => addedUserIds?.includes(user.id))
-          .map((user: IUser) => {
-            return (
-              <Button variant="outlined">
-                {user.name}
+        <div className={classes.item}>
+          <FileUploader
+            title="Cover photo"
+            handleFiles={handleFiles}
+            shouldHavePreview={true}
+            maxNumberOfFiles={1}
+          />
+        </div>
+        <div className={classes.item}>
+          <Form.Field.Input name="name" label="Name" />
+        </div>
+        <div className={classes.item}>
+          <Form.Field.TextEditor name="description" label="Description" />
+        </div>
+        <div className={classes.item}>
+          <p className={classes.label}>Audience</p>
+          <AudienceSelector
+            audience={audience}
+            setAudience={onChangeAudience}
+          />
+        </div>
+        <div className={classes.item}>
+          <p className={classes.label}>Team</p>
+          <ul className={classes.userList}>
+            {users
+              ?.filter((user: IUser) => addedUserIds?.includes(user.id))
+              .map((user: IUser) => {
+                return (
+                  <Button variant="outlined">
+                    {user.name}
 
-                <span>
-                  <TiDelete onClick={onRemoveUser(user.id)} />
-                </span>
-              </Button>
-            );
-          })}
-        <SearchWithDropdown
-          onSearch={onSearchUsers}
-          onClickResult={onAddUser}
-          renderResult={renderUserOption}
-          options={userOptions}
-        />
+                    <span>
+                      <TiDelete onClick={onRemoveUser(user.id)} />
+                    </span>
+                  </Button>
+                );
+              })}
+          </ul>
+          <SearchWithDropdown
+            onSearch={onSearchUsers}
+            onClickResult={onAddUser}
+            renderResult={renderUserOption}
+            options={userOptions}
+          />
+        </div>
         <div className={classes.actions}>
           <Button type="submit" variant="primary">
             Submit
           </Button>
-          <Button type="button" variant="empty">
+          <Button type="button" variant="outline">
             Cancel
           </Button>
         </div>

@@ -209,6 +209,7 @@ input CreateProjectInput {
   privacy: Int!
   description: String = ""
   ownerUserId: Int!
+  projectUserIds: [Int!] = []
 }
 
 input UpdateTaskLabelsInputDto {

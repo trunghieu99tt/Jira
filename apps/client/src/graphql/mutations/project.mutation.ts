@@ -7,6 +7,7 @@ export const CREATE_PROJECT_MUTATION = gql`
     $privacy: Int!
     $description: String
     $ownerUserId: Int!
+    $projectUserIds: [Int!]
   ) {
     createProject(
       createProjectInput: {
@@ -15,6 +16,7 @@ export const CREATE_PROJECT_MUTATION = gql`
         ownerUserId: $ownerUserId
         coverPhotoFileId: $coverPhotoFileId
         description: $description
+        projectUserIds: $projectUserIds
       }
     ) {
       id

@@ -1,45 +1,44 @@
 .root {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 3.2rem;
-  vertical-align: middle;
-  line-height: 1;
-  white-space: nowrap;
-  border-radius: 0.3rem;
-  transition: all 0.3s;
-  appearance: none;
-  background-color: var(--primary);
-  font-weight: 500;
-  outline: none;
-  min-width: 10rem;
-  color: #fff;
-  border: none;
-  cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    height: 3.2rem;
+    vertical-align: middle;
+    line-height: 1;
+    white-space: nowrap;
+    border-radius: 0.3rem;
+    transition: all 0.3s;
+    appearance: none;
+    background-color: var(--primary);
+    font-weight: 500;
+    outline: none;
+    min-width: 10rem;
+    color: #fff;
+    border: none;
+    cursor: pointer;
 }
 
 .root:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .root.primary {
-  background-color: var(--primary);
+    background-color: var(--primary);
 }
 
 .root.success {
-  background-color: var(--success);
+    background-color: var(--success);
 }
 
 .root.danger {
-  background-color: var(--danger);
+    background-color: var(--danger);
 }
 
 .root.warning {
-  background-color: var(--warning);
+    background-color: var(--warning);
 }
 
 .root.secondary {
-  background: none;
-  color: #000;
+    background: none;
+    color: #000;
 }
