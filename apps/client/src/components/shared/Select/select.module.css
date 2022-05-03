@@ -1,7 +1,7 @@
 .root {
   position: relative;
   display: inline-block;
-  min-width: 15rem;
+  width: 100%;
 }
 
 .value {
@@ -10,8 +10,8 @@
   min-height: 2rem;
   background: rgb(223, 225, 230);
   padding: 0.5em;
-  border-radius: 0.5rem;
-  color: rgb(66, 82, 110);
+  border-radius: 0.3rem;
+  color: var(--gray-1);
   font-size: 1.45rem;
   font-weight: 500;
   align-items: center;
@@ -21,5 +21,5 @@
 }
 
 .value:hover {
-  transform: scale(1.05);
+  transform: scale(1.01);
 }

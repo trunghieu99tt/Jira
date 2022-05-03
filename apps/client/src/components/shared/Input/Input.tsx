@@ -5,7 +5,7 @@ import defaultClasses from './input.module.css';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   classes?: any;
-  value: string | number;
+  value?: string | number;
   icon?: string;
   invalid?: boolean;
   filter?: RegExp | undefined;

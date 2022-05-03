@@ -5,16 +5,8 @@ import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 export class Service<E, R extends Repository<E>> {
   constructor(protected readonly repository: R) {}
 
-  async findOne(options?: FindOneOptions<E>): Promise<Partial<E>> {
-    const record = await this.repository.findOne(options);
-
-    if (!record) {
-      throw new NotFoundException(
-        `No record with ${JSON.stringify(options?.where || {})} not found`,
-      );
-    }
-
-    return record;
+  async findOne(options?: FindOneOptions<E>): Promise<Partial<E> | undefined> {
+    return this.repository.findOne(options);
   }
 
   async findList(options?: FindManyOptions<E>): Promise<Partial<E>[]> {

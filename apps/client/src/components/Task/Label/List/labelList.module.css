@@ -1,0 +1,16 @@
+
+.list {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.label {
+    height: 2.5rem;
+    min-width: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: .8rem;
+    font-size: 1rem;
+}

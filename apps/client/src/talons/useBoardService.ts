@@ -1,52 +1,32 @@
-import { useApolloClient, useMutation } from '@apollo/client';
+import { useApolloClient, useLazyQuery, useMutation } from '@apollo/client';
 import { IBoard } from '@type/board.type';
 import { ITask } from '@type/task.type';
 import { CREATE_PROJECT_MUTATION } from 'graphql/mutations/project.mutation';
 import { GET_BOARD_BY_ID } from 'graphql/queries/board.queries';
-import { useCallback } from 'react';
 
 export const useBoardService = () => {
   const client = useApolloClient();
   const [createBoardMutation, createBoardResponse] = useMutation(
     CREATE_PROJECT_MUTATION,
   );
+  const [getBoardDetailQuery, getBoardDetailResponse] =
+    useLazyQuery(GET_BOARD_BY_ID);
 
-  const getBoard = useCallback(
-    async (boardId: number) => {
-      try {
-        await client.query({
-          query: GET_BOARD_BY_ID,
-          variables: {
-            boardId,
-          },
-        });
-      } catch (error) {
-        console.error('error', error);
-      }
-    },
-    [client],
-  );
-
-  const getBoards = useCallback(
-    async (boardIds: number[]) => {
-      if (!boardIds.length) return;
-
-      try {
-        await Promise.all(
-          boardIds.map(async (boardId) => {
-            getBoard(boardId);
-          }),
-        );
-      } catch (error) {
-        console.error('error', error);
-      }
-    },
-    [getBoard],
-  );
-
-  const getCachedBoard = (boardId: number) => {
-    return client.cache.readQuery({
+  const getCachedBoard = (boardId: number): IBoard | null => {
+    const cachedBoard: {
+      board: IBoard;
+    } | null = client.cache.readQuery({
       query: GET_BOARD_BY_ID,
+      variables: {
+        boardId,
+      },
+    });
+
+    return cachedBoard?.board || null;
+  };
+
+  const refetchBoard = async (boardId: number) => {
+    await getBoardDetailQuery({
       variables: {
         boardId,
       },
@@ -104,10 +84,10 @@ export const useBoardService = () => {
   };
 
   return {
+    refetchBoard,
+    getCachedBoard,
+
     createBoardResponse,
     updateCacheBoardTasks,
-
-    getBoard,
-    getBoards,
   };
 };

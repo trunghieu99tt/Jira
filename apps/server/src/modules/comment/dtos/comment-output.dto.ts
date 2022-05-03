@@ -7,10 +7,4 @@ export class CommentOutput {
 
   @Field(() => String)
   content: string;
-
-  @Field(() => String)
-  userName: string;
-
-  @Field(() => String)
-  userAvatar: string;
 }

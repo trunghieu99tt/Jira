@@ -1,4 +1,33 @@
 .formWrapper {
-  width: 40rem;
-  padding: 5rem;
+    width: 60vw;
+    padding: 5rem;
+}
+
+
+.item {
+    margin: 1rem 0;
+    border: 1px solid #e8e8e8;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.label {
+    display: block;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.userList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.actions {
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }

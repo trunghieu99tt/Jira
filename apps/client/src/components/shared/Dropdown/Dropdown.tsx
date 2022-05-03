@@ -1,63 +1,54 @@
-import { motion, AnimatePresence } from 'framer-motion';
-
-// utils
+import { TTransformOrigin } from '@type/app.type';
 import mergeClasses from '@utils/mergeClasses';
+import cn from 'classnames';
 
 // style
 import defaultClasses from './dropdown.module.css';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
+interface Props {
   items?: any;
   isVisible?: boolean;
   classes?: any;
+  options?: any;
+  renderOption: ({ value }: { value: any }) => JSX.Element;
+  onChange: (value: string) => void;
+  transformOrigin?: TTransformOrigin;
 }
 
-const motionConfig = {
-  initial: {
-    opacity: 0,
-    scale: 0,
-  },
-  animate: {
-    opacity: 1,
-    scale: 1,
-    transformOrigin: 'top right',
-  },
-  exit: {
-    opacity: 0,
-    scale: 0,
-  },
-};
-
 const Dropdown = ({
+  classes: propClasses,
   isVisible,
-  items,
-  children,
-  classes: propsClasses,
+  options,
+  onChange,
+  renderOption,
 }: Props) => {
-  const classes = mergeClasses(defaultClasses, propsClasses);
+  const classes = mergeClasses(defaultClasses, propClasses);
+
+  const onClick = (value: string) => (event: any) => {
+    event.stopPropagation();
+    onChange(value);
+  };
 
   return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div {...motionConfig}>
-          <div className={classes.wrapper}>
-            <ul className={classes.dropdownList}>
-              {items?.map((item: any, idx: number) => {
-                return (
-                  <li
-                    key={item.id || `dropdown-item-${idx}`}
-                    className={classes.dropdownListItem}
-                  >
-                    {item}
-                  </li>
-                );
-              })}
-              {children}
-            </ul>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <div
+      className={cn(classes.wrapper, {
+        [classes.visible]: isVisible,
+      })}
+    >
+      <ul className={classes.dropdownList}>
+        {options?.map((option: any, idx: number) => {
+          return (
+            <li
+              key={`dropdown-item-${idx}`}
+              className={classes.dropdownListItem}
+              onClick={onClick(option.value)}
+            >
+              {renderOption({ value: option.value })}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 };
 

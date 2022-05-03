@@ -49,6 +49,7 @@ export const UPDATE_TASK_MUTATION = gql`
     $type: String
     $name: String
     $summary: String
+    $coverPhoto: String
   ) {
     updateTask(
       updateTaskInput: {
@@ -62,6 +63,7 @@ export const UPDATE_TASK_MUTATION = gql`
         type: $type
         name: $name
         summary: $summary
+        coverPhoto: $coverPhoto
       }
     ) {
       id

@@ -1,28 +1,15 @@
-// talons
-import { useFileUploader } from './useFileUploader';
-
-// utils
-import mergeClasses from '@utils/mergeClasses';
-
-// components
-import Button from '../Button';
-
-// constants
 import { MAX_NUMBER_OF_FILES } from '@constants/common';
-
-// icons
+import mergeClasses from '@utils/mergeClasses';
 import {
-  AiOutlineCloudUpload,
-  AiFillFileZip,
-  AiFillFilePdf,
   AiFillFileImage,
-  AiFillFileAdd,
+  AiFillFilePdf,
+  AiFillFileZip,
+  AiOutlineCloudUpload,
 } from 'react-icons/ai';
 import { IoMdRemoveCircleOutline } from 'react-icons/io';
-
-// styles
+import Button from '../Button';
 import defaultClasses from './fileUploader.module.css';
-import { uploadFiles } from '@utils/imageUploader';
+import { useFileUploader } from './useFileUploader';
 
 interface FileUploaderProps {
   title: string;
@@ -59,7 +46,7 @@ const FileUploader = ({
 
   return (
     <section className={classes.root}>
-      <p>{title}</p>
+      <p className={classes.title}>{title}</p>
       {errors.length > 0 && (
         <ul className={classes.errorList}>
           {errors.map((error: string, idx: number) => (

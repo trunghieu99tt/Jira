@@ -9,6 +9,7 @@ export interface IBoardTask {
   assigneeName: string;
   listPosition: number;
   assigneeAvatar: string;
+  updatedAt: Date;
 }
 
 export interface ITask {
@@ -21,4 +22,10 @@ export interface ITask {
   board: IBoard;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface iTaskLabel {
+  id: number;
+  name: string;
+  color: string;
 }

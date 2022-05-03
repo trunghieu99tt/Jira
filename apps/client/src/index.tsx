@@ -9,12 +9,15 @@ import reportWebVitals from './reportWebVitals';
 
 import AppProvider from '@context/app.context';
 
+import { ToastContainer } from 'react-toastify';
+
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'react-quill/dist/quill.snow.css';
 import './index.css';
 import './i18.config';
 import App from './App';
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -25,6 +28,7 @@ ReactDOM.render(
             <HelmetProvider>
               <ApolloProvider client={apolloClient}>
                 <App />
+                <ToastContainer />
               </ApolloProvider>
             </HelmetProvider>
           </RecoilRoot>

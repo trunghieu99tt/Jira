@@ -16,6 +16,7 @@ import { UPDATE_TYPE } from './constants/task.constant';
 import { TaskUser } from './dtos/task-user-output.dto';
 import { ProjectUserService } from '../project-user/services/project-user.service';
 import { AttachmentOutput } from './dtos/attachment-output.dto';
+import { CommentService } from '../comment/comment.service';
 
 @Injectable()
 export class TaskService extends Service<Task, TaskRepository> {
@@ -24,8 +25,9 @@ export class TaskService extends Service<Task, TaskRepository> {
     private readonly connection: Connection,
     private readonly userService: UserService,
     private readonly fileService: FileService,
-    private readonly attachmentService: AttachmentService,
+    private readonly commentService: CommentService,
     private readonly projectUserService: ProjectUserService,
+    private readonly attachmentService: AttachmentService,
   ) {
     super(repository);
   }
@@ -54,60 +56,36 @@ export class TaskService extends Service<Task, TaskRepository> {
         'type',
         'assigneeUserId',
         'listPosition',
+        'coverPhoto',
+        'updatedAt',
       ],
       order: {
         updatedAt: 'DESC',
       },
     });
 
-    let assigneeUserIds =
-      boardTasks
-        .map((task: Partial<Task>) => task.assigneeUserId)
-        .filter(Boolean) || [];
-    assigneeUserIds = [...new Set(assigneeUserIds)];
-    const users = await this.userService.findList({
-      where: {
-        id: In(assigneeUserIds),
-      },
-      select: ['avatarFileId', 'name', 'id'],
-    });
+    const assignees = await this.getTasksAssignees(boardTasks);
+    const assigneesAvatars = await this.getAssigneesAvatars(assignees);
 
-    const userAvatarFileIds = (users
-      ?.map((user: Partial<User>) => user?.avatarFileId)
-      .filter(Boolean) || []) as number[];
+    return Promise.all(
+      boardTasks?.map(async (task: Partial<Task>) => {
+        const { numberOfAttachments, numberOfComments } =
+          await this.getTaskStatistic(task.id);
+        const assignee =
+          (task?.assigneeUserId &&
+            this.getTaskAssignee(assignees, task.assigneeUserId)) ||
+          null;
 
-    const userAvatarList = await this.fileService.getFileUrls(
-      userAvatarFileIds,
-    );
-
-    return plainToClass(
-      BoardTask,
-      boardTasks.map((boardTask: Partial<Task>) => {
-        let assignee = null;
-        if (boardTask?.assigneeUserId) {
-          assignee = users?.find((user: Partial<User>) => {
-            if (!boardTask?.assigneeUserId) {
-              return false;
-            }
-            if (!user.id || !boardTask?.assigneeUserId) return false;
-            return +user.id === +boardTask.assigneeUserId;
-          });
-        }
-
-        let assigneeAvatar = '';
-        let assigneeName = '';
-        if (assignee?.avatarFileId) {
-          assigneeAvatar = userAvatarList[assignee.avatarFileId];
-        }
-        if (assignee?.name) {
-          assigneeName = assignee.name;
-        }
-
-        return {
-          ...ObjectTool.omit(boardTask, ['assigneeUserId']),
-          assigneeAvatar,
-          assigneeName,
-        };
+        return plainToClass(BoardTask, {
+          ...ObjectTool.omit(task, ['assigneeUserId']),
+          assigneeAvatar:
+            (assignee?.avatarFileId &&
+              assigneesAvatars?.[assignee?.avatarFileId]) ||
+            '',
+          assigneeName: assignee?.name || '',
+          numberOfAttachments,
+          numberOfComments,
+        });
       }),
     );
   }
@@ -119,7 +97,15 @@ export class TaskService extends Service<Task, TaskRepository> {
         id: In(attachmentIds),
       },
     });
-    const newTaskObj = plainToClass(Task, input);
+    const countTasks = await this.count({
+      where: {
+        boardId: input.boardId,
+      },
+    });
+    const newTaskObj = plainToClass(Task, {
+      ...input,
+      listPosition: countTasks + 1,
+    });
 
     return this.connection.transaction(async (manager) => {
       const newTaskDb = await manager.save(newTaskObj);
@@ -148,9 +134,9 @@ export class TaskService extends Service<Task, TaskRepository> {
       case UPDATE_TYPE.MOVE_TASK:
         {
           const { newBoardId, listPosition } = input;
-          if (!newBoardId || !listPosition) {
+          if (!newBoardId) {
             throw new Error(
-              'newBoardId and listPosition is required for move task update.Please check your input',
+              'newBoardId is required for move task update.Please check your input',
             );
           }
           task.boardId = newBoardId;
@@ -234,6 +220,17 @@ export class TaskService extends Service<Task, TaskRepository> {
           task.summary = summary;
         }
         break;
+      case UPDATE_TYPE.UPDATE_COVER_PHOTO:
+        {
+          const { coverPhoto } = input;
+          if (!coverPhoto) {
+            throw new Error(
+              'coverPhoto is required for update coverPhoto update.Please check your input',
+            );
+          }
+          task.coverPhoto = coverPhoto;
+        }
+        break;
       default: {
         console.error(`updateType ${updateType} is not supported`);
       }
@@ -299,5 +296,71 @@ export class TaskService extends Service<Task, TaskRepository> {
         fileId: attachment.fileId,
       })),
     );
+  }
+
+  private async getTasksAssignees(
+    tasks: Partial<Task>[],
+  ): Promise<Partial<User>[]> {
+    const assigneeUserIds = tasks
+      .map((task: Partial<Task>) => task.assigneeUserId)
+      .filter(Boolean);
+    return this.userService.findList({
+      where: {
+        id: In(assigneeUserIds),
+      },
+      select: ['avatarFileId', 'name', 'id'],
+    });
+  }
+
+  private getTaskAssignee(
+    assignees: Partial<User>[],
+    assigneeUserId: number,
+  ): Partial<User> | undefined {
+    return assignees?.find((user: Partial<User>) => {
+      if (!assigneeUserId) {
+        return false;
+      }
+      if (!user.id || !assigneeUserId) return false;
+      return +user.id === +assigneeUserId;
+    });
+  }
+
+  private async getAssigneesAvatars(assignees: Partial<User>[]): Promise<{
+    [key: string]: string;
+  }> {
+    const userAvatarFileIds = (assignees
+      ?.map((user: Partial<User>) => user?.avatarFileId)
+      .filter(Boolean) || []) as number[];
+    return this.fileService.getFileUrls(userAvatarFileIds);
+  }
+
+  private async getTaskStatistic(taskId: number | undefined): Promise<{
+    numberOfComments: number;
+    numberOfAttachments: number;
+  }> {
+    if (!taskId) {
+      return {
+        numberOfComments: 0,
+        numberOfAttachments: 0,
+      };
+    }
+
+    const [numberOfAttachments, numberOfComments] = await Promise.all([
+      this.attachmentService.count({
+        where: {
+          taskId,
+        },
+      }),
+      this.commentService.count({
+        where: {
+          taskId,
+        },
+      }),
+    ]);
+
+    return {
+      numberOfAttachments,
+      numberOfComments,
+    };
   }
 }

@@ -19,6 +19,8 @@ import { AiFillFileZip } from 'react-icons/ai';
 
 // styles
 import defaultClasses from './taskDetail.module.css';
+import TaskDetailLabel from '@components/Task/Detail/Label';
+import TaskDetailCoverPhoto from '@components/Task/Detail/CoverPhoto';
 
 type Props = {
   classes?: any;
@@ -36,26 +38,32 @@ const TaskDetail = ({ classes: propClasses, taskId, modalClose }: Props) => {
     onChangeName,
     onChangeType,
     onChangeBoard,
-    onChangeSummary,
     onChangeAssignee,
     onChangePriority,
     updateDescription,
     onAddAttachments,
     onChangeDescription,
+    onChangeCoverPhoto,
   } = useTaskDetail(taskId);
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  console.log('data', data);
-
   return (
     <article className={classes.root}>
       <header className={classes.header}>
-        <figure>
-          <img src="" alt="" />
-        </figure>
+        {data?.coverPhoto && (
+          <figure className={classes.coverPhotoWrapper}>
+            <img
+              src={data?.coverPhoto}
+              alt={data?.name}
+              loading={'lazy'}
+              className={classes.coverPhoto}
+            />
+            p
+          </figure>
+        )}
       </header>
       <main className={classes.main}>
         <section className={classes.content}>
@@ -131,6 +139,19 @@ const TaskDetail = ({ classes: propClasses, taskId, modalClose }: Props) => {
             <TaskDetailPrioritySelector
               defaultValue={data?.priority}
               onChange={onChangePriority}
+            />
+          </div>
+
+          <div className={classes.item}>
+            <p className={classes.itemName}> Labels </p>
+            <TaskDetailLabel taskId={taskId} />
+          </div>
+
+          <div className={classes.item}>
+            <p className={classes.itemName}> Cover Photo </p>
+            <TaskDetailCoverPhoto
+              taskId={taskId}
+              onChange={onChangeCoverPhoto}
             />
           </div>
         </aside>

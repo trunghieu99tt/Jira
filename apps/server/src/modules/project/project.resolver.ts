@@ -16,6 +16,7 @@ import { FileService } from '../file/services/file.service';
 import { ProjectUserService } from '../project-user/services/project-user.service';
 import { UserService } from '../user/user.service';
 import { CreateProjectInput } from './dtos/create-project-input.dto';
+import { PaginatedProjects } from './dtos/paginated-project';
 import { ProjectUserOutput } from './dtos/project-user-output.dto';
 import { Project } from './project.entity';
 import { ProjectService } from './project.service';
@@ -30,14 +31,33 @@ export class ProjectResolver {
     private readonly projectUserService: ProjectUserService,
   ) {}
 
-  @Query(() => [Project])
+  @Query(() => PaginatedProjects)
   async projects(
-    @Args() paginationArgs: PaginationArgs,
-  ): Promise<Partial<Project>[]> {
-    return this.projectService.findAllProjects(
-      paginationArgs.offset,
-      paginationArgs.limit,
-    );
+    @Args('first', {
+      type: () => Int,
+      nullable: true,
+    })
+    first: number,
+    @Args('after', {
+      nullable: true,
+    })
+    after: string,
+    @Args('last', {
+      type: () => Int,
+      nullable: true,
+    })
+    last?: number,
+    @Args('before', {
+      nullable: true,
+    })
+    before?: string,
+  ): Promise<PaginatedProjects> {
+    return this.projectService.findAllProjects({
+      first,
+      after,
+      last: last || undefined,
+      before: before || undefined,
+    });
   }
 
   @Query(() => Project)

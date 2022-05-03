@@ -1,9 +1,11 @@
-import { useCommentService } from '@talons/useCommentService';
-import { useEffect, useRef } from 'react';
-import { useRecoilValue } from 'recoil';
-import { taskCommentsSelector } from 'recoil/comment.recoil';
-import { userState } from 'recoil/user.recoil';
-
+// types
+import { useQuery } from '@apollo/client';
+import { iComment } from '@type/comment.type';
+import { GET_TASK_COMMENTS } from 'graphql/queries/comment.queries';
+import CreateComment from './Create/CreateComment';
+// components
+import CommentItem from './Item/CommentItem';
+// styles
 import classes from './taskDetailComment.module.css';
 
 type Props = {
@@ -11,56 +13,22 @@ type Props = {
 };
 
 const TaskDetailComment = ({ taskId }: Props) => {
-  const { fetchTaskComments } = useCommentService();
-  const comments = useRecoilValue(taskCommentsSelector(taskId));
-  const currentUser = useRecoilValue(userState);
-
-  const $commentInputRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'm') {
-        e.preventDefault();
-        $commentInputRef.current?.focus();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (taskId) {
-      fetchTaskComments({
-        taskId,
-      });
-    }
-  }, [fetchTaskComments, taskId]);
+  const { data, loading, error } = useQuery(GET_TASK_COMMENTS, {
+    variables: {
+      taskId,
+    },
+  });
+  const comments = data?.comments || [];
 
   return (
     <section className={classes.root}>
-      <div>
-        <div>
-          <img src={currentUser?.avatar} alt={currentUser?.name} />
-        </div>
-        <div>
-          <textarea
-            ref={$commentInputRef}
-            className={classes.textarea}
-            placeholder="Write a comment..."
-          />
-          <p>
-            Tips: Press <strong>M</strong> to comment
-          </p>
-        </div>
-      </div>
+      <CreateComment taskId={taskId} />
 
-      {comments.map((comment) => (
-        <div>{comment.content}</div>
-      ))}
+      <div className={classes.list}>
+        {comments.map((comment: iComment) => (
+          <CommentItem key={`comment-${comment.id}`} data={comment} />
+        ))}
+      </div>
     </section>
   );
 };

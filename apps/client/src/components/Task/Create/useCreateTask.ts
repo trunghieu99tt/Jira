@@ -17,6 +17,8 @@ export const useCreateTask = () => {
       attachmentFileIds = uploadFileResponse.join(',');
     }
 
+    console.log('values', values);
+
     const data = {
       ...values,
       attachmentFileIds,

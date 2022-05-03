@@ -41,8 +41,7 @@ const TaskDetailDescription = ({
 
   return (
     <section className={classes.root}>
-      <p className={classes.label}>
-        {' '}
+      <p className={classes.label} onClick={onOpenEdit}>
         <MdOutlineDescription /> Description
       </p>
       {(isEditing && (
@@ -69,13 +68,7 @@ const TaskDetailDescription = ({
           </Button>
 
           {isEditing && (
-            <Button
-              variant="secondary"
-              classes={{
-                root: classNames(classes.btn, classes.btnCancel),
-              }}
-              onClick={onCloseEdit}
-            >
+            <Button variant="secondary" onClick={onCloseEdit}>
               Cancel
             </Button>
           )}

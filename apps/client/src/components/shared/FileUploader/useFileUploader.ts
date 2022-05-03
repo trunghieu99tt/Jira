@@ -40,7 +40,6 @@ export const useFileUploader = ({
 
   const onDropFile = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    console.log('e.dataTransfer.files', e.dataTransfer.files);
     if (e.dataTransfer.files.length > 0) {
       handleFiles(e.dataTransfer.files);
     }

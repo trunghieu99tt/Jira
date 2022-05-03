@@ -1,25 +1,10 @@
 import { useMemo, useRef } from 'react';
 import { useParams } from 'react-router';
-import { useRecoilValue } from 'recoil';
-
-// talons
 import { useCreateTask } from './useCreateTask';
-
-// utils
 import mergeClasses from '@utils/mergeClasses';
-
-// components
 import Form from '@components/shared/Form';
 import Button from '@components/shared/Button';
 import FileUploader from '@components/shared/FileUploader';
-
-// global state
-import {
-  selectProjectBoardsByProjectId,
-  selectProjectUsersByProjectId,
-} from 'recoil/project.recoil';
-
-// constants
 import { MAX_NUMBER_OF_ATTACHMENTS } from '@constants/common';
 import {
   TASK_PRIORITY,
@@ -27,12 +12,12 @@ import {
   TASK_TYPES,
   TASK_TYPES_LABEL,
 } from '@constants/task';
-
-// types
 import { IProjectUser } from '@type/project.type';
-
-// styles
 import defaultClasses from './createTask.module.css';
+import { useQuery } from '@apollo/client';
+import { GET_PROJECT_BY_ID } from 'graphql/queries/project.queries';
+import { IBoard } from '@type/board.type';
+import { IUser } from '@type/user.types';
 
 type Props = {
   classes?: any;
@@ -43,10 +28,13 @@ const CreateTask = ({ classes: propsClasses }: Props) => {
 
   const { projectId } = useParams();
 
-  const projectUsers = useRecoilValue(selectProjectUsersByProjectId(projectId));
-  const projectBoards = useRecoilValue(
-    selectProjectBoardsByProjectId(projectId),
-  );
+  const { data, loading, error } = useQuery(GET_PROJECT_BY_ID, {
+    variables: {
+      id: parseInt(projectId || '1'),
+    },
+  });
+  const projectUsers = useMemo(() => data?.project?.projectUsers || [], [data]);
+  const projectBoards = useMemo(() => data?.project?.boards || [], [data]);
 
   const $formRef = useRef<HTMLFormElement>(null);
 
@@ -79,7 +67,9 @@ const CreateTask = ({ classes: propsClasses }: Props) => {
   }, [projectUsers]);
 
   const renderUserOption = ({ value: userId }: { value: number }) => {
-    const user = projectUsers.find((user) => user.id === userId);
+    const user = projectUsers.find(
+      (user: IProjectUser) => user.userId === userId,
+    );
     return (
       <div>
         <span>{user?.name}</span>
@@ -89,7 +79,7 @@ const CreateTask = ({ classes: propsClasses }: Props) => {
 
   const boardOptions = useMemo(() => {
     return (
-      projectBoards?.map((board) => ({
+      projectBoards?.map((board: IBoard) => ({
         value: board.id,
         label: board.name,
       })) || []
@@ -97,7 +87,7 @@ const CreateTask = ({ classes: propsClasses }: Props) => {
   }, [projectBoards]);
 
   const renderBoardOption = ({ value: boardId }: { value: number }) => {
-    const board = projectBoards.find((board) => board.id === boardId);
+    const board = projectBoards.find((board: IUser) => board.id === boardId);
     return (
       <div>
         <span>{board?.name}</span>
@@ -127,6 +117,9 @@ const CreateTask = ({ classes: propsClasses }: Props) => {
         name: '',
         description: '',
         type: TASK_TYPES.TASK,
+        reporterUserId: 1,
+        assigneeUserId: 1,
+        listPosition: 1,
       }}
       validations={{
         name: Form.is.required(),
@@ -135,7 +128,7 @@ const CreateTask = ({ classes: propsClasses }: Props) => {
       innerRef={$formRef}
     >
       <Form.Element className={classes.formWrapper}>
-        <h3>Create a new task</h3>
+        <h3 className={classes.heading}>Create a new task</h3>
 
         <Form.Field.Select
           name="type"

@@ -7,7 +7,7 @@ import useOnOutsideClick from '@hooks/useOnClickOutside';
 import mergeClasses from '@utils/mergeClasses';
 
 // components
-import Dropdown from './Dropdown';
+import Dropdown from '../Dropdown';
 
 // icons
 import { RiArrowDownSLine } from 'react-icons/ri';
@@ -67,12 +67,14 @@ const Select = ({
           </span>
         )}
       </div>
-      <Dropdown
-        isVisible={isDropdownOpen && selectable}
-        onChange={onChange}
-        options={options}
-        renderOption={renderOption}
-      />
+      {options?.length > 0 && (
+        <Dropdown
+          isVisible={isDropdownOpen && selectable}
+          onChange={onChange}
+          options={options}
+          renderOption={renderOption}
+        />
+      )}
     </section>
   );
 };

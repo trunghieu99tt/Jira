@@ -24,4 +24,16 @@ export class BoardTask {
 
   @Field(() => Int)
   listPosition: number;
+
+  @Field(() => Int)
+  numberOfAttachments: number;
+
+  @Field(() => Int)
+  numberOfComments: number;
+
+  @Field(() => String)
+  coverPhoto: string;
+
+  @Field(() => Date)
+  updatedAt: Date;
 }

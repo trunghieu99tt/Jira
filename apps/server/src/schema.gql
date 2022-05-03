@@ -16,6 +16,34 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type User {
+  id: Float!
+  username: String!
+  password: String!
+  email: String!
+  name: String!
+  avatarFileId: Int
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  avatar: String!
+}
+
+type UserOutput {
+  id: Int!
+  name: String!
+  avatar: String!
+}
+
+type Comment {
+  id: Float!
+  content: String!
+  userId: Int!
+  taskId: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  owner: User!
+}
+
 type AttachmentOutput {
   id: Int!
   taskId: Int
@@ -44,6 +72,7 @@ type Task {
   projectId: Int!
   boardId: Int!
   listPosition: Int!
+  coverPhoto: String!
   createdAt: DateTime!
   updatedAt: DateTime!
   assignee: TaskUser!
@@ -59,6 +88,10 @@ type BoardTask {
   assigneeAvatar: String!
   assigneeName: String!
   listPosition: Int!
+  numberOfAttachments: Int!
+  numberOfComments: Int!
+  coverPhoto: String!
+  updatedAt: DateTime!
 }
 
 type Board {
@@ -96,30 +129,52 @@ enum Privacy {
   PRIVATE
 }
 
-type Comment {
+type ProjectEdge {
+  cursor: String!
+  node: Project!
+}
+
+type PaginatedProjects {
+  edges: [ProjectEdge!]
+  nodes: [Project!]
+  totalCount: Int!
+  hasNextPage: Boolean!
+}
+
+type Label {
   id: Float!
-  content: String!
-  userId: Int!
-  taskId: Int!
+  name: String!
+  color: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
+type TaskLabelOutput {
+  labelId: Int!
+  name: String!
+  color: String!
+}
+
 type Query {
   task(id: Int!): Task!
+  searchUsers(search: String!): [UserOutput!]!
   getTaskAttachments(taskId: Int!): [Attachment!]!
-  projects(offset: Int = 0, limit: Int = 20): [Project!]!
+  comments(taskId: Int!): [Comment!]!
+  projects(before: String, last: Int, after: String, first: Int): PaginatedProjects!
   project(id: Int!): Project!
   board(boardId: Int!): Board!
-  comments(taskId: Int!): [Comment!]!
+  taskLabels(taskId: Int!): [TaskLabelOutput!]!
+  labels: [Label!]!
 }
 
 type Mutation {
   createTask(createTaskInput: CreateTaskInput!): Task!
   updateTask(updateTaskInput: UpdateTaskInput!): Task!
   createdAttachments(createAttachmentsInput: CreateAttachmentsInput!): [Attachment!]!
-  createProject(createProjectInput: CreateProjectInput!): Project!
   createComment(createCommentInput: CreateCommentInput!): Comment!
+  createProject(createProjectInput: CreateProjectInput!): Project!
+  updateTaskLabels(updateTaskLabelsInput: UpdateTaskLabelsInputDto!): Boolean!
+  createLabel(createLabelInput: CreateLabelInputDto!): Label!
 }
 
 input CreateTaskInput {
@@ -146,11 +201,18 @@ input UpdateTaskInput {
   type: String
   name: String
   summary: String
+  coverPhoto: String
 }
 
 input CreateAttachmentsInput {
   taskId: Int!
   fileIds: [Int!]!
+}
+
+input CreateCommentInput {
+  taskId: Int!
+  content: String!
+  userId: Int!
 }
 
 input CreateProjectInput {
@@ -159,9 +221,15 @@ input CreateProjectInput {
   privacy: Int!
   description: String = ""
   ownerUserId: Int!
+  projectUserIds: [Int!] = []
 }
 
-input CreateCommentInput {
+input UpdateTaskLabelsInputDto {
+  labelId: Int!
   taskId: Int!
-  content: String!
+}
+
+input CreateLabelInputDto {
+  name: String!
+  color: String!
 }

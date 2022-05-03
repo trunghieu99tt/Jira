@@ -16,26 +16,27 @@ export interface IPaginatedType<T> {
 export function Paginated<T>(classRef: Type<T>): Type<IPaginatedType<T>> {
   @ObjectType(`${classRef.name}Edge`)
   abstract class EdgeType {
-    @Field((type) => String)
+    @Field(() => String)
     cursor: string;
 
-    @Field((type) => classRef)
+    @Field(() => classRef)
     node: T;
   }
 
   @ObjectType({ isAbstract: true })
   abstract class PaginatedType implements IPaginatedType<T> {
-    @Field((type) => [EdgeType], { nullable: true })
+    @Field(() => [EdgeType], { nullable: true })
     edges: EdgeType[];
 
-    @Field((type) => [classRef], { nullable: true })
+    @Field(() => [classRef], { nullable: true })
     nodes: T[];
 
-    @Field((type) => Int)
+    @Field(() => Int)
     totalCount: number;
 
     @Field()
     hasNextPage: boolean;
   }
+
   return PaginatedType as Type<IPaginatedType<T>>;
 }

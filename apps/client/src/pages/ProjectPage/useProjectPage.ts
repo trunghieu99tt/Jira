@@ -1,7 +1,9 @@
 import { useQuery } from '@apollo/client';
+import { useBoardService } from '@talons/useBoardService';
 import { useTaskService } from '@talons/useTaskService';
 import { insertItemIntoArray, moveItemWithinArray } from '@utils/helper';
 import { GET_PROJECT_BY_ID } from 'graphql/queries/project.queries';
+import { useEffect, useState } from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import { useParams } from 'react-router';
 
@@ -15,9 +17,18 @@ export const useProjectPage = () => {
   });
 
   const { updateTask } = useTaskService();
+  const { getCachedBoard } = useBoardService();
+
+  const [audience, setAudience] = useState<number>(0);
+
+  useEffect(() => {
+    console.log('data', data);
+    if (data?.project?.privacy) {
+      setAudience(data.project.privacy);
+    }
+  }, [data]);
 
   const project = data?.project;
-  const boards = project?.boards;
 
   const isPositionChanged = (
     destination: DraggableLocation | undefined,
@@ -35,21 +46,29 @@ export const useProjectPage = () => {
     droppedTaskId: number,
     destinationIndex: number,
   ) => {
-    const initialTaskListOfDestinationBoard =
-      boards[destinationBoardId]?.tasks || [];
+    const cachedDestinationBoard = getCachedBoard(destinationBoardId);
+    if (!cachedDestinationBoard) {
+      return {
+        prevTask: null,
+        nextTask: null,
+      };
+    }
+    const initialTasksOfDestinationBoard = cachedDestinationBoard?.tasks || [];
     const isSameBoard = sourceBoardId === destinationBoardId;
-    const droppedTask = boards[sourceBoardId]?.tasks?.find(
+
+    const cachedSourceBoard = getCachedBoard(sourceBoardId);
+    const droppedTask = cachedSourceBoard?.tasks?.find(
       (task: any) => task.id === droppedTaskId,
     );
 
     const afterDropDestinationTaskList = isSameBoard
       ? moveItemWithinArray(
-          initialTaskListOfDestinationBoard,
+          initialTasksOfDestinationBoard,
           droppedTask,
           destinationIndex,
         )
       : insertItemIntoArray(
-          initialTaskListOfDestinationBoard,
+          initialTasksOfDestinationBoard,
           droppedTask,
           destinationIndex,
         );
@@ -81,14 +100,19 @@ export const useProjectPage = () => {
     } else if (!nextTask) {
       position = prevTask.listPosition + 1;
     } else {
-      position =
+      position = Math.floor(
         prevTask.listPosition +
-        (nextTask.listPosition - prevTask.listPosition) / 2;
+          (nextTask.listPosition - prevTask.listPosition) / 2,
+      );
     }
-    return position ? Math.max(1, position) : 1;
+    return position;
   };
 
-  const onDropEnd = ({ destination, source, draggableId }: DropResult) => {
+  const onDropEnd = async ({
+    destination,
+    source,
+    draggableId,
+  }: DropResult) => {
     if (!isPositionChanged(destination, source) || !destination) return;
 
     const { index, droppableId } = destination || {};
@@ -105,21 +129,16 @@ export const useProjectPage = () => {
       index,
     );
 
-    updateTask(
-      droppedTaskId,
-      {
-        listPosition: newListPosition,
-        updateType: 'MOVE_TASK',
-        newBoardId: destinationBoardId,
-      },
-      {
-        sourceBoardId,
-        targetBoardId: destinationBoardId,
-      },
-    );
+    await updateTask(droppedTaskId, {
+      listPosition: newListPosition,
+      updateType: 'MOVE_TASK',
+      newBoardId: destinationBoardId,
+    });
   };
 
   return {
+    audience,
+    setAudience,
     loading,
     data: project,
     error,

@@ -1,19 +1,19 @@
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useApolloClient, useLazyQuery, useMutation } from '@apollo/client';
 import {
   CREATE_TASK_MUTATION,
   UPDATE_TASK_MUTATION,
 } from 'graphql/mutations/task.mutation';
+import { GET_BOARD_BY_ID } from 'graphql/queries/board.queries';
 import { GET_TASK_BY_ID } from 'graphql/queries/task.queries';
 import { useCallback } from 'react';
-import { useBoardService } from './useBoardService';
+import { toast } from 'react-toastify';
 
 export const useTaskService = () => {
+  const apolloClient = useApolloClient();
   const [updateTaskMutation] = useMutation(UPDATE_TASK_MUTATION);
   const [createTaskMutation] = useMutation(CREATE_TASK_MUTATION);
   const [getTaskDetailQuery, getTaskDetailQueryResponse] =
     useLazyQuery(GET_TASK_BY_ID);
-
-  const { getBoards, updateCacheBoardTasks } = useBoardService();
 
   const getTaskDetail = useCallback(
     async (taskId: number) => {
@@ -27,17 +27,7 @@ export const useTaskService = () => {
   );
 
   const updateTask = useCallback(
-    async (
-      taskId: number,
-      data: any,
-      {
-        sourceBoardId,
-        targetBoardId,
-      }: {
-        sourceBoardId?: number;
-        targetBoardId?: number;
-      } = {},
-    ) => {
+    async (taskId: number, data: any) => {
       await updateTaskMutation({
         variables: {
           id: taskId,
@@ -45,20 +35,18 @@ export const useTaskService = () => {
         },
         onCompleted: (data) => {
           if (data?.updateTask) {
-            if (sourceBoardId) {
-              updateCacheBoardTasks(sourceBoardId, data.updateTask, 'remove');
-            }
-
-            if (targetBoardId) {
-              updateCacheBoardTasks(targetBoardId, data.updateTask, 'add');
-            }
-
-            getTaskDetail(taskId);
+            apolloClient.refetchQueries({
+              include: [GET_TASK_BY_ID, GET_BOARD_BY_ID],
+            });
           }
+        },
+        onError: (error) => {
+          console.error('error', error);
+          toast.error(error.message);
         },
       });
     },
-    [updateTaskMutation, getTaskDetail],
+    [updateTaskMutation, apolloClient],
   );
 
   const createTask = useCallback(
@@ -69,12 +57,18 @@ export const useTaskService = () => {
         },
         onCompleted: (data) => {
           if (data?.createTask) {
-            getBoards(refetchBoardIds);
+            apolloClient.refetchQueries({
+              include: [GET_TASK_BY_ID, GET_BOARD_BY_ID],
+            });
           }
+        },
+        onError: (error) => {
+          console.error('error', error);
+          toast.error(error.message);
         },
       });
     },
-    [createTaskMutation, getBoards],
+    [apolloClient, createTaskMutation],
   );
 
   return {

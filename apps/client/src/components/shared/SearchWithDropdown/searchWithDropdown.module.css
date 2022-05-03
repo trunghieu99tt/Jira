@@ -1,0 +1,13 @@
+.root {
+    position: relative;
+}
+
+.input {
+    padding: .9rem 1.2rem;
+    background: #fff;
+    border-radius: .8rem;
+    border: none;
+    box-shadow: var(--box-shadow);
+    font-size: 1rem;
+    width: 100%;
+}

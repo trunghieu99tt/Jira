@@ -1,0 +1,75 @@
+.label {
+    mix-blend-mode: darken;
+    border-radius: .8rem;
+    height: 2.5rem;
+    min-width: 5rem;
+    padding: 0 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    position: relative;
+}
+
+.deleteLabelBtn {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(5px, -1rem);
+    background: #2F80ED;
+    border: none;
+    border-radius: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    cursor: pointer;
+}
+
+.label:hover > .deleteLabelBtn {
+    display: flex;
+}
+
+.labelContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.addLabelBtn {
+    --size: 2.5rem;
+    width: var(--size);
+    height: var(--size);
+    border-radius: .8rem;
+    background: var(--blue-1);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    cursor: pointer;
+}
+
+.addLabelBtn svg {
+    --size: 2rem;
+    width: var(--size);
+    height: var(--size);
+}
+
+.labelForms {
+    margin: 2rem 0;
+    padding: 2rem;
+    box-shadow: var(--box-shadow);
+    border-radius: 1.2rem;
+}
+
+.availableLabels {
+    margin: 1.5rem 0;
+}
+
+.availableLabelsHeading {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gray-4);
+    margin-bottom: 1rem;
+}

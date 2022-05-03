@@ -13,6 +13,10 @@ export const GET_BOARD_BY_ID = gql`
         assigneeAvatar
         assigneeName
         listPosition
+        updatedAt
+        coverPhoto
+        numberOfComments
+        numberOfAttachments
       }
     }
   }

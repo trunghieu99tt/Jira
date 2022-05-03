@@ -1,59 +1,60 @@
 import { useApolloClient, useMutation } from '@apollo/client';
+import { iComment } from '@type/comment.type';
 import { ADD_COMMENT } from 'graphql/mutations/comment.mutation';
 import { GET_TASK_COMMENTS } from 'graphql/queries/comment.queries';
 import { useCallback } from 'react';
-import { useSetRecoilState } from 'recoil';
-import { commentsState } from 'recoil/comment.recoil';
 
 export const useCommentService = () => {
   const client = useApolloClient();
+
   const [addCommentMutation] = useMutation(ADD_COMMENT);
 
-  const setComments = useSetRecoilState(commentsState);
-
-  const fetchTaskComments = useCallback(
-    async ({ taskId }: { taskId: number }) => {
-      try {
-        const response = await client.query({
-          query: GET_TASK_COMMENTS,
-          variables: { taskId },
-        });
-
-        if (response?.data?.comments) {
-          setComments((prev) => ({
-            ...prev,
-            [taskId]: response.data.comments,
-          }));
-        }
-      } catch (error) {
-        console.error(`[useCommentService] fetchTaskComments error: ${error}`);
-      }
-    },
-    [client, setComments],
-  );
-
-  const addComment = useCallback(
-    async ({ taskId, content }: { taskId: number; content: string }) => {
+  const createComment = useCallback(
+    async ({
+      taskId,
+      content,
+      userId,
+    }: {
+      taskId: number;
+      content: string;
+      userId: number;
+    }) => {
       await addCommentMutation({
         variables: {
           taskId,
           content,
+          userId,
         },
-        onCompleted: (data) => {
-          if (data?.createComment) {
-            setComments((prev) => ({
-              ...prev,
-              [taskId]: [...(prev[taskId] || []), data.createComment],
-            }));
-          }
+        onCompleted: (response) => {
+          client.refetchQueries({
+            include: [GET_TASK_COMMENTS],
+          });
         },
       });
     },
-    [addCommentMutation, setComments],
+    [addCommentMutation],
   );
 
+  const addCommentToCache = (taskId: number, newComment: iComment) => {
+    const cache: {
+      comments: iComment[];
+    } | null = client.cache.readQuery({
+      query: GET_TASK_COMMENTS,
+      variables: { taskId },
+    });
+
+    if (cache?.comments) {
+      client.cache.writeQuery({
+        query: GET_TASK_COMMENTS,
+        variables: { taskId },
+        data: {
+          comments: [...cache.comments, newComment],
+        },
+      });
+    }
+  };
+
   return {
-    addComment,
-    fetchTaskComments,
+    createComment,
   };
 };

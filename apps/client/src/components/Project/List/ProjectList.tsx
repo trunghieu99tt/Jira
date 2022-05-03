@@ -9,16 +9,19 @@ import { IProject, IProjectUser } from '@type/project.type';
 
 // styles
 import classes from './projectList.module.css';
+import { Paginated } from '@type/app.type';
 
 type Props = {
-  data: IProject[];
+  data: Paginated<IProject>[];
 };
 
 const ProjectList = ({ data }: Props) => {
   return (
     <section className={classes.root}>
-      {data?.map((project: IProject) => {
-        const { projectUsers } = project;
+      {data?.map((paginatedProject: Paginated<IProject>) => {
+        const { node: project } = paginatedProject;
+        const projectUsers = project?.projectUsers || [];
+
         return (
           <Link
             to={`/project/${project.id}`}
@@ -43,7 +46,7 @@ const ProjectList = ({ data }: Props) => {
                         tooltip={projectUser?.name}
                         size="MEDIUM"
                         key={`project-list-item-user-avatar-${projectUser?.id}`}
-                      ></Avatar>
+                      />
                     );
                   })}
                 </div>

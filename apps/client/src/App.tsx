@@ -1,3 +1,4 @@
+import BaseLayout from '@layout/Base.layout';
 import ProjectListPage from '@pages/ProjectList/ProjectListPage';
 import ProjectPage from '@pages/ProjectPage';
 import React from 'react';
@@ -17,4 +18,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default BaseLayout(App);

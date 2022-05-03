@@ -1,0 +1,25 @@
+.root {
+    margin: 2rem 0;
+}
+
+.heading {
+    font-size: 1.2rem;
+}
+
+.list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto;
+    gap: 1rem;
+}
+
+.option {
+    height: 3rem;
+    border-radius: .4rem;
+    border: none;
+    cursor: pointer;
+}
+
+.option.selected {
+    border: 2px solid #000;
+}

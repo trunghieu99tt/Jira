@@ -1,46 +1,27 @@
 .wrapper {
   position: absolute;
-  right: 0;
   width: 100%;
-  border: 1px solid #e0e0e0;
-  box-sizing: border-box;
-  box-shadow: var(--box-shadow-1);
-  border-radius: 12px;
-  padding: 1.5rem;
-  transform: translateY(1rem);
-  background: #fff;
-  min-width: 20rem;
-  z-index: 2;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.5s;
+  border-radius: 0px 0px 4px 4px;
+  background: rgb(255, 255, 255);
+  box-shadow: rgb(9 30 66 / 25%) 0px 4px 8px -2px,
+    rgb(9 30 66 / 31%) 0px 0px 1px;
 }
 
-.dropdownList {
+.wrapper.visible {
+  z-index: 2;
+  max-height: initial;
 }
 
 .dropdownListItem {
-  padding: 1rem 1.5rem;
-  transition: all 0.5s;
-  border-radius: 5px;
+  list-style: none;
+  padding: 1rem;
+  cursor: pointer;
+  font-size: 1.45rem;
 }
 
 .dropdownListItem:hover {
-  cursor: pointer;
-  background: var(--light-1);
-}
-
-.dropdownListItem a {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  color: var(--gray-2);
-}
-
-.dropdownListItem a svg {
-  --size: 1.6rem;
-  width: var(--size);
-  height: var(--size);
-}
-
-.dropdownListItem a p {
-  font-size: 1.2rem;
-  font-weight: 500;
+  background: rgb(210, 229, 254);
 }

@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
 @ObjectType()
 @Entity({
   name: 'users',
@@ -20,6 +21,7 @@ export class User {
   @Field(() => String)
   @Column({
     name: 'username',
+    unique: true,
   })
   username: string;
 
@@ -32,16 +34,20 @@ export class User {
   @Field(() => String)
   @Column({
     name: 'email',
+    unique: true,
   })
   email: string;
 
-  @Field(() => Int)
+  @Field(() => String)
   @Column()
   name: string;
 
-  @Field(() => Int)
+  @Field(() => Int, {
+    nullable: true,
+  })
   @Column({
     name: 'avatar_file_id',
+    nullable: true,
   })
   avatarFileId: number;
 
@@ -56,4 +62,7 @@ export class User {
     name: 'updated_at',
   })
   updatedAt: Date;
+
+  @Field(() => String)
+  avatar: string;
 }

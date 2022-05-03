@@ -1,0 +1,27 @@
+.root {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.ownerName {
+  color: var(--gray-1);
+}
+
+.inline {
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+.ownerName {
+  font-size: 1.5rem;
+}
+
+.updatedAt {
+  font-size: 1.45rem;
+}
+
+.content {
+  font-size: 1.5rem;
+}

@@ -22,4 +22,10 @@ export class CreateProjectInput {
 
   @Field(() => Int)
   ownerUserId: number;
+
+  @Field(() => [Int], {
+    defaultValue: [],
+    nullable: true,
+  })
+  projectUserIds: number[];
 }
