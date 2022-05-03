@@ -1,11 +1,16 @@
-import { ArgsType, Field, Int } from '@nestjs/graphql';
-import { DEFAULT_LIMIT, DEFAULT_OFFSET } from '../constants/common.constant';
+import { ArgsType, Int, Field } from '@nestjs/graphql';
 
 @ArgsType()
 export class PaginationArgs {
-  @Field(() => Int, { defaultValue: DEFAULT_OFFSET })
-  offset?: number;
+  @Field(() => Int, { nullable: true })
+  first: number;
 
-  @Field(() => Int, { defaultValue: DEFAULT_LIMIT })
-  limit?: number;
+  @Field(() => String, { nullable: true })
+  after: string;
+
+  @Field(() => Int, { nullable: true })
+  last?: number;
+
+  @Field(() => String, { nullable: true })
+  before?: string;
 }

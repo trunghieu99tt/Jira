@@ -1,17 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
-import { Connection, EntityManager } from 'typeorm';
+import { PaginationArgs } from 'src/common/dto/pagination-args.dto';
 import { Service } from 'src/common/generics/service.generic';
-import { Project } from './project.entity';
-import { ProjectRepository } from './project.repository';
-import {
-  DEFAULT_LIMIT,
-  DEFAULT_OFFSET,
-} from 'src/common/constants/common.constant';
-import { CreateProjectInput } from './dtos/create-project-input.dto';
-import { DEFAULT_BOARD_NAMES } from './constants/project.constant';
+import { paginate } from 'src/common/tools/paginate';
+import { Connection, EntityManager } from 'typeorm';
 import { Board } from '../board/board.entity';
 import { ProjectUser } from '../project-user/entities/project-user.entity';
+import { DEFAULT_BOARD_NAMES } from './constants/project.constant';
+import { CreateProjectInput } from './dtos/create-project-input.dto';
+import { PaginatedProjects } from './dtos/paginated-project';
+import { Project } from './project.entity';
+import { ProjectRepository } from './project.repository';
 
 @Injectable()
 export class ProjectService extends Service<Project, ProjectRepository> {
@@ -23,16 +22,10 @@ export class ProjectService extends Service<Project, ProjectRepository> {
   }
 
   async findAllProjects(
-    offset = DEFAULT_OFFSET,
-    limit = DEFAULT_LIMIT,
-  ): Promise<Partial<Project>[]> {
-    return this.findList({
-      order: {
-        updatedAt: 'DESC',
-      },
-      skip: offset,
-      take: limit,
-    });
+    paginationArgs: PaginationArgs,
+  ): Promise<PaginatedProjects> {
+    const query = this.repository.createQueryBuilder().select();
+    return paginate(query, paginationArgs);
   }
 
   async findProjectById(id: number): Promise<Partial<Project>> {

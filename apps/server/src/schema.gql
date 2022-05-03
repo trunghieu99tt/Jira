@@ -129,6 +129,18 @@ enum Privacy {
   PRIVATE
 }
 
+type ProjectEdge {
+  cursor: String!
+  node: Project!
+}
+
+type PaginatedProjects {
+  edges: [ProjectEdge!]
+  nodes: [Project!]
+  totalCount: Int!
+  hasNextPage: Boolean!
+}
+
 type Label {
   id: Float!
   name: String!
@@ -148,7 +160,7 @@ type Query {
   searchUsers(search: String!): [UserOutput!]!
   getTaskAttachments(taskId: Int!): [Attachment!]!
   comments(taskId: Int!): [Comment!]!
-  projects(offset: Int = 0, limit: Int = 20): [Project!]!
+  projects(before: String, last: Int, after: String, first: Int): PaginatedProjects!
   project(id: Int!): Project!
   board(boardId: Int!): Board!
   taskLabels(taskId: Int!): [TaskLabelOutput!]!

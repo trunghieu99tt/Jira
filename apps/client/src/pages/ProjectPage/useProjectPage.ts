@@ -22,6 +22,7 @@ export const useProjectPage = () => {
   const [audience, setAudience] = useState<number>(0);
 
   useEffect(() => {
+    console.log('data', data);
     if (data?.project?.privacy) {
       setAudience(data.project.privacy);
     }
@@ -107,7 +108,11 @@ export const useProjectPage = () => {
     return position;
   };
 
-  const onDropEnd = ({ destination, source, draggableId }: DropResult) => {
+  const onDropEnd = async ({
+    destination,
+    source,
+    draggableId,
+  }: DropResult) => {
     if (!isPositionChanged(destination, source) || !destination) return;
 
     const { index, droppableId } = destination || {};
@@ -124,7 +129,7 @@ export const useProjectPage = () => {
       index,
     );
 
-    updateTask(droppedTaskId, {
+    await updateTask(droppedTaskId, {
       listPosition: newListPosition,
       updateType: 'MOVE_TASK',
       newBoardId: destinationBoardId,

@@ -1,11 +1,17 @@
-import { useProjectService } from '@talons/useProjectService';
+import { useQuery } from '@apollo/client';
+import { GET_PROJECT_LIST } from 'graphql/queries/project.queries';
 
 export const useProjectListPage = () => {
-  const {
-    getProjectListResponse: { data, loading, error },
-  } = useProjectService();
+  const { data, error, loading } = useQuery(GET_PROJECT_LIST, {
+    variables: {
+      first: 10,
+      after: null,
+    },
+  });
 
-  const projects = data?.projects;
+  const projects = data?.projects?.edges || [];
+
+  console.log('projects', data?.projects?.edges);
 
   return {
     loading,

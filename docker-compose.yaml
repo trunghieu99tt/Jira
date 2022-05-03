@@ -13,13 +13,6 @@ services:
       MYSQL_ROOT_PASSWORD: my-secret-pw
       MYSQL_DATABASE: jira
 
-  adminer:
-    image: adminer
-    ports:
-      - 8080:8080
-    depends_on:
-      - mysqldb
-  
   redis: 
     image: "redis:alpine"
     ports:

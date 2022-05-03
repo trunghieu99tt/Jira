@@ -1,4 +1,4 @@
-import { useApolloClient, useMutation, useQuery } from '@apollo/client';
+import { useApolloClient, useMutation } from '@apollo/client';
 import { IBoard } from '@type/board.type';
 import {
   IProject,
@@ -6,16 +6,12 @@ import {
   IProjectUser,
 } from '@type/project.type';
 import { CREATE_PROJECT_MUTATION } from 'graphql/mutations/project.mutation';
-import {
-  GET_PROJECT_BY_ID,
-  GET_PROJECT_LIST,
-} from 'graphql/queries/project.queries';
+import { GET_PROJECT_BY_ID } from 'graphql/queries/project.queries';
 import { useCallback } from 'react';
 
 export const useProjectService = () => {
   const client = useApolloClient();
 
-  const getProjectListQueryResponse = useQuery(GET_PROJECT_LIST);
   const [createProjectMutation, createProjectResponse] = useMutation(
     CREATE_PROJECT_MUTATION,
   );
@@ -24,14 +20,9 @@ export const useProjectService = () => {
     (input: IProjectCreateInput) => {
       createProjectMutation({
         variables: input,
-        onCompleted: (data) => {
-          if (data?.createProject) {
-            getProjectListQueryResponse.refetch();
-          }
-        },
       });
     },
-    [createProjectMutation, getProjectListQueryResponse],
+    [createProjectMutation],
   );
 
   const getCachedProject = (projectId: number): IProject => {
@@ -56,7 +47,6 @@ export const useProjectService = () => {
     return cachedProject?.projectUsers || [];
   };
   return {
-    getProjectListResponse: getProjectListQueryResponse,
     createProjectResponse,
 
     createProject,

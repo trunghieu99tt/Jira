@@ -2,14 +2,19 @@ import { gql } from '@apollo/client';
 import { PROJECT_USER_FRAGMENT } from 'graphql/fragments/projectUser.fragment';
 
 export const GET_PROJECT_LIST = gql`
-  query getAllProjects($offset: Int, $limit: Int) {
-    projects(offset: $offset, limit: $limit) {
-      id
-      name
-      coverPhotoUrl
-      userCount
-      projectUsers {
-        ...projectUserFragment
+  query getAllProjects($first: Int, $after: String) {
+    projects(first: $first, after: $after) {
+      edges {
+        cursor
+        node {
+          id
+          name
+          coverPhotoUrl
+          userCount
+          projectUsers {
+            ...projectUserFragment
+          }
+        }
       }
     }
   }

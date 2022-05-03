@@ -35,3 +35,8 @@ export type TTransformOrigin =
   | 'center center';
 
 export type TPrivacy = 'PUBLIC' | 'PRIVATE';
+
+export type Paginated<T> = {
+  node: T;
+  cursor: string;
+};
