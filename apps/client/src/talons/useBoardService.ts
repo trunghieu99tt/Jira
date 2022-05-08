@@ -10,8 +10,7 @@ export const useBoardService = () => {
   const [createBoardMutation, createBoardResponse] = useMutation(
     CREATE_PROJECT_MUTATION,
   );
-  const [getBoardDetailQuery, getBoardDetailResponse] =
-    useLazyQuery(GET_BOARD_BY_ID);
+  const [getBoardDetailQuery] = useLazyQuery(GET_BOARD_BY_ID);
 
   const getCachedBoard = (boardId: number): IBoard | null => {
     const cachedBoard: {
@@ -42,6 +41,17 @@ export const useBoardService = () => {
       data: {
         board: newBoardData,
       },
+    });
+  };
+
+  const updateCachedBoards = (
+    input: {
+      boardId: number;
+      newBoardData: IBoard;
+    }[],
+  ) => {
+    input.forEach((board) => {
+      updateCachedBoard(board.boardId, board.newBoardData);
     });
   };
 
@@ -78,44 +88,73 @@ export const useBoardService = () => {
     destinationBoardId: number,
     taskId: number,
     updateData: Partial<ITask>,
-  ) => {
+  ): {
+    sourceBoard: IBoard;
+    destinationBoard: IBoard;
+  } => {
     const sourceBoard = getCachedBoard(sourceBoardId);
     const destinationBoard = getCachedBoard(destinationBoardId);
-    if (!sourceBoard || !destinationBoard) return;
+    if (!sourceBoard || !destinationBoard) {
+      throw new Error('Board not found');
+    }
+
     const { tasks = [] } = sourceBoard;
+    const task = _.find(tasks, (task: IBoardTask) => task.id === taskId);
+    if (!task) {
+      throw new Error('Task not found');
+    }
+
+    const updatedBoards = [];
+
     if (sourceBoardId !== destinationBoardId) {
-      const task = _.find(tasks, (task: IBoardTask) => task.id === taskId);
-      if (!task) return;
-      const updatedTasks = tasks?.filter(
+      const updatedSourceBoardTasks = tasks?.filter(
         (task: IBoardTask) => task.id !== taskId,
       );
-      const updatedDestinationTasks = [
+      const updatedDestinationBoardTasks = [
         ...(destinationBoard?.tasks || []),
         { ...task, ...updateData },
       ].sort((a, b) => a.listPosition - b.listPosition);
-      updateCachedBoard(sourceBoardId, {
-        ...sourceBoard,
-        tasks: updatedTasks,
-      });
-      updateCachedBoard(destinationBoardId, {
-        ...destinationBoard,
-        tasks: updatedDestinationTasks,
-      });
+
+      updatedBoards.push(
+        ...[
+          {
+            boardId: sourceBoardId,
+            newBoardData: {
+              ...sourceBoard,
+              tasks: updatedSourceBoardTasks,
+            },
+          },
+          {
+            boardId: destinationBoardId,
+            newBoardData: {
+              ...destinationBoard,
+              tasks: updatedDestinationBoardTasks,
+            },
+          },
+        ],
+      );
     } else {
-      const task = _.find(tasks, (task: IBoardTask) => task.id === taskId);
-      if (!task) return;
       const updatedTasks = _.map(tasks, (e) => {
         if (e.id === taskId) {
           return { ...e, ...updateData };
         }
         return e;
       }).sort((a, b) => a.listPosition - b.listPosition);
-      console.log('updatedTasks', updatedTasks);
-      updateCachedBoard(sourceBoardId, {
-        ...sourceBoard,
-        tasks: updatedTasks,
+      updatedBoards.push({
+        boardId: sourceBoardId,
+        newBoardData: {
+          ...sourceBoard,
+          tasks: updatedTasks,
+        },
       });
     }
+
+    updateCachedBoards(updatedBoards);
+
+    return {
+      sourceBoard,
+      destinationBoard,
+    };
   };
 
   const updateCacheBoardTasks = (
@@ -137,6 +176,7 @@ export const useBoardService = () => {
     createBoardResponse,
     updateCacheBoardTasks,
     updateCachedBoard,
+    updateCachedBoards,
     createBoardMutation,
     addTaskToBoardCache,
     moveTaskBetweenBoards,

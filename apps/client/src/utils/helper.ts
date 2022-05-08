@@ -91,9 +91,11 @@ const calcDiffTimeString = (date: Date): string => {
 const moveItemWithinArray = (arr: any[], item: any, toIndex: number) => {
   const fromIndex = arr.indexOf(item);
   if (fromIndex === toIndex) return arr;
+
   const newArr = [...arr];
   newArr.splice(fromIndex, 1);
   newArr.splice(toIndex, 0, item);
+
   return newArr;
 };
 

@@ -1,4 +1,9 @@
-import { useApolloClient, useLazyQuery, useMutation } from '@apollo/client';
+import {
+  ApolloError,
+  useApolloClient,
+  useLazyQuery,
+  useMutation,
+} from '@apollo/client';
 import { ITask, IUpdateBoardTask, IUpdateTask } from '@type/task.type';
 import {
   CREATE_TASK_MUTATION,
@@ -6,10 +11,10 @@ import {
 } from 'graphql/mutations/task.mutation';
 import { GET_BOARD_BY_ID } from 'graphql/queries/board.queries';
 import { GET_TASK_BY_ID } from 'graphql/queries/task.queries';
+import _ from 'lodash';
 import { useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { useBoardService } from './useBoardService';
-import _ from 'lodash';
 
 export const useTaskService = () => {
   const apolloClient = useApolloClient();
@@ -17,7 +22,7 @@ export const useTaskService = () => {
   const [createTaskMutation] = useMutation(CREATE_TASK_MUTATION);
   const [getTaskDetailQuery, getTaskDetailQueryResponse] =
     useLazyQuery(GET_TASK_BY_ID);
-  const { addTaskToBoardCache, moveTaskBetweenBoards } = useBoardService();
+  const { moveTaskBetweenBoards, updateCachedBoards } = useBoardService();
 
   const getTaskDetail = useCallback(
     async (taskId: number) => {
@@ -61,19 +66,32 @@ export const useTaskService = () => {
     taskId: number,
     input: IUpdateBoardTask,
   ): void => {
-    updateCachedTask(taskId, input.data);
     const { data, sourceBoardId, destinationBoardId, updateType } = input;
     const updateData = _.merge({ updateType }, data);
-    moveTaskBetweenBoards(
+
+    const { sourceBoard, destinationBoard } = moveTaskBetweenBoards(
       sourceBoardId!,
       destinationBoardId!,
       taskId,
       updateData,
     );
+
     updateTaskMutation({
       variables: {
         id: taskId,
         ...updateData,
+      },
+      onError: (err: ApolloError) => {
+        toast.error(err.message);
+        console.error('error', err);
+        updateCachedBoards(
+          [sourceBoard, destinationBoard].map((board) => {
+            return {
+              boardId: board.id,
+              newBoardData: board,
+            };
+          }),
+        );
       },
     });
   };

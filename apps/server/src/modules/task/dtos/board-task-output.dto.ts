@@ -22,7 +22,7 @@ export class BoardTask {
   @Field(() => String)
   assigneeName: string;
 
-  @Field(() => Int)
+  @Field()
   listPosition: number;
 
   @Field(() => Int)

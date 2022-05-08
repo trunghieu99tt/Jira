@@ -17,8 +17,6 @@ const BoardItem = ({ data: propData, classes: propsClasses }: Props) => {
   const { data: boardDetail } = useBoardItem(propData.id);
   const tasks: IBoardTask[] = [...(boardDetail?.tasks || [])];
 
-  console.log('tasks', tasks);
-
   return (
     <Droppable droppableId={propData?.id.toString()}>
       {(provided, snapshot) => (

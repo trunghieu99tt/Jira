@@ -87,7 +87,7 @@ type BoardTask {
   type: String!
   assigneeAvatar: String!
   assigneeName: String!
-  listPosition: Int!
+  listPosition: Float!
   numberOfAttachments: Int!
   numberOfComments: Int!
   coverPhoto: String!

@@ -50,8 +50,6 @@ export const useBoardList = () => {
           destinationIndex,
         );
 
-    console.log('afterDropDestinationTaskList', afterDropDestinationTaskList);
-
     return {
       prevTask: afterDropDestinationTaskList?.[destinationIndex - 1],
       nextTask: afterDropDestinationTaskList?.[destinationIndex + 1],
@@ -73,9 +71,6 @@ export const useBoardList = () => {
       );
       let position;
 
-      console.log('prevTask', prevTask);
-      console.log('nextTask', nextTask);
-
       if (!prevTask && !nextTask) {
         position = 0;
       } else if (!prevTask) {
@@ -87,7 +82,6 @@ export const useBoardList = () => {
           prevTask.listPosition +
           (nextTask.listPosition - prevTask.listPosition) / 2;
       }
-      console.log('position', position);
       return position;
     } catch (error) {
       console.error('[calculateIssueListPosition] error', error);

@@ -1,49 +1,50 @@
 .root {
-    width: 60vw;
-    padding: 3rem;
+  width: 60vw;
+  padding: 3rem;
 }
 
 .coverPhoto {
-    height: 15rem;
-    border-radius: 1.2rem;
-    object-fit: cover;
-    object-position: center;
-    width: 100%;
+  height: 15rem;
+  border-radius: 1.2rem;
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
 }
 
 .main {
-    display: grid;
-    grid-template-columns: 60% 35%;
-    gap: 3rem;
-    justify-content: space-between;
+  display: grid;
+  grid-template-columns: 60% 35%;
+  gap: 3rem;
+  justify-content: space-between;
+  margin-top: 2rem;
 }
 
 .name {
-    font-size: 2.4rem;
-    font-weight: 600;
-    margin-bottom: 3rem;
-    margin-top: 0;
+  font-size: 2.4rem;
+  font-weight: 600;
+  margin-bottom: 3rem;
+  margin-top: 0;
 }
 
 .item {
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
 .itemHeader {
-    display: flex;
-    gap: 1.5rem;
+  display: flex;
+  gap: 1.5rem;
 }
 
 .itemName {
-    font-size: 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 600;
-    color: rgb(94, 108, 132);
-    margin-bottom: 1rem;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: rgb(94, 108, 132);
+  margin-bottom: 1rem;
 }
 
 .itemValue {
-    font-size: 1.45rem;
+  font-size: 1.45rem;
 }

@@ -61,7 +61,6 @@ const TaskDetail = ({ classes: propClasses, taskId, modalClose }: Props) => {
               loading={'lazy'}
               className={classes.coverPhoto}
             />
-            p
           </figure>
         )}
       </header>
