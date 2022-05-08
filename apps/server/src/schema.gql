@@ -71,7 +71,7 @@ type Task {
   assigneeUserId: Int!
   projectId: Int!
   boardId: Int!
-  listPosition: Int!
+  listPosition: Float!
   coverPhoto: String!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -193,8 +193,8 @@ input CreateTaskInput {
 input UpdateTaskInput {
   id: Int!
   updateType: String!
-  newBoardId: Int
-  listPosition: Int
+  boardId: Int
+  listPosition: Float
   assigneeUserId: Int
   description: String
   priority: Int

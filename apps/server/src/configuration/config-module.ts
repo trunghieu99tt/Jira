@@ -10,7 +10,6 @@ export const configModuleOptions: ConfigModuleOptions = {
     PORT: Joi.number().default(3000),
     PROJECT_NAME: Joi.string().default('NestJS'),
     PROJECT_VERSION: Joi.string().default('1.0.0'),
-    CLOUDINARY_URL: Joi.string().default('cloudinary://'),
     CLOUDINARY_PATH: Joi.string().default('/'),
     DB_PORT: Joi.number().default(27017),
     DB_HOST: Joi.string().default('localhost'),

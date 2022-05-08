@@ -1,15 +1,10 @@
-// talons
-import { useProjectListPage } from './useProjectListPage';
-import { useQueryParamModal } from '@talons/useQueryParamModal';
-
-// components
-import Modal from '@components/shared/Modal';
-import Button from '@components/shared/Button';
 import BoardCreate from '@components/Project/Create';
 import ProjectList from '@components/Project/List/ProjectList';
-
-// styles
+import Button from '@components/shared/Button';
+import Modal from '@components/shared/Modal';
+import { useQueryParamModal } from '@talons/useQueryParamModal';
 import classes from './projectListPage.module.css';
+import { useProjectListPage } from './useProjectListPage';
 
 const ProjectListPage = () => {
   const { data, error, loading } = useProjectListPage();

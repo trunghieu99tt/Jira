@@ -11,9 +11,9 @@ export class UpdateTaskInput {
   @Field(() => Int, {
     nullable: true,
   })
-  newBoardId: number;
+  boardId: number;
 
-  @Field(() => Int, {
+  @Field({
     nullable: true,
   })
   listPosition: number;

@@ -1,4 +1,5 @@
 import { useApolloClient, useLazyQuery, useMutation } from '@apollo/client';
+import { ITask, IUpdateBoardTask, IUpdateTask } from '@type/task.type';
 import {
   CREATE_TASK_MUTATION,
   UPDATE_TASK_MUTATION,
@@ -7,6 +8,8 @@ import { GET_BOARD_BY_ID } from 'graphql/queries/board.queries';
 import { GET_TASK_BY_ID } from 'graphql/queries/task.queries';
 import { useCallback } from 'react';
 import { toast } from 'react-toastify';
+import { useBoardService } from './useBoardService';
+import _ from 'lodash';
 
 export const useTaskService = () => {
   const apolloClient = useApolloClient();
@@ -14,6 +17,7 @@ export const useTaskService = () => {
   const [createTaskMutation] = useMutation(CREATE_TASK_MUTATION);
   const [getTaskDetailQuery, getTaskDetailQueryResponse] =
     useLazyQuery(GET_TASK_BY_ID);
+  const { addTaskToBoardCache, moveTaskBetweenBoards } = useBoardService();
 
   const getTaskDetail = useCallback(
     async (taskId: number) => {
@@ -26,17 +30,68 @@ export const useTaskService = () => {
     [getTaskDetailQuery],
   );
 
+  const getCachedTask = (taskId: number): ITask => {
+    const cachedTaskDetail: {
+      task: ITask;
+    } | null = apolloClient.cache.readQuery({
+      query: GET_TASK_BY_ID,
+      variables: {
+        id: taskId,
+      },
+    });
+    return cachedTaskDetail?.task || ({} as ITask);
+  };
+
+  const updateCachedTask = (taskId: number, task: Partial<ITask>) => {
+    apolloClient.cache.writeQuery({
+      data: {
+        task: {
+          ...getCachedTask(taskId),
+          ...task,
+        },
+      },
+      query: GET_TASK_BY_ID,
+      variables: {
+        id: taskId,
+      },
+    });
+  };
+
+  const optimisticUpdateBoardTask = (
+    taskId: number,
+    input: IUpdateBoardTask,
+  ): void => {
+    updateCachedTask(taskId, input.data);
+    const { data, sourceBoardId, destinationBoardId, updateType } = input;
+    const updateData = _.merge({ updateType }, data);
+    moveTaskBetweenBoards(
+      sourceBoardId!,
+      destinationBoardId!,
+      taskId,
+      updateData,
+    );
+    updateTaskMutation({
+      variables: {
+        id: taskId,
+        ...updateData,
+      },
+    });
+  };
+
   const updateTask = useCallback(
-    async (taskId: number, data: any) => {
+    async (taskId: number, input: IUpdateTask) => {
+      const { data, updateType } = input;
+      const updateData = _.merge({ updateType }, data);
+
       await updateTaskMutation({
         variables: {
           id: taskId,
-          ...data,
+          ...updateData,
         },
         onCompleted: (data) => {
           if (data?.updateTask) {
             apolloClient.refetchQueries({
-              include: [GET_TASK_BY_ID, GET_BOARD_BY_ID],
+              include: [GET_BOARD_BY_ID],
             });
           }
         },
@@ -77,5 +132,6 @@ export const useTaskService = () => {
     updateTask,
     createTask,
     getTaskDetail,
+    optimisticUpdateBoardTask,
   };
 };

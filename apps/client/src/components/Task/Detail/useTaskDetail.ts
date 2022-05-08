@@ -50,8 +50,10 @@ export const useTaskDetail = (taskId: number) => {
       }
       if (task?.boardId && newBoardId !== task?.boardId) {
         updateTask(task.id, {
-          newBoardId,
           updateType: 'UPDATE_BOARD',
+          data: {
+            boardId: newBoardId,
+          },
         });
       }
     },
@@ -67,8 +69,10 @@ export const useTaskDetail = (taskId: number) => {
 
       if (task?.assigneeUserId !== newAssigneeUserId) {
         updateTask(task.id, {
-          assigneeUserId: newAssigneeUserId,
           updateType: 'UPDATE_ASSIGNEE',
+          data: {
+            assigneeUserId: newAssigneeUserId,
+          },
         });
       }
     },
@@ -86,8 +90,10 @@ export const useTaskDetail = (taskId: number) => {
   const updateDescription = () => {
     if (task?.description !== description) {
       updateTask(task.id, {
-        description,
         updateType: 'UPDATE_DESCRIPTION',
+        data: {
+          description,
+        },
       });
     }
   };
@@ -100,8 +106,10 @@ export const useTaskDetail = (taskId: number) => {
 
       if (task?.priority !== newPriority) {
         updateTask(task.id, {
-          priority: newPriority,
           updateType: 'UPDATE_PRIORITY',
+          data: {
+            priority: newPriority,
+          },
         });
       }
     },
@@ -115,8 +123,10 @@ export const useTaskDetail = (taskId: number) => {
       }
       if (task?.type !== newType) {
         updateTask(task.id, {
-          type: newType,
           updateType: 'UPDATE_TYPE',
+          data: {
+            type: newType,
+          },
         });
       }
     },
@@ -130,8 +140,10 @@ export const useTaskDetail = (taskId: number) => {
       }
       if (task?.name !== newName) {
         updateTask(task.id, {
-          name: newName,
           updateType: 'UPDATE_NAME',
+          data: {
+            name: newName,
+          },
         });
       }
     },
@@ -145,8 +157,10 @@ export const useTaskDetail = (taskId: number) => {
       }
       if (task?.summary !== newSummary) {
         updateTask(task.id, {
-          summary: newSummary,
           updateType: 'UPDATE_SUMMARY',
+          data: {
+            summary: newSummary,
+          },
         });
       }
     },
@@ -163,14 +177,16 @@ export const useTaskDetail = (taskId: number) => {
 
   const onChangeCoverPhoto = useCallback(
     async (newCoverPhotoUrl: string) => {
-      const normilizedCoverPhotoUrl = removeMaliciousTags(newCoverPhotoUrl);
+      const normalizedCoverPhotoUrl = removeMaliciousTags(newCoverPhotoUrl);
       if (
-        normilizedCoverPhotoUrl?.length > 0 &&
-        normilizedCoverPhotoUrl?.startsWith('http')
+        normalizedCoverPhotoUrl?.length > 0 &&
+        normalizedCoverPhotoUrl?.startsWith('http')
       ) {
         updateTask(task.id, {
-          coverPhoto: normilizedCoverPhotoUrl,
           updateType: 'UPDATE_COVER_PHOTO',
+          data: {
+            coverPhoto: normalizedCoverPhotoUrl,
+          },
         });
       }
     },

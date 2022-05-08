@@ -71,7 +71,7 @@ export class Task {
   })
   boardId: number;
 
-  @Field(() => Int)
+  @Field()
   @Column({
     name: 'list_position',
   })

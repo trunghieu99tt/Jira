@@ -6,7 +6,7 @@ export class AlterTableTask1646850743318 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
             ALTER TABLE \`tasks\`
-            ADD \`list_position\` int NOT NULL
+            ADD \`list_position\` float NOT NULL
         `);
   }
 

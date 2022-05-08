@@ -1,8 +1,9 @@
 import { useApolloClient, useLazyQuery, useMutation } from '@apollo/client';
 import { IBoard } from '@type/board.type';
-import { ITask } from '@type/task.type';
+import { IBoardTask, ITask } from '@type/task.type';
 import { CREATE_PROJECT_MUTATION } from 'graphql/mutations/project.mutation';
 import { GET_BOARD_BY_ID } from 'graphql/queries/board.queries';
+import _ from 'lodash';
 
 export const useBoardService = () => {
   const client = useApolloClient();
@@ -21,7 +22,6 @@ export const useBoardService = () => {
         boardId,
       },
     });
-
     return cachedBoard?.board || null;
   };
 
@@ -63,12 +63,59 @@ export const useBoardService = () => {
     if (!cachedBoard) return;
 
     const { tasks } = cachedBoard.board;
-    const updatedTasks = [...tasks, task];
+    const updatedTasks = [...tasks, task].sort(
+      (a, b) => a.listPosition - b.listPosition,
+    );
 
     updateCachedBoard(boardId, {
       ...cachedBoard.board,
       tasks: updatedTasks,
     });
+  };
+
+  const moveTaskBetweenBoards = (
+    sourceBoardId: number,
+    destinationBoardId: number,
+    taskId: number,
+    updateData: Partial<ITask>,
+  ) => {
+    const sourceBoard = getCachedBoard(sourceBoardId);
+    const destinationBoard = getCachedBoard(destinationBoardId);
+    if (!sourceBoard || !destinationBoard) return;
+    const { tasks = [] } = sourceBoard;
+    if (sourceBoardId !== destinationBoardId) {
+      const task = _.find(tasks, (task: IBoardTask) => task.id === taskId);
+      if (!task) return;
+      const updatedTasks = tasks?.filter(
+        (task: IBoardTask) => task.id !== taskId,
+      );
+      const updatedDestinationTasks = [
+        ...(destinationBoard?.tasks || []),
+        { ...task, ...updateData },
+      ].sort((a, b) => a.listPosition - b.listPosition);
+      updateCachedBoard(sourceBoardId, {
+        ...sourceBoard,
+        tasks: updatedTasks,
+      });
+      updateCachedBoard(destinationBoardId, {
+        ...destinationBoard,
+        tasks: updatedDestinationTasks,
+      });
+    } else {
+      const task = _.find(tasks, (task: IBoardTask) => task.id === taskId);
+      if (!task) return;
+      const updatedTasks = _.map(tasks, (e) => {
+        if (e.id === taskId) {
+          return { ...e, ...updateData };
+        }
+        return e;
+      }).sort((a, b) => a.listPosition - b.listPosition);
+      console.log('updatedTasks', updatedTasks);
+      updateCachedBoard(sourceBoardId, {
+        ...sourceBoard,
+        tasks: updatedTasks,
+      });
+    }
   };
 
   const updateCacheBoardTasks = (
@@ -89,5 +136,9 @@ export const useBoardService = () => {
 
     createBoardResponse,
     updateCacheBoardTasks,
+    updateCachedBoard,
+    createBoardMutation,
+    addTaskToBoardCache,
+    moveTaskBetweenBoards,
   };
 };

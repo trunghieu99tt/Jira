@@ -60,6 +60,7 @@ export class TaskService extends Service<Task, TaskRepository> {
         'updatedAt',
       ],
       order: {
+        listPosition: 'ASC',
         updatedAt: 'DESC',
       },
     });
@@ -133,25 +134,25 @@ export class TaskService extends Service<Task, TaskRepository> {
     switch (updateType) {
       case UPDATE_TYPE.MOVE_TASK:
         {
-          const { newBoardId, listPosition } = input;
-          if (!newBoardId) {
+          const { boardId, listPosition } = input;
+          if (!boardId) {
             throw new Error(
               'newBoardId is required for move task update.Please check your input',
             );
           }
-          task.boardId = newBoardId;
+          task.boardId = boardId;
           task.listPosition = listPosition;
         }
         break;
       case UPDATE_TYPE.UPDATE_BOARD:
         {
-          const { newBoardId } = input;
-          if (!newBoardId) {
+          const { boardId } = input;
+          if (!boardId) {
             throw new Error(
               'newBoardId is required for update board update.Please check your input',
             );
           }
-          task.boardId = newBoardId;
+          task.boardId = boardId;
         }
         break;
       case UPDATE_TYPE.UPDATE_ASSIGNEE:
@@ -236,7 +237,9 @@ export class TaskService extends Service<Task, TaskRepository> {
       }
     }
 
-    return this.repository.save(task);
+    const res = await this.repository.save(task);
+    console.log('res', res);
+    return res;
   }
 
   async getTaskUser(userId: number): Promise<TaskUser> {

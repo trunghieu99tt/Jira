@@ -51,10 +51,10 @@ const Avatar = ({
     img.onload = () => {
       setLoading(false);
     };
-    
+
     return () => {
-    }
-    
+      img.src = '';
+    };
   }, [src]);
 
   return (

@@ -1,15 +1,9 @@
-import { Link } from 'react-router-dom';
-
-// components
-import Image from '@components/shared/Image';
 import Avatar from '@components/shared/Avatar';
-
-// types
-import { IProject, IProjectUser } from '@type/project.type';
-
-// styles
-import classes from './projectList.module.css';
+import Image from '@components/shared/Image';
 import { Paginated } from '@type/app.type';
+import { IProject, IProjectUser } from '@type/project.type';
+import { Link } from 'react-router-dom';
+import classes from './projectList.module.css';
 
 type Props = {
   data: Paginated<IProject>[];

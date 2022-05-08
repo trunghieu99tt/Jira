@@ -34,8 +34,6 @@ const TaskItem = ({ data, index, classes: propClasses }: Props) => {
   } = useQueryParamModal(`task-view-${data.id}`);
   const { taskLabels } = useTaskLabelService({ taskId: data.id });
 
-  console.log('data', data);
-
   return (
     <React.Fragment>
       {isTaskViewModalOpen() && (

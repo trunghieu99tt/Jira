@@ -41,8 +41,8 @@ export const UPDATE_TASK_MUTATION = gql`
   mutation updateTask(
     $id: Int!
     $updateType: String!
-    $newBoardId: Int
-    $listPosition: Int
+    $boardId: Int
+    $listPosition: Float
     $assigneeUserId: Int
     $description: String
     $priority: Int
@@ -55,7 +55,7 @@ export const UPDATE_TASK_MUTATION = gql`
       updateTaskInput: {
         id: $id
         updateType: $updateType
-        newBoardId: $newBoardId
+        boardId: $boardId
         listPosition: $listPosition
         assigneeUserId: $assigneeUserId
         description: $description

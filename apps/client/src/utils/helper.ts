@@ -1,4 +1,5 @@
 import { TIME_TO_MILLISECONDS, TIME_UNIT } from '@constants/common';
+import _ from 'lodash';
 
 const nFormatter = (num: number, digits = 2): string => {
   const lookup = [
@@ -89,14 +90,10 @@ const calcDiffTimeString = (date: Date): string => {
 
 const moveItemWithinArray = (arr: any[], item: any, toIndex: number) => {
   const fromIndex = arr.indexOf(item);
-
-  if (fromIndex === -1) {
-    return;
-  }
-
+  if (fromIndex === toIndex) return arr;
   const newArr = [...arr];
-  console.log('fromIndex', fromIndex);
-  newArr.splice(toIndex, 0, newArr.splice(fromIndex, 1)[0]);
+  newArr.splice(fromIndex, 1);
+  newArr.splice(toIndex, 0, item);
   return newArr;
 };
 

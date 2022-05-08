@@ -1,12 +1,10 @@
-import React, { Suspense } from 'react';
-import BoardItem from '@components/Board/Item';
+import BoardList from '@components/Board/List';
 import AudienceSelector from '@components/Project/AudienceSelector';
 import Avatar from '@components/shared/Avatar';
 import Button from '@components/shared/Button';
 import { useQueryParamModal } from '@talons/useQueryParamModal';
-import { IBoard } from '@type/board.type';
 import { IProjectUser } from '@type/project.type';
-import { DragDropContext } from 'react-beautiful-dnd';
+import React, { Suspense, useEffect } from 'react';
 import classes from './projectPage.module.css';
 import { useProjectPage } from './useProjectPage';
 
@@ -14,14 +12,17 @@ const Modal = React.lazy(() => import('@components/shared/Modal'));
 const CreateTask = React.lazy(() => import('@components/Task/Create'));
 
 const ProjectPage = () => {
-  const { data, error, loading, onDropEnd, audience, setAudience } =
-    useProjectPage();
+  const { data, error, loading, audience, setAudience } = useProjectPage();
 
   const {
     open: openCreateTaskModal,
     close: closeCreateTaskModal,
     isOpen: isCreateTaskModalOpen,
   } = useQueryParamModal('task-create');
+
+  useEffect(() => {
+    console.log('project page is re-rendered');
+  });
 
   if (loading) return <div>Loading...</div>;
 
@@ -69,13 +70,7 @@ const ProjectPage = () => {
           Add task
         </Button>
       </section>
-      <DragDropContext onDragEnd={onDropEnd}>
-        <section className={classes.boardList}>
-          {boards?.map((board: IBoard) => {
-            return <BoardItem key={board.id} data={board} />;
-          })}
-        </section>
-      </DragDropContext>
+      <BoardList data={boards} />
     </section>
   );
 };
