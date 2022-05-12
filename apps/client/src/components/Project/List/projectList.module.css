@@ -18,7 +18,7 @@
 }
 
 .name {
-  font-size: 1.6rem;
+  font-size: var(--font-size-4);
   font-weight: 500;
   color: #000;
 }

@@ -2,10 +2,14 @@ import { useApolloClient, useMutation } from '@apollo/client';
 import { IBoard } from '@type/board.type';
 import {
   IProject,
-  IProjectCreateInput,
+  ICreateProjectInput,
   IProjectUser,
+  IUpdateProjectInput,
 } from '@type/project.type';
-import { CREATE_PROJECT_MUTATION } from 'graphql/mutations/project.mutation';
+import {
+  CREATE_PROJECT_MUTATION,
+  UPDATE_PROJECT_MUTATION,
+} from 'graphql/mutations/project.mutation';
 import { GET_PROJECT_BY_ID } from 'graphql/queries/project.queries';
 import { useCallback } from 'react';
 
@@ -15,16 +19,11 @@ export const useProjectService = () => {
   const [createProjectMutation, createProjectResponse] = useMutation(
     CREATE_PROJECT_MUTATION,
   );
+  const [updateProjectMutation] = useMutation(UPDATE_PROJECT_MUTATION);
 
-  const createProject = useCallback(
-    (input: IProjectCreateInput) => {
-      createProjectMutation({
-        variables: input,
-      });
-    },
-    [createProjectMutation],
-  );
-
+  /**
+   * GET
+   */
   const getCachedProject = (projectId: number): IProject => {
     const cachedProjectData: {
       project: IProject;
@@ -46,10 +45,35 @@ export const useProjectService = () => {
     const cachedProject = getCachedProject(projectId);
     return cachedProject?.projectUsers || [];
   };
+
+  const createProject = useCallback(
+    (input: ICreateProjectInput) => {
+      createProjectMutation({
+        variables: input,
+      });
+    },
+    [createProjectMutation],
+  );
+
+  const updateProject = useCallback(
+    (input: IUpdateProjectInput, onCompleted?: Function) => {
+      updateProjectMutation({
+        variables: input,
+        onCompleted: () => {
+          if (onCompleted && typeof onCompleted === 'function') {
+            onCompleted();
+          }
+        },
+      });
+    },
+    [],
+  );
+
   return {
     createProjectResponse,
 
     createProject,
+    updateProject,
     getCachedProjectUsers,
     getCachedProjectBoards,
   };

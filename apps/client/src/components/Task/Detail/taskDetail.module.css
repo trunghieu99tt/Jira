@@ -36,12 +36,12 @@
 }
 
 .itemName {
-  font-size: 1.25rem;
+  font-size: var(--font-size-1);
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-weight: 600;
-  color: rgb(94, 108, 132);
+  color: var(--gray-4);
   margin-bottom: 1rem;
 }
 

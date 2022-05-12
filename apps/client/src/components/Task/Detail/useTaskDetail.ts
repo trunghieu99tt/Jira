@@ -30,18 +30,6 @@ export const useTaskDetail = (taskId: number) => {
     }
   }, [task]);
 
-  const [isEditingDescription, setIsEditingDescription] =
-    useState<boolean>(false);
-
-  const onClickDescriptionButton = () => {
-    if (!isEditingDescription) {
-      setIsEditingDescription(true);
-    } else {
-      // update task
-      setIsEditingDescription(false);
-    }
-  };
-
   const onChangeBoard = useCallback(
     (newBoardId: string | number) => {
       // update board
@@ -198,7 +186,6 @@ export const useTaskDetail = (taskId: number) => {
     loading,
     data: task,
     description,
-    isEditingDescription,
 
     onChangeName,
     onChangeType,
@@ -211,6 +198,5 @@ export const useTaskDetail = (taskId: number) => {
     updateDescription,
     onChangeCoverPhoto,
     onChangeDescription,
-    onClickDescriptionButton,
   };
 };

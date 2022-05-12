@@ -237,9 +237,7 @@ export class TaskService extends Service<Task, TaskRepository> {
       }
     }
 
-    const res = await this.repository.save(task);
-    console.log('res', res);
-    return res;
+    return this.repository.save(task);
   }
 
   async getTaskUser(userId: number): Promise<TaskUser> {

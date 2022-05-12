@@ -30,6 +30,7 @@ export const GET_PROJECT_BY_ID = gql`
       createdAt
       updatedAt
       privacy
+      description
       boards {
         id
         name
@@ -37,6 +38,12 @@ export const GET_PROJECT_BY_ID = gql`
       projectUsers {
         ...projectUserFragment
       }
+      owner {
+        id
+        name
+        avatar
+      }
+      createdAt
     }
   }
   ${PROJECT_USER_FRAGMENT}

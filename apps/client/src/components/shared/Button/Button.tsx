@@ -42,8 +42,8 @@ const Button = forwardRef<HTMLButtonElement, Props>(
         ref={ref}
         className={cn(classes.root, classes[variant])}
       >
-        {icon}
-        {children}
+        <span>{icon}</span>
+        <span>{children}</span>
       </button>
     );
   },

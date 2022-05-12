@@ -3,6 +3,13 @@
   padding: 1.5rem;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
 .info {
   display: flex;
   align-items: center;
@@ -11,5 +18,23 @@
 
 .audienceSelector {
   width: 10rem;
+  background-color: var(--white-1);
+  padding: 0.7rem;
+  border-radius: 0.8rem;
 }
 
+.sideRight {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 30rem;
+  transform: translateX(100%);
+  transition: all 0.3s;
+  background-color: #fff;
+  padding: 2rem;
+}
+
+.sideRight.open {
+  transform: translateX(0);
+}

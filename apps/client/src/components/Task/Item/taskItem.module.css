@@ -1,57 +1,57 @@
 .inner {
-    box-shadow: var(--box-shadow);
-    border-radius: 0.5rem;
-    padding: 1.2rem;
-    background-color: #fff;
-    transition: all 0.2s;
-    margin-bottom: 1rem;
+  box-shadow: var(--box-shadow);
+  border-radius: 0.5rem;
+  padding: 1.2rem;
+  background-color: #fff;
+  transition: all 0.2s;
+  margin-bottom: 1rem;
 }
 
 .inner:hover {
-    filter: brightness(0.9);
+  filter: brightness(0.9);
 }
 
 .inner.isDragging {
-    transform: rotate(3deg);
-    box-shadow: 5px 10px 30px 0px rgba(9, 30, 66, 0.15);
+  transform: rotate(3deg);
+  box-shadow: 5px 10px 30px 0px rgba(9, 30, 66, 0.15);
 }
 
 .coverPhoto {
-    height: 13rem;
-    width: 100%;
-    object-position: center;
-    object-fit: cover;
-    border-radius: 1.2rem;
+  height: 13rem;
+  width: 100%;
+  object-position: center;
+  object-fit: cover;
+  border-radius: 1.2rem;
 }
 
 .name {
-    font-size: 1.3rem;
+  font-size: var(--font-size-4);
 }
 
 .labelList {
-    margin: 1.5rem 0;
+  margin: 1.5rem 0;
 }
 
 .assignee {
-    display: flex;
-    justify-content: flex-end;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .stats {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-
 .statItem {
-    display: flex;
-    gap: .5rem;
-    align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: var(--font-size-1);
 }

@@ -1,15 +1,6 @@
-import React, { memo, useCallback, useState } from 'react';
-import classNames from 'classnames';
-
-// components
-import Button from '@components/shared/Button';
-import TextEditor from '@components/shared/TextEditor';
-
-// icons
+import EditableField from '@components/shared/EditableField';
+import React, { memo } from 'react';
 import { MdOutlineDescription } from 'react-icons/md';
-
-// styles
-import classes from './taskDetailDescription.module.css';
 
 type Props = {
   defaultValue: string;
@@ -22,59 +13,14 @@ const TaskDetailDescription = ({
   onChange,
   updateDescription,
 }: Props) => {
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-
-  const onClickBtn = () => {
-    if (isEditing) {
-      updateDescription();
-    }
-    setIsEditing((v) => !v);
-  };
-
-  const onCloseEdit = useCallback(() => {
-    setIsEditing(false);
-  }, []);
-
-  const onOpenEdit = useCallback(() => {
-    setIsEditing(true);
-  }, []);
-
   return (
-    <section className={classes.root}>
-      <p className={classes.label} onClick={onOpenEdit}>
-        <MdOutlineDescription /> Description
-      </p>
-      {(isEditing && (
-        <TextEditor defaultValue={defaultValue} onChange={onChange} />
-      )) || (
-        <div
-          className={classes.value}
-          dangerouslySetInnerHTML={{
-            __html: defaultValue || '',
-          }}
-          onClick={onOpenEdit}
-        />
-      )}
-      {isEditing && (
-        <div className={classes.actionsBtn}>
-          <Button
-            variant="primary"
-            classes={{
-              root: classes.btn,
-            }}
-            onClick={onClickBtn}
-          >
-            Save
-          </Button>
-
-          {isEditing && (
-            <Button variant="secondary" onClick={onCloseEdit}>
-              Cancel
-            </Button>
-          )}
-        </div>
-      )}
-    </section>
+    <EditableField
+      title="Description"
+      icon={<MdOutlineDescription />}
+      onChange={onChange}
+      onSubmit={updateDescription}
+      defaultValue={defaultValue}
+    />
   );
 };
 

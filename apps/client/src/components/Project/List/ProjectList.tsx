@@ -25,7 +25,7 @@ const ProjectList = ({ data }: Props) => {
               <Image
                 src={project.coverPhoto}
                 alt={`${project.name}`}
-                height="200px"
+                height="13rem"
                 classes={{ root: classes.itemImage }}
               />
               <div className={classes.info}>

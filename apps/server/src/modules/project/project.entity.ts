@@ -10,6 +10,7 @@ import {
 // enums
 import { EPrivacy } from '../../common/enums';
 import { Board } from '../board/board.entity';
+import { User } from '../user/user.entity';
 import { ProjectUserOutput } from './dtos/project-user-output.dto';
 
 registerEnumType(EPrivacy, {
@@ -81,4 +82,7 @@ export class Project {
 
   @Field(() => String)
   coverPhotoUrl: string;
+
+  @Field(() => User)
+  owner: User;
 }

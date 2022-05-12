@@ -1,6 +1,6 @@
 .value {
   cursor: text;
-  font-size: 2.4rem;
+  font-size: var(--font-size-3);
   padding: 1rem 0.5rem;
 }
 

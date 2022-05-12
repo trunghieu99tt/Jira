@@ -15,13 +15,14 @@
 }
 
 .ownerName {
-  font-size: 1.5rem;
+  font-size: var(--font-size-2);
 }
 
 .updatedAt {
-  font-size: 1.45rem;
+  font-size: var(--font-size-1);
+  color: var(--gray-4);
 }
 
 .content {
-  font-size: 1.5rem;
+  font-size: var(--font-size-3);
 }

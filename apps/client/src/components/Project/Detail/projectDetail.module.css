@@ -1,0 +1,45 @@
+.root {
+  position: relative;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 0;
+  right: 1rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.sectionHeading {
+  font-weight: 600;
+  font-size: var(--font-size-1);
+  color: var(--gray-4);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.owner {
+  display: flex;
+  gap: 1.3rem;
+}
+
+.ownerName {
+  font-weight: 600;
+  font-size: var(--font-size-2);
+}
+
+.item {
+  margin-bottom: 2.5rem;
+}
+
+.createdAt {
+  font-size: var(--font-size-1);
+}

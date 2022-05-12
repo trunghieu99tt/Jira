@@ -1,10 +1,13 @@
 import { useQuery } from '@apollo/client';
 import { GET_PROJECT_BY_ID } from 'graphql/queries/project.queries';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 export const useProjectPage = () => {
   const { projectId } = useParams();
+
+  const [isProjectDetailOpened, setIsProjectDetailOpened] =
+    useState<boolean>(false);
 
   const { loading, data, error } = useQuery(GET_PROJECT_BY_ID, {
     variables: {
@@ -20,6 +23,18 @@ export const useProjectPage = () => {
     }
   }, [data]);
 
+  const toggleProjectDetail = useCallback(() => {
+    setIsProjectDetailOpened((v) => !v);
+  }, []);
+
+  const onOpenProjectDetail = useCallback(() => {
+    setIsProjectDetailOpened(true);
+  }, []);
+
+  const onCloseProjectDetail = useCallback(() => {
+    setIsProjectDetailOpened(false);
+  }, []);
+
   const project = data?.project;
 
   return {
@@ -27,7 +42,11 @@ export const useProjectPage = () => {
     loading,
     audience,
     data: project,
+    isProjectDetailOpened,
 
     setAudience,
+    onOpenProjectDetail,
+    onCloseProjectDetail,
+    toggleProjectDetail,
   };
 };

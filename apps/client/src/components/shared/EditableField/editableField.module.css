@@ -1,0 +1,13 @@
+.value {
+  font-size: var(--font-size-3);
+}
+
+.value * {
+  max-width: 100%;
+}
+
+.label {
+  font-size: var(--font-size-1);
+  color: var(--gray-4);
+  font-weight: 500;
+}

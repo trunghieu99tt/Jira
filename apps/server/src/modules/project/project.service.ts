@@ -9,7 +9,9 @@ import { ProjectUser } from '../project-user/entities/project-user.entity';
 import { DEFAULT_BOARD_NAMES } from './constants/project.constant';
 import { CreateProjectInput } from './dtos/create-project-input.dto';
 import { PaginatedProjects } from './dtos/paginated-project';
+import { UpdateProjectInput } from './dtos/update-project-input.dto';
 import { Project } from './project.entity';
+import _ from 'lodash';
 import { ProjectRepository } from './project.repository';
 
 @Injectable()
@@ -78,5 +80,21 @@ export class ProjectService extends Service<Project, ProjectRepository> {
       await manager.save(newProjectUsers);
       return newProjectDb;
     });
+  }
+
+  async updateProject(input: UpdateProjectInput): Promise<Partial<Project>> {
+    const oldProject = await this.findOne({
+      where: {
+        id: input.id,
+      },
+    });
+
+    const newProject = {
+      ...oldProject,
+      ..._.omit(input, ['id']),
+    };
+    const updateResponse = await this.repository.save(newProject);
+    console.log('updateResponse', updateResponse);
+    return updateResponse;
   }
 }

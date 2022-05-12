@@ -1,4 +1,5 @@
 import { IBoard } from './board.type';
+import { IUser } from './user.types';
 
 export enum ProjectUserRole {
   ADMIN = 'ADMIN',
@@ -21,12 +22,19 @@ export interface IProject {
   description: string;
   projectUsers: IProjectUser[];
   boards: IBoard[];
+  owner: Partial<IUser>;
+  createdAt: Date;
 }
 
-export interface IProjectCreateInput {
+export interface ICreateProjectInput {
   name: string;
   privacy: number;
   description: string;
   ownerUserId: number;
   coverPhotoFileId: number | null;
+}
+
+export interface IUpdateProjectInput {
+  id: number;
+  description?: string;
 }

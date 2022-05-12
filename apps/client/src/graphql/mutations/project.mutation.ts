@@ -23,3 +23,11 @@ export const CREATE_PROJECT_MUTATION = gql`
     }
   }
 `;
+
+export const UPDATE_PROJECT_MUTATION = gql`
+  mutation updateProject($description: String, $id: Int!) {
+    updateProject(updateProjectInput: { id: $id, description: $description }) {
+      id
+    }
+  }
+`;

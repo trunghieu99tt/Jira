@@ -14,10 +14,12 @@ import { Board } from '../board/board.entity';
 import { BoardService } from '../board/board.service';
 import { FileService } from '../file/services/file.service';
 import { ProjectUserService } from '../project-user/services/project-user.service';
+import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
 import { CreateProjectInput } from './dtos/create-project-input.dto';
 import { PaginatedProjects } from './dtos/paginated-project';
 import { ProjectUserOutput } from './dtos/project-user-output.dto';
+import { UpdateProjectInput } from './dtos/update-project-input.dto';
 import { Project } from './project.entity';
 import { ProjectService } from './project.service';
 
@@ -32,26 +34,8 @@ export class ProjectResolver {
   ) {}
 
   @Query(() => PaginatedProjects)
-  async projects(
-    @Args('first', {
-      type: () => Int,
-      nullable: true,
-    })
-    first: number,
-    @Args('after', {
-      nullable: true,
-    })
-    after: string,
-    @Args('last', {
-      type: () => Int,
-      nullable: true,
-    })
-    last?: number,
-    @Args('before', {
-      nullable: true,
-    })
-    before?: string,
-  ): Promise<PaginatedProjects> {
+  async projects(@Args() args: PaginationArgs): Promise<PaginatedProjects> {
+    const { after, first, before, last } = args;
     return this.projectService.findAllProjects({
       first,
       after,
@@ -72,6 +56,13 @@ export class ProjectResolver {
     @Args('createProjectInput') createProjectInput: CreateProjectInput,
   ): Promise<Project> {
     return this.projectService.createNewProject(createProjectInput);
+  }
+
+  @Mutation(() => Project)
+  async updateProject(
+    @Args('updateProjectInput') updateProjectInput: UpdateProjectInput,
+  ): Promise<Partial<Project>> {
+    return this.projectService.updateProject(updateProjectInput);
   }
 
   @ResolveField()
@@ -147,5 +138,11 @@ export class ProjectResolver {
     if (!coverPhotoFileId) return '';
 
     return this.fileService.getFileUrl(coverPhotoFileId);
+  }
+
+  @ResolveField()
+  async owner(@Parent() project: Project): Promise<Partial<User>> {
+    const { ownerUserId } = project;
+    return this.userService.getUserInfo(ownerUserId);
   }
 }

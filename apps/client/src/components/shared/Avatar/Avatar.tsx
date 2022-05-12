@@ -1,18 +1,11 @@
+import { AVATAR_COLORS_BY_LETTER } from '@constants/common';
+import { TSize, TTooltipPlacement } from '@type/app.type';
+import mergeClasses from '@utils/mergeClasses';
+import cn from 'classnames';
 import { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
-import cn from 'classnames';
-
-// utils
-import mergeClasses from '@utils/mergeClasses';
-
-// constants
-import { TSize, TTooltipPlacement } from '@type/app.type';
-import { AVATAR_COLORS_BY_LETTER } from '@constants/common';
-
-// styles
 import defaultClasses from './avatar.module.css';
 
-// component types
 type Props = {
   src: string;
   alt: string;

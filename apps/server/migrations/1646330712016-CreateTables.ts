@@ -46,7 +46,7 @@ export class CreateTables1646330712016 implements MigrationInterface {
                 \`name\` varchar(255) NOT NULL,
                 \`cover_photo\` varchar(255) NOT NULL,
                 \`privacy\` enum ('0', '1') NOT NULL,
-                \`description\` varchar(255) NOT NULL,
+                \`description\` longtext NOT NULL,
                 \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
                 \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
                 \`ownerId\` bigint NULL,
