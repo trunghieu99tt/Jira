@@ -14,6 +14,8 @@ import { Project } from './project.entity';
 import _ from 'lodash';
 import { ProjectRepository } from './project.repository';
 
+_.map;
+
 @Injectable()
 export class ProjectService extends Service<Project, ProjectRepository> {
   constructor(

@@ -114,8 +114,26 @@ const removeMaliciousTags = (text: string): string => {
   return text.replace(tagsToRemoveRegex, '');
 };
 
+const brightener = (hex: string, percent: number): string => {
+  hex = hex.replace(/^\s*#|\s*$/g, '');
+  if (hex.length === 3) {
+    hex = hex.replace(/(.)/g, '$1$1');
+  }
+  const r = parseInt(hex.substring(0, 2), 16),
+    g = parseInt(hex.substring(2, 4), 16),
+    b = parseInt(hex.substr(4, 6), 16);
+
+  return (
+    '#' +
+    (0 | ((1 << 8) + r + ((256 - r) * percent) / 100)).toString(16).substr(1) +
+    (0 | ((1 << 8) + g + ((256 - g) * percent) / 100)).toString(16).substr(1) +
+    (0 | ((1 << 8) + b + ((256 - b) * percent) / 100)).toString(16).substr(1)
+  );
+};
+
 export {
   urlify,
+  brightener,
   nFormatter,
   formatNumber,
   validateEmail,

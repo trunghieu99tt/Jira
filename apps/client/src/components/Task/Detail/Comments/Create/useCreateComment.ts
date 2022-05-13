@@ -32,13 +32,13 @@ export const useCreateComment = ({ taskId }: { taskId: number }) => {
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      switch (e.key) {
-        case 'm':
-          e.preventDefault();
-          $commentInputRef.current?.focus();
-          startEdit();
-          break;
-      }
+      // switch (e.key) {
+      //   case 'm':
+      //     e.preventDefault();
+      //     $commentInputRef.current?.focus();
+      //     startEdit();
+      //     break;
+      // }
     },
     [$commentInputRef, startEdit],
   );

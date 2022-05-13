@@ -9,7 +9,6 @@
   transition: all 0.3s;
   appearance: none;
   background-color: var(--primary);
-  font-weight: 500;
   outline: none;
   min-width: 10rem;
   color: #fff;
@@ -17,7 +16,7 @@
   cursor: pointer;
   gap: 1rem;
   display: flex;
-  font-size: var(--font-size-2);
+  font-size: var(--font-size-1);
 }
 
 .root:disabled {

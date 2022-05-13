@@ -1,4 +1,5 @@
 import { iLabel } from '@type/label.types';
+import { brightener } from '@utils/helper';
 import classes from './labelList.module.css';
 
 type Props = {
@@ -20,7 +21,8 @@ const LabelList = ({ data, onClick }: Props) => {
           <div
             key={`label-${label.id || Math.random()}`}
             style={{
-              background: label.color,
+              background: brightener(label.color, 60),
+              color: label.color,
             }}
             className={classes.label}
             onClick={onClickLabelHandler}

@@ -11,3 +11,9 @@
   color: var(--gray-4);
   font-weight: 500;
 }
+
+.actionsBtn {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+}

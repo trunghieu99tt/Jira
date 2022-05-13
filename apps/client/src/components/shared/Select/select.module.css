@@ -8,10 +8,10 @@
   display: flex;
   justify-content: space-between;
   min-height: 2rem;
-  background: rgb(223, 225, 230);
+  background: var(--white-1);
   padding: 0.5em;
   border-radius: 0.3rem;
-  color: var(--gray-1);
+  color: var(--gray-3);
   font-size: var(--font-size-2);
   font-weight: 500;
   align-items: center;

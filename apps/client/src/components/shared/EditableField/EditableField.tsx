@@ -57,13 +57,7 @@ const EditableField = ({
       )}
       {isEditing && (
         <div className={classes.actionsBtn}>
-          <Button
-            variant="primary"
-            classes={{
-              root: classes.btn,
-            }}
-            onClick={onClickBtn}
-          >
+          <Button variant="primary" onClick={onClickBtn}>
             Save
           </Button>
 

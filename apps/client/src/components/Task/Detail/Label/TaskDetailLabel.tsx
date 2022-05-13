@@ -25,9 +25,6 @@ const TaskDetailLabel = ({ taskId, classes: propClasses }: Props) => {
     taskId,
   });
 
-  console.log('taskLabels', taskLabels);
-  console.log('labels', labels);
-
   return (
     <section className={classes.root}>
       <div className={classes.labelContainer}>

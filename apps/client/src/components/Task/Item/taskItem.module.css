@@ -26,6 +26,7 @@
 
 .name {
   font-size: var(--font-size-4);
+  margin-top: 1.2rem;
 }
 
 .labelList {
@@ -54,4 +55,5 @@
   gap: 0.5rem;
   align-items: center;
   font-size: var(--font-size-1);
+  color: var(--gray-4);
 }

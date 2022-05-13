@@ -17,16 +17,18 @@ const CommentItem = ({ data, classes: propsClasses }: Props) => {
 
   return (
     <article className={classes.root}>
-      <div className={classes.left}>
-        <Avatar alt={name} size="MEDIUM" src={avatar} />
-      </div>
-      <div className={classes.right}>
-        <div className={cn(classes.inline, classes.ownerName)}>{name}</div>
-        <div className={cn(classes.inline, classes.updatedAt)}>
-          {calcDiffTimeString(data?.updatedAt)}
+      <div className={classes.meta}>
+        <div className={classes.left}>
+          <Avatar alt={name} size="MEDIUM" src={avatar} />
         </div>
-        <p className={classes.content}>{data.content}</p>
+        <div className={classes.right}>
+          <div className={cn(classes.inline, classes.ownerName)}>{name}</div>
+          <div className={cn(classes.inline, classes.updatedAt)}>
+            {calcDiffTimeString(data?.updatedAt)}
+          </div>
+        </div>
       </div>
+      <p className={classes.content}>{data.content}</p>
     </article>
   );
 };
