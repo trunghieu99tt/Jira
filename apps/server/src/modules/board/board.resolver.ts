@@ -1,6 +1,7 @@
 import {
   Args,
   Int,
+  Mutation,
   Parent,
   Query,
   ResolveField,
@@ -10,11 +11,12 @@ import { BoardTask } from '../task/dtos/board-task-output.dto';
 import { TaskService } from '../task/task.service';
 import { Board } from './board.entity';
 import { BoardService } from './board.service';
+import { CreateBoardInput } from './dtos/create-board-input.dto';
 
 @Resolver(() => Board)
 export class BoardResolver {
   constructor(
-    private readonly boardListService: BoardService,
+    private readonly boardService: BoardService,
     private readonly taskService: TaskService,
   ) {}
 
@@ -23,7 +25,14 @@ export class BoardResolver {
     @Args('boardId', { type: () => Int }) boardId: number,
   ): Promise<Board> {
     console.log('boardId', boardId);
-    return this.boardListService.findBoardById(boardId);
+    return this.boardService.findBoardById(boardId);
+  }
+
+  @Mutation(() => Board)
+  async createBoard(
+    @Args('createBoardInput') createBoardInput: CreateBoardInput,
+  ): Promise<Board> {
+    return this.boardService.createNewBoard(createBoardInput);
   }
 
   @ResolveField(() => [BoardTask])

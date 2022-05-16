@@ -1,10 +1,17 @@
 .boardList {
   background: var(--bg);
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(20rem, 30rem));
-  gap: 2rem;
+  display: flex;
+  gap: 5rem;
   padding: 2rem;
   margin-top: 2rem;
   border-radius: 1.2rem;
   min-height: 80vh;
+  flex: 1;
+  flex-wrap: nowrap;
+  overflow: auto;
+}
+
+.boardList > article {
+  width: 30rem;
+  flex-shrink: 0;
 }

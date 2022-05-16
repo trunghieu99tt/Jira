@@ -23,7 +23,7 @@ const BoardItem = ({ data: propData, classes: propsClasses }: Props) => {
         <article className={classes.root}>
           <h4 className={classes.name}>{boardDetail?.name}</h4>
 
-          <div ref={provided.innerRef}>
+          <div ref={provided.innerRef} className={classes.tasks}>
             {tasks?.map((task: any, idx: number) => {
               return (
                 <TaskItem

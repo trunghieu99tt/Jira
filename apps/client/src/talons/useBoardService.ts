@@ -1,15 +1,15 @@
 import { useApolloClient, useLazyQuery, useMutation } from '@apollo/client';
 import { IBoard } from '@type/board.type';
 import { IBoardTask, ITask } from '@type/task.type';
-import { CREATE_PROJECT_MUTATION } from 'graphql/mutations/project.mutation';
+import { CREATE_NEW_BOARD } from 'graphql/mutations/board.mutation';
 import { GET_BOARD_BY_ID } from 'graphql/queries/board.queries';
+import { GET_PROJECT_BY_ID } from 'graphql/queries/project.queries';
 import _ from 'lodash';
 
 export const useBoardService = () => {
   const client = useApolloClient();
-  const [createBoardMutation, createBoardResponse] = useMutation(
-    CREATE_PROJECT_MUTATION,
-  );
+  const [createBoardMutation, createBoardResponse] =
+    useMutation(CREATE_NEW_BOARD);
   const [getBoardDetailQuery] = useLazyQuery(GET_BOARD_BY_ID);
 
   const getCachedBoard = (boardId: number): IBoard | null => {
@@ -169,16 +169,30 @@ export const useBoardService = () => {
     }
   };
 
+  const createNewBoard = async (input: { name: string; projectId: number }) => {
+    const { data } = await createBoardMutation({
+      variables: {
+        ...input,
+      },
+      onCompleted: () => {
+        client.refetchQueries({
+          include: [GET_PROJECT_BY_ID],
+        });
+      },
+    });
+    return data;
+  };
+
   return {
     refetchBoard,
     getCachedBoard,
 
-    createBoardResponse,
-    updateCacheBoardTasks,
+    createNewBoard,
     updateCachedBoard,
     updateCachedBoards,
     createBoardMutation,
     addTaskToBoardCache,
     moveTaskBetweenBoards,
+    updateCacheBoardTasks,
   };
 };

@@ -40,3 +40,10 @@ export type Paginated<T> = {
   node: T;
   cursor: string;
 };
+
+export type TButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'outline'
+  | 'empty';

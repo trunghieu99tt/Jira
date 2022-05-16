@@ -90,10 +90,7 @@ const ProjectPage = () => {
       <Button variant="primary" onClick={openCreateTaskModal}>
         Add task
       </Button>
-      <div className={classes.boards}>
-        <BoardList data={boards} />
-        <button>Add another board</button>
-      </div>
+      <BoardList data={boards} />
       <aside
         className={cn(classes.sideRight, {
           [classes.open]: isProjectDetailOpened,

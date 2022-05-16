@@ -93,7 +93,7 @@ const CreateProject = ({ classes: propsClasses }: Props) => {
               ?.filter((user: IUser) => addedUserIds?.includes(user.id))
               .map((user: IUser) => {
                 return (
-                  <Button variant="outlined">
+                  <Button variant="outline">
                     {user.name}
 
                     <span>

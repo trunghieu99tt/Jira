@@ -175,6 +175,7 @@ type Mutation {
   createComment(createCommentInput: CreateCommentInput!): Comment!
   createProject(createProjectInput: CreateProjectInput!): Project!
   updateProject(updateProjectInput: UpdateProjectInput!): Project!
+  createBoard(createBoardInput: CreateBoardInput!): Board!
   updateTaskLabels(updateTaskLabelsInput: UpdateTaskLabelsInputDto!): Boolean!
   createLabel(createLabelInput: CreateLabelInputDto!): Label!
 }
@@ -229,6 +230,11 @@ input CreateProjectInput {
 input UpdateProjectInput {
   description: String
   id: Int!
+}
+
+input CreateBoardInput {
+  name: String!
+  projectId: Int!
 }
 
 input UpdateTaskLabelsInputDto {

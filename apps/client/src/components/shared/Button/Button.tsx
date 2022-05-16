@@ -1,16 +1,13 @@
-import { ButtonHTMLAttributes, forwardRef, ReactElement } from 'react';
-import cn from 'classnames';
-
-// utils
+import { TButtonVariant } from '@type/app.type';
 import mergeClasses from '@utils/mergeClasses';
-
-// styles
+import cn from 'classnames';
+import { ButtonHTMLAttributes, forwardRef, ReactElement } from 'react';
 import defaultClasses from './button.module.css';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   classes?: any;
   children: any;
-  variant: string;
+  variant: TButtonVariant;
   icon?: string | ReactElement;
   disabled?: boolean;
   isLoading?: boolean;

@@ -1,11 +1,19 @@
 import { useBoardService } from '@talons/useBoardService';
+import { useQueryParamModal } from '@talons/useQueryParamModal';
 import { useTaskService } from '@talons/useTaskService';
 import { insertItemIntoArray, moveItemWithinArray } from '@utils/helper';
+import { useState } from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 
 export const useBoardList = () => {
   const { getCachedBoard } = useBoardService();
   const { optimisticUpdateBoardTask } = useTaskService();
+
+  const {
+    open: openBoardFormModal,
+    close: closeBoardFormModal,
+    isOpen: isBoardFormModalOpened,
+  } = useQueryParamModal(`create-board`);
 
   const isPositionChanged = (
     destination: DraggableLocation | undefined,
@@ -123,5 +131,8 @@ export const useBoardList = () => {
 
   return {
     onDropEnd,
+    openBoardFormModal,
+    closeBoardFormModal,
+    isBoardFormModalOpened,
   };
 };

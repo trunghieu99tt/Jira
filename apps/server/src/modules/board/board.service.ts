@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Service } from 'src/common/generics/service.generic';
 import { Board } from './board.entity';
 import { BoardRepository } from './board.repository';
+import { CreateBoardInput } from './dtos/create-board-input.dto';
 
 @Injectable()
 export class BoardService extends Service<Board, BoardRepository> {
@@ -22,5 +23,9 @@ export class BoardService extends Service<Board, BoardRepository> {
       where: { projectId },
       select: ['id', 'name'],
     });
+  }
+
+  async createNewBoard(input: CreateBoardInput): Promise<Board> {
+    return this.repository.save(input);
   }
 }
