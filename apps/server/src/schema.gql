@@ -16,6 +16,12 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type UserOutput {
+  id: Int!
+  name: String!
+  avatar: String!
+}
+
 type User {
   id: Float!
   username: String!
@@ -25,12 +31,6 @@ type User {
   avatarFileId: Int
   createdAt: DateTime!
   updatedAt: DateTime!
-  avatar: String!
-}
-
-type UserOutput {
-  id: Int!
-  name: String!
   avatar: String!
 }
 
@@ -101,6 +101,14 @@ type Board {
   tasks: [BoardTask!]!
 }
 
+type Label {
+  id: Float!
+  name: String!
+  color: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type ProjectUserOutput {
   id: Int!
   userId: Int!
@@ -140,14 +148,6 @@ type PaginatedProjects {
   nodes: [Project!]
   totalCount: Int!
   hasNextPage: Boolean!
-}
-
-type Label {
-  id: Float!
-  name: String!
-  color: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 
 type TaskLabelOutput {
@@ -191,6 +191,7 @@ input CreateTaskInput {
   attachmentFileIds: String = ""
   type: String!
   projectId: Int!
+  coverPhoto: String!
 }
 
 input UpdateTaskInput {

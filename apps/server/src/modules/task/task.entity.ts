@@ -80,6 +80,7 @@ export class Task {
   @Field(() => String)
   @Column({
     name: 'cover_photo',
+    default: '',
   })
   coverPhoto: string;
 

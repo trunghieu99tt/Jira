@@ -38,4 +38,7 @@ export class CreateTaskInput {
 
   @Field((type) => Int)
   projectId: number;
+
+  @Field(() => String)
+  coverPhoto: string;
 }

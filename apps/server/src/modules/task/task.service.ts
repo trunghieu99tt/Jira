@@ -17,6 +17,12 @@ import { TaskUser } from './dtos/task-user-output.dto';
 import { ProjectUserService } from '../project-user/services/project-user.service';
 import { AttachmentOutput } from './dtos/attachment-output.dto';
 import { CommentService } from '../comment/comment.service';
+import {
+  Transactional,
+  runOnTransactionCommit,
+  runOnTransactionRollback,
+} from 'typeorm-transactional-cls-hooked';
+import { AttachmentRepository } from '../attachment/attachment.repository';
 
 @Injectable()
 export class TaskService extends Service<Task, TaskRepository> {
@@ -28,6 +34,7 @@ export class TaskService extends Service<Task, TaskRepository> {
     private readonly commentService: CommentService,
     private readonly projectUserService: ProjectUserService,
     private readonly attachmentService: AttachmentService,
+    private readonly attachmentRepository: AttachmentRepository,
   ) {
     super(repository);
   }
@@ -91,6 +98,7 @@ export class TaskService extends Service<Task, TaskRepository> {
     );
   }
 
+  @Transactional()
   async createNewTask(input: CreateTaskInput): Promise<Task> {
     const attachmentIds = input.attachmentFileIds.split(',').map(Number);
     const attachments = await this.attachmentService.findList({
@@ -105,18 +113,22 @@ export class TaskService extends Service<Task, TaskRepository> {
     });
     const newTaskObj = plainToClass(Task, {
       ...input,
+      coverPhoto: input?.coverPhoto || '',
       listPosition: countTasks + 1,
     });
-
-    return this.connection.transaction(async (manager) => {
-      const newTaskDb = await manager.save(newTaskObj);
-      const updatedAttachments = attachments.map((attachment) => {
-        attachment.taskId = newTaskDb.id;
-        return attachment;
-      });
-      await manager.save(updatedAttachments);
-      return newTaskDb;
+    const newTask = await this.repository.save(newTaskObj);
+    const updatedAttachments = attachments.map((attachment) => {
+      attachment.taskId = newTask.id;
+      return attachment;
     });
+    await this.attachmentRepository.save(updatedAttachments);
+    runOnTransactionCommit(() => {
+      console.log('Transaction committed');
+    });
+    runOnTransactionRollback(() => {
+      console.log('Transaction rollbacked');
+    });
+    return newTask;
   }
 
   async updateTask(input: UpdateTaskInput): Promise<Task> {
