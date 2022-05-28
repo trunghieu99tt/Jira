@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { TaskLabelRepository } from './task-label.repository';
-import { TaskLabelService } from './task-label.service';
+import { OrmModule } from 'src/orm.module';
 import { LabelModule } from '../label/label.module';
 import { TaskLabelResolver } from './task-label.resolver';
+import { TaskLabelService } from './task-label.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TaskLabelRepository]), LabelModule],
+  imports: [OrmModule, LabelModule],
   providers: [TaskLabelService, TaskLabelResolver],
   exports: [TaskLabelService],
 })

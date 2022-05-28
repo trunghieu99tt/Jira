@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../../user/user.service';
 import { AuthTokenOutputDto } from '../dtos/auth-token-output.dto';
 import { User } from '../../user/user.entity';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import {
   GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET,
@@ -65,7 +65,7 @@ export class AuthService {
       sub: user.id,
     };
 
-    return plainToClass(AuthTokenOutputDto, {
+    return plainToInstance(AuthTokenOutputDto, {
       accessToken: this.jwtService.sign(payload, {
         expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN_SECONDS,
       }),
@@ -90,7 +90,7 @@ export class AuthService {
     if (user) return user;
 
     const initialPassword = await hash(AuthTool.randomToken(10), 10);
-    const newUser = plainToClass(User, {
+    const newUser = plainToInstance(User, {
       username: `${email}-${new Date().getTime()}`,
       password: initialPassword,
       name,

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { Service } from 'src/common/generics/service.generic';
 import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
@@ -32,7 +32,7 @@ export class CommentService extends Service<Comment, CommentRepository> {
       commentUserIds as number[],
     );
 
-    return plainToClass(
+    return plainToInstance(
       CommentOutput,
       comments.map((comment: Partial<Comment>) => {
         let author = {

@@ -7,13 +7,13 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { PaginationArgs } from 'src/common/dto/pagination-args.dto';
 import { In } from 'typeorm';
 import { Board } from '../board/board.entity';
-import { BoardService } from '../board/board.service';
+import { BoardRepository } from '../board/board.repository';
 import { FileService } from '../file/services/file.service';
-import { ProjectUserService } from '../project-user/services/project-user.service';
+import { ProjectUserRepository } from '../project-user/repositories/project-user.repository';
 import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
 import { CreateProjectInput } from './dtos/create-project-input.dto';
@@ -28,9 +28,9 @@ export class ProjectResolver {
   constructor(
     private readonly userService: UserService,
     private readonly fileService: FileService,
-    private readonly boardService: BoardService,
+    private readonly boardRepository: BoardRepository,
+    private readonly projectUserRepository: ProjectUserRepository,
     private readonly projectService: ProjectService,
-    private readonly projectUserService: ProjectUserService,
   ) {}
 
   @Query(() => PaginatedProjects)
@@ -68,13 +68,18 @@ export class ProjectResolver {
   @ResolveField()
   async boards(@Parent() project: Project): Promise<Board[]> {
     const { id } = project;
-    return this.boardService.findBoardsByProjectId(id);
+    return this.boardRepository.find({
+      where: {
+        projectId: id,
+      },
+      select: ['id', 'name'],
+    });
   }
 
   @ResolveField()
   async projectUsers(@Parent() project: Project): Promise<ProjectUserOutput[]> {
     const { id } = project;
-    const projectUsers = await this.projectUserService.findList({
+    const projectUsers = await this.projectUserRepository.find({
       where: {
         projectId: id,
       },
@@ -99,7 +104,7 @@ export class ProjectResolver {
 
     const fileUrlsMapping = await this.fileService.getFileUrls(fileIds);
 
-    return plainToClass(
+    return plainToInstance(
       ProjectUserOutput,
       projectUsers.map((projectUser) => {
         const userId = projectUser.userId;
@@ -125,7 +130,7 @@ export class ProjectResolver {
   @ResolveField()
   async userCount(@Parent() project: Project): Promise<number> {
     const { id } = project;
-    return this.projectUserService.count({
+    return this.projectUserRepository.count({
       where: {
         projectId: id,
       },

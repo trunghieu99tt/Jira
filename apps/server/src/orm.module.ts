@@ -7,9 +7,13 @@ import {
   patchTypeORMRepositoryWithBaseRepository,
 } from 'typeorm-transactional-cls-hooked';
 import { AttachmentRepository } from './modules/attachment/attachment.repository';
+import { BoardRepository } from './modules/board/board.repository';
 import { CommentRepository } from './modules/comment/comment.repository';
 import { FileRepository } from './modules/file/repositories/file.repository';
+import { LabelRepository } from './modules/label/label.repository';
 import { ProjectUserRepository } from './modules/project-user/repositories/project-user.repository';
+import { ProjectRepository } from './modules/project/project.repository';
+import { TaskLabelRepository } from './modules/task-label/task-label.repository';
 import { TaskRepository } from './modules/task/task.repository';
 import { UserRepository } from './modules/user/user.repository';
 
@@ -44,6 +48,11 @@ patchTypeORMRepositoryWithBaseRepository(); // patch Repository with BaseReposit
       FileRepository,
       CommentRepository,
       ProjectUserRepository,
+      LabelRepository,
+      TaskLabelRepository,
+      ProjectUserRepository,
+      ProjectRepository,
+      BoardRepository,
     ]),
   ],
   exports: [TypeOrmModule],

@@ -1,20 +1,21 @@
 import { Injectable } from '@nestjs/common';
+import { plainToInstance } from 'class-transformer';
+import { In } from 'typeorm';
+import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { Service } from '../../common/generics/service.generic';
-import { TaskLabelRepository } from './task-label.repository';
-import { TaskLabel } from './task-label.entity';
-import { LabelService } from '../label/label.service';
 import { Label } from '../label/label.entity';
-import { Connection, In } from 'typeorm';
+import { LabelRepository } from '../label/label.repository';
 import { TaskLabelOutput } from './dtos/task-label-output.dto';
-import { plainToClass } from 'class-transformer';
 import { UpdateTaskLabelsInputDto } from './dtos/update-task-labels-input.dto';
+import { TaskLabel } from './task-label.entity';
+import { TaskLabelRepository } from './task-label.repository';
 
 @Injectable()
 export class TaskLabelService extends Service<TaskLabel, TaskLabelRepository> {
   constructor(
     repository: TaskLabelRepository,
-    private readonly labelService: LabelService,
-    private readonly connection: Connection,
+    private readonly taskLabelRepository: TaskLabelRepository,
+    private readonly labelRepository: LabelRepository,
   ) {
     super(repository);
   }
@@ -25,13 +26,13 @@ export class TaskLabelService extends Service<TaskLabel, TaskLabelRepository> {
       select: ['labelId'],
     });
     const labelIds = taskLabels.map((taskLabel) => taskLabel.labelId);
-    const labels = await this.labelService.findList({
+    const labels = await this.labelRepository.find({
       where: {
         id: In(labelIds),
       },
     });
 
-    return plainToClass(
+    return plainToInstance(
       TaskLabelOutput,
       labels.map((label: Partial<Label>) => {
         return {
@@ -43,42 +44,41 @@ export class TaskLabelService extends Service<TaskLabel, TaskLabelRepository> {
     );
   }
 
+  @Transactional()
   async updateTaskLabels(input: UpdateTaskLabelsInputDto): Promise<boolean> {
     const { taskId, labelId } = input;
 
-    return this.connection.transaction(async (manager) => {
-      try {
-        const taskLabel = await this.findOne({
-          where: {
+    try {
+      const taskLabel = await this.findOne({
+        where: {
+          taskId,
+          labelId,
+        },
+      });
+
+      if (!taskLabel) {
+        await this.taskLabelRepository.save(
+          plainToInstance(TaskLabel, {
+            taskId,
+            labelId,
+          }),
+        );
+      } else {
+        await this.taskLabelRepository.update(
+          {
             taskId,
             labelId,
           },
-        });
-
-        console.log('taskLabel', taskLabel);
-        if (!taskLabel) {
-          await manager.insert(TaskLabel, {
-            taskId,
-            labelId,
-          });
-        } else {
-          await manager.update(
-            TaskLabel,
-            {
-              taskId,
-              labelId,
-            },
-            {
-              isDeleted: !taskLabel.isDeleted,
-            },
-          );
-        }
-
-        return true;
-      } catch (error) {
-        console.error('[updateTaskLabels] error', error);
-        return false;
+          {
+            isDeleted: !taskLabel.isDeleted,
+          },
+        );
       }
-    });
+
+      return true;
+    } catch (error) {
+      console.error('[updateTaskLabels] error', error);
+      return false;
+    }
   }
 }

@@ -1,39 +1,34 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
+import _ from 'lodash';
 import { Service } from 'src/common/generics/service.generic';
-import { Connection, In } from 'typeorm';
-import { AttachmentService } from '../attachment/attachment.service';
+import { ObjectTool } from 'tools';
+import { In } from 'typeorm';
+import {
+  runOnTransactionRollback,
+  Transactional,
+} from 'typeorm-transactional-cls-hooked';
+import { Attachment } from '../attachment/attachment.entity';
+import { AttachmentRepository } from '../attachment/attachment.repository';
+import { CommentRepository } from '../comment/comment.repository';
 import { FileService } from '../file/services/file.service';
 import { User } from '../user/user.entity';
-import { UserService } from '../user/user.service';
+import { UserRepository } from '../user/user.repository';
+import { AttachmentOutput } from './dtos/attachment-output.dto';
 import { BoardTask } from './dtos/board-task-output.dto';
 import { CreateTaskInput } from './dtos/create-task-input.dto';
+import { TaskUser } from './dtos/task-user-output.dto';
+import { UpdateTaskInput } from './dtos/update-task-input.dto';
 import { Task } from './task.entity';
 import { TaskRepository } from './task.repository';
-import { ObjectTool } from 'tools';
-import { UpdateTaskInput } from './dtos/update-task-input.dto';
-import { UPDATE_TYPE } from './constants/task.constant';
-import { TaskUser } from './dtos/task-user-output.dto';
-import { ProjectUserService } from '../project-user/services/project-user.service';
-import { AttachmentOutput } from './dtos/attachment-output.dto';
-import { CommentService } from '../comment/comment.service';
-import {
-  Transactional,
-  runOnTransactionCommit,
-  runOnTransactionRollback,
-} from 'typeorm-transactional-cls-hooked';
-import { AttachmentRepository } from '../attachment/attachment.repository';
 
 @Injectable()
 export class TaskService extends Service<Task, TaskRepository> {
   constructor(
     repository: TaskRepository,
-    private readonly connection: Connection,
-    private readonly userService: UserService,
+    private readonly userRepository: UserRepository,
     private readonly fileService: FileService,
-    private readonly commentService: CommentService,
-    private readonly projectUserService: ProjectUserService,
-    private readonly attachmentService: AttachmentService,
+    private readonly commentRepository: CommentRepository,
     private readonly attachmentRepository: AttachmentRepository,
   ) {
     super(repository);
@@ -84,7 +79,7 @@ export class TaskService extends Service<Task, TaskRepository> {
             this.getTaskAssignee(assignees, task.assigneeUserId)) ||
           null;
 
-        return plainToClass(BoardTask, {
+        return plainToInstance(BoardTask, {
           ...ObjectTool.omit(task, ['assigneeUserId']),
           assigneeAvatar:
             (assignee?.avatarFileId &&
@@ -101,7 +96,7 @@ export class TaskService extends Service<Task, TaskRepository> {
   @Transactional()
   async createNewTask(input: CreateTaskInput): Promise<Task> {
     const attachmentIds = input.attachmentFileIds.split(',').map(Number);
-    const attachments = await this.attachmentService.findList({
+    const attachments = await this.attachmentRepository.find({
       where: {
         id: In(attachmentIds),
       },
@@ -111,29 +106,25 @@ export class TaskService extends Service<Task, TaskRepository> {
         boardId: input.boardId,
       },
     });
-    const newTaskObj = plainToClass(Task, {
+    const newTaskObj = plainToInstance(Task, {
       ...input,
       coverPhoto: input?.coverPhoto || '',
       listPosition: countTasks + 1,
     });
     const newTask = await this.repository.save(newTaskObj);
-    const updatedAttachments = attachments.map((attachment) => {
+    const updatedAttachments = attachments.map((attachment: Attachment) => {
       attachment.taskId = newTask.id;
       return attachment;
     });
     await this.attachmentRepository.save(updatedAttachments);
-    runOnTransactionCommit(() => {
-      console.log('Transaction committed');
-    });
     runOnTransactionRollback(() => {
-      console.log('Transaction rollbacked');
+      throw new Error('Internal server error');
     });
     return newTask;
   }
 
   async updateTask(input: UpdateTaskInput): Promise<Task> {
-    const { updateType, id } = input;
-
+    const { id } = input;
     const task = await this.findOne({
       where: {
         id,
@@ -142,118 +133,16 @@ export class TaskService extends Service<Task, TaskRepository> {
     if (!task) {
       throw new NotFoundException('Task not found');
     }
+    const updatedTask = {
+      ...task,
+      ..._.omit(input, 'updatedType'),
+    };
 
-    switch (updateType) {
-      case UPDATE_TYPE.MOVE_TASK:
-        {
-          const { boardId, listPosition } = input;
-          if (!boardId) {
-            throw new Error(
-              'newBoardId is required for move task update.Please check your input',
-            );
-          }
-          task.boardId = boardId;
-          task.listPosition = listPosition;
-        }
-        break;
-      case UPDATE_TYPE.UPDATE_BOARD:
-        {
-          const { boardId } = input;
-          if (!boardId) {
-            throw new Error(
-              'newBoardId is required for update board update.Please check your input',
-            );
-          }
-          task.boardId = boardId;
-        }
-        break;
-      case UPDATE_TYPE.UPDATE_ASSIGNEE:
-        {
-          const { assigneeUserId } = input;
-          if (!assigneeUserId) {
-            throw new Error(
-              'assigneeUserId is required for update assignee update.Please check your input',
-            );
-          }
-          task.assigneeUserId = assigneeUserId;
-        }
-        break;
-      case UPDATE_TYPE.UPDATE_DESCRIPTION:
-        {
-          const { description } = input;
-          if (!description) {
-            throw new Error(
-              'description is required for update description update.Please check your input',
-            );
-          }
-          task.description = description;
-        }
-        break;
-      case UPDATE_TYPE.UPDATE_PRIORITY:
-        {
-          const { priority } = input;
-          if (!priority) {
-            throw new Error(
-              'priority is required for update priority update.Please check your input',
-            );
-          }
-          task.priority = priority;
-        }
-        break;
-      case UPDATE_TYPE.UPDATE_NAME:
-        {
-          const { name } = input;
-          if (!name) {
-            throw new Error(
-              'name is required for update name update.Please check your input',
-            );
-          }
-          task.name = name;
-        }
-        break;
-      case UPDATE_TYPE.UPDATE_TYPE:
-        {
-          const { type } = input;
-          if (!type) {
-            throw new Error(
-              'type is required for update type update.Please check your input',
-            );
-          }
-          task.type = type;
-        }
-        break;
-      case UPDATE_TYPE.UPDATE_SUMMARY:
-        {
-          const { summary } = input;
-          if (!summary) {
-            throw new Error(
-              'summary is required for update summary update.Please check your input',
-            );
-          }
-          task.summary = summary;
-        }
-        break;
-      case UPDATE_TYPE.UPDATE_COVER_PHOTO:
-        {
-          const { coverPhoto } = input;
-          if (!coverPhoto) {
-            throw new Error(
-              'coverPhoto is required for update coverPhoto update.Please check your input',
-            );
-          }
-          task.coverPhoto = coverPhoto;
-        }
-        break;
-      default: {
-        console.error(`updateType ${updateType} is not supported`);
-      }
-    }
-
-    return this.repository.save(task);
+    return this.repository.save(updatedTask);
   }
 
   async getTaskUser(userId: number): Promise<TaskUser> {
-    const taskUser = await this.userService.findOne({
+    const taskUser = await this.userRepository.findOne({
       where: {
         id: userId,
       },
@@ -268,7 +157,7 @@ export class TaskService extends Service<Task, TaskRepository> {
       avatar = await this.fileService.getFileUrl(taskUser.avatarFileId);
     }
 
-    return plainToClass(TaskUser, {
+    return plainToInstance(TaskUser, {
       userId: taskUser.id,
       name: taskUser.name,
       avatar,
@@ -276,7 +165,7 @@ export class TaskService extends Service<Task, TaskRepository> {
   }
 
   async getTaskAttachments(taskId: number): Promise<AttachmentOutput[]> {
-    const attachments = await this.attachmentService.findList({
+    const attachments = await this.attachmentRepository.find({
       where: {
         taskId,
       },
@@ -298,7 +187,7 @@ export class TaskService extends Service<Task, TaskRepository> {
       attachmentFileIds as number[],
     );
 
-    return plainToClass(
+    return plainToInstance(
       AttachmentOutput,
       attachments.map((attachment) => ({
         id: attachment.id,
@@ -317,7 +206,7 @@ export class TaskService extends Service<Task, TaskRepository> {
     const assigneeUserIds = tasks
       .map((task: Partial<Task>) => task.assigneeUserId)
       .filter(Boolean);
-    return this.userService.findList({
+    return this.userRepository.find({
       where: {
         id: In(assigneeUserIds),
       },
@@ -334,7 +223,7 @@ export class TaskService extends Service<Task, TaskRepository> {
         return false;
       }
       if (!user.id || !assigneeUserId) return false;
-      return +user.id === +assigneeUserId;
+      return user.id == assigneeUserId;
     });
   }
 
@@ -359,12 +248,12 @@ export class TaskService extends Service<Task, TaskRepository> {
     }
 
     const [numberOfAttachments, numberOfComments] = await Promise.all([
-      this.attachmentService.count({
+      this.attachmentRepository.count({
         where: {
           taskId,
         },
       }),
-      this.commentService.count({
+      this.commentRepository.count({
         where: {
           taskId,
         },

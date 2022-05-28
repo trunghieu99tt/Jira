@@ -34,52 +34,6 @@ type User {
   avatar: String!
 }
 
-type Comment {
-  id: Float!
-  content: String!
-  userId: Int!
-  taskId: Int!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  owner: User!
-}
-
-type AttachmentOutput {
-  id: Int!
-  taskId: Int
-  fileId: Int!
-  name: String!
-  type: String!
-  createdAt: Int!
-  url: String!
-}
-
-type TaskUser {
-  userId: Int!
-  name: String!
-  avatar: String!
-}
-
-type Task {
-  id: Float!
-  name: String!
-  description: String!
-  summary: String!
-  priority: Float!
-  type: String!
-  reporterUserId: Int!
-  assigneeUserId: Int!
-  projectId: Int!
-  boardId: Int!
-  listPosition: Float!
-  coverPhoto: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  assignee: TaskUser!
-  reporter: TaskUser!
-  attachments: [AttachmentOutput!]!
-}
-
 type BoardTask {
   id: Int!
   name: String!
@@ -99,6 +53,16 @@ type Board {
   name: String!
   projectId: Int!
   tasks: [BoardTask!]!
+}
+
+type Comment {
+  id: Float!
+  content: String!
+  userId: Int!
+  taskId: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  owner: User!
 }
 
 type Label {
@@ -136,6 +100,42 @@ type Project {
 enum Privacy {
   PUBLIC
   PRIVATE
+}
+
+type AttachmentOutput {
+  id: Int!
+  taskId: Int
+  fileId: Int!
+  name: String!
+  type: String!
+  createdAt: Int!
+  url: String!
+}
+
+type TaskUser {
+  userId: Int!
+  name: String!
+  avatar: String!
+}
+
+type Task {
+  id: Float!
+  name: String!
+  description: String!
+  summary: String!
+  priority: Float!
+  type: String!
+  reporterUserId: Int!
+  assigneeUserId: Int!
+  projectId: Int!
+  boardId: Int!
+  listPosition: Float!
+  coverPhoto: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  assignee: TaskUser!
+  reporter: TaskUser!
+  attachments: [AttachmentOutput!]!
 }
 
 type ProjectEdge {

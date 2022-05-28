@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { Service } from 'src/common/generics/service.generic';
 import { In, Like } from 'typeorm';
 import { FileService } from '../file/services/file.service';
@@ -53,7 +53,7 @@ export class UserService extends Service<User, UserRepository> {
       avatar = await this.fileService.getFileUrl(user.avatarFileId);
     }
 
-    return plainToClass(UserOutput, {
+    return plainToInstance(UserOutput, {
       ...user,
       avatar,
     });
@@ -88,7 +88,7 @@ export class UserService extends Service<User, UserRepository> {
     });
 
     users = await this.attachAvatars(users);
-    return plainToClass(UserOutput, users);
+    return plainToInstance(UserOutput, users);
   }
 
   async validateUsernamePassword(
@@ -115,7 +115,7 @@ export class UserService extends Service<User, UserRepository> {
   }
 
   async createUser(input: RegisterInputDto): Promise<User> {
-    const user = plainToClass(User, input);
+    const user = plainToInstance(User, input);
     user.password = await hash(user.password, 10);
     return this.repository.save(user);
   }
@@ -128,6 +128,6 @@ export class UserService extends Service<User, UserRepository> {
       select: ['id', 'name', 'avatarFileId'],
     });
     users = await this.attachAvatars(users);
-    return plainToClass(UserOutput, users);
+    return plainToInstance(UserOutput, users);
   }
 }

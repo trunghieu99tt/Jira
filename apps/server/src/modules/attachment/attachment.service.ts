@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { Service } from 'src/common/generics/service.generic';
 import { Attachment } from './attachment.entity';
 import { AttachmentRepository } from './attachment.repository';
@@ -25,7 +25,7 @@ export class AttachmentService extends Service<
   async createNewAttachment(
     input: CreateAttachmentsInput,
   ): Promise<Partial<Attachment>[]> {
-    const newAttachments = plainToClass(
+    const newAttachments = plainToInstance(
       Attachment,
       input.fileIds.map((fileId: number) => ({
         taskId: input.taskId,

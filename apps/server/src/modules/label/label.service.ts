@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { LabelRepository } from './lable.repository';
+import { LabelRepository } from './label.repository';
 import { Service } from '../../common/generics/service.generic';
 import { Label } from './label.entity';
 import { CreateLabelInputDto } from './dtos/create-label-input.dto';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class LabelService extends Service<Label, LabelRepository> {
@@ -17,6 +17,6 @@ export class LabelService extends Service<Label, LabelRepository> {
     if (existingLabel) {
       throw new Error('Label already exists');
     }
-    return this.repository.save(plainToClass(Label, input));
+    return this.repository.save(plainToInstance(Label, input));
   }
 }

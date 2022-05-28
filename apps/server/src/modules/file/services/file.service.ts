@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { Service } from 'src/common/generics/service.generic';
 import { IpfsUploadService } from 'src/modules/upload/services/ipfs.service';
 import { LocalUploadService } from 'src/modules/upload/services/local.service';
@@ -45,7 +45,9 @@ export class FileService extends Service<File, FileRepository> {
 
     newFile.path = await this.localUploadService.uploadImage(file);
 
-    const newDbFile = await this.repository.save(plainToClass(File, newFile));
+    const newDbFile = await this.repository.save(
+      plainToInstance(File, newFile),
+    );
 
     return newDbFile.id;
   }
@@ -104,7 +106,7 @@ export class FileService extends Service<File, FileRepository> {
           }),
         );
         newFiles = fileUrls.map((fileUrl: string, idx: number) => {
-          return plainToClass(File, {
+          return plainToInstance(File, {
             ownerId,
             type: files[idx].mimetype,
             path: fileUrl,
@@ -126,7 +128,7 @@ export class FileService extends Service<File, FileRepository> {
         );
         newFiles = ipfsFiles.map((ipfsFile, idx: number) => {
           const file = files[idx];
-          return plainToClass(File, {
+          return plainToInstance(File, {
             ownerId,
             type: file.mimetype,
             path: ipfsFile.path,
